@@ -16,6 +16,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+//EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
 
 @Api(value = "/users", description = "Endpoint to User Service")
 @Path("/users")
@@ -27,14 +30,14 @@ public class UserService {
         this.um = UserManagerImpl.getInstance();
         if (um.size()==0) {
             this.um.addUser("Ivan","ivan@yahoo.es");
-            this.um.addUser("Despacito", "Luis Fonsi");
+            this.um.addUser("Manu", "manu@outlook.es");
         }
 
 
     }
 
     @GET
-    @ApiOperation(value = "get all User", notes = "asdasd")
+    @ApiOperation(value = "get all User", notes = "Devuelve una lista con todos los usuarios")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class, responseContainer="List"),
     })
@@ -50,7 +53,7 @@ public class UserService {
     }
 
     @GET
-    @ApiOperation(value = "get a User", notes = "asdasd")
+    @ApiOperation(value = "get a User", notes = "Devuelve el usuario que tenga el id que quieras buscar")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 404, message = "User not found")
@@ -64,7 +67,7 @@ public class UserService {
     }
 
     @DELETE
-    @ApiOperation(value = "delete a User", notes = "asdasd")
+    @ApiOperation(value = "delete a User", notes = "Elimina un usuario mediante su id")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "User not found")
@@ -78,7 +81,7 @@ public class UserService {
     }
 
     @PUT
-    @ApiOperation(value = "update a User", notes = "asdasd")
+    @ApiOperation(value = "update a User", notes = "Actualiza los datos de un usuario")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "User not found")
@@ -96,19 +99,19 @@ public class UserService {
 
 
     @POST
-    @ApiOperation(value = "create a new User", notes = "asdasd")
+    @ApiOperation(value = "create a new User", notes = "Crea un nuevo usuario")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response=User.class),
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
 
-    @Path("/")
+    @Path("/{nombre}/{mail}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newUser(User user) {
+    public Response newUser(@PathParam("nombre") String nombre, @PathParam("mail") String mail) {
 
+        User user = new User(nombre,mail);
         if(user.getMail()==null || user.getNombre()==null) return Response.status(500).entity(user).build();
-        user.setId(RandomUtils.generateID(6));
         this.um.addUser(user);
         return Response.status(201).entity(user).build();
     }

@@ -61,6 +61,7 @@ public class Main {
         server.getServerConfiguration().addHttpHandler(staticHttpHandler, "/");
 
 
+        System.out.println("Hacer consulta del ID ALEATORIO (UserService, getUser(String id)");
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
 
