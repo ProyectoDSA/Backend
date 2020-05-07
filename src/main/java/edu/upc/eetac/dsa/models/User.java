@@ -1,6 +1,6 @@
-package edu.upc.dsa.models;
+package edu.upc.eetac.dsa.models;
 
-import edu.upc.dsa.util.RandomUtils;
+import edu.upc.eetac.dsa.orm.util.RandomUtils;
 
 public class User {
 

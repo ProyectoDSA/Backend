@@ -1,10 +1,9 @@
-package edu.upc.dsa.services;
+package edu.upc.eetac.dsa.services;
 
 
-import edu.upc.dsa.UserManager;
-import edu.upc.dsa.UserManagerImpl;
-import edu.upc.dsa.models.User;
-import edu.upc.dsa.util.RandomUtils;
+import edu.upc.eetac.dsa.UserManager;
+import edu.upc.eetac.dsa.UserManagerImpl;
+import edu.upc.eetac.dsa.models.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -14,9 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 //EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
 
@@ -45,7 +42,7 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
 
-        List<User> users = this.um.findAll();
+        List<User> users = this.um.getAllUsers();
 
         GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {};
         return Response.status(201).entity(entity).build()  ;
@@ -112,7 +109,7 @@ public class UserService {
 
         User user = new User(nombre,mail);
         if(user.getMail()==null || user.getNombre()==null) return Response.status(500).entity(user).build();
-        this.um.addUser(user);
+        this.um.addUser(user.getNombre(), user.getMail());
         return Response.status(201).entity(user).build();
     }
 

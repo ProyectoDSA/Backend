@@ -1,4 +1,4 @@
-package edu.upc.dsa;
+package edu.upc.eetac.dsa;
 
 import org.junit.Test;
 
