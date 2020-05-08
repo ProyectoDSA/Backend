@@ -13,12 +13,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.LinkedList;
 import java.util.List;
 
 //EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
 
-@Api(value = "/users", description = "Endpoint to User Service")
-@Path("/users")
+@Api(value = "/usermanager", description = "Endpoint to User Service")
+@Path("/usermanager")
 public class UserService {
 
     private UserManager um;
@@ -29,24 +30,35 @@ public class UserService {
             this.um.addUser("Ivan","ivan@yahoo.es");
             this.um.addUser("Manu", "manu@outlook.es");
         }
-
+        System.out.println("User service");
 
     }
 
     @GET
-    @ApiOperation(value = "get all User", notes = "Devuelve una lista con todos los usuarios")
+    @ApiOperation(value = "get all Users", notes = "Devuelve una lista con todos los usuarios")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class, responseContainer="List"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @Path("/")
+    @Path("/users")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
 
-        List<User> users = this.um.getAllUsers();
+            System.out.println("getUsers()");
+            List<User> users = null;
+        try {
+            users = this.um.getAllUsers();
 
+        System.out.println("string1 "+ users);
+
+        for(User u : users){
+            System.out.println("chivato"+u);
+        }
+        }catch (Throwable e) {
+            e.printStackTrace();
+        }
         GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {};
-        return Response.status(201).entity(entity).build()  ;
-
+        return Response.status(201).entity(entity).build();
     }
 
     @GET
@@ -55,7 +67,7 @@ public class UserService {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 404, message = "User not found")
     })
-    @Path("/{id}")
+    @Path("/user/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("id") String id) { //PORQUE NO VA SI ID = /OSU?N ?????
         User u = this.um.getUser(id);

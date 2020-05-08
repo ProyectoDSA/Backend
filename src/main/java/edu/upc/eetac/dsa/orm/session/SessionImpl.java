@@ -57,7 +57,7 @@ public class SessionImpl implements Session {
         Statement statement = null;
 
         try {
-            object = theClass.newInstance();
+
             statement = this.conn.createStatement();
             statement.execute(selectQuery);
             rs = statement.getResultSet();
@@ -65,13 +65,15 @@ public class SessionImpl implements Session {
             //Obtenemos los objetos y leemos las columnas con metadata
             //para ir guardando en cada objeto sus datos correspondientes
             while(rs.next()) {
+                object = theClass.newInstance();
                 ResultSetMetaData rsmd = rs.getMetaData();
+                String field = null;
                 for (int i=1; i<=rsmd.getColumnCount(); i++) {
-                    String field = rsmd.getColumnName(i);
+                    field = rsmd.getColumnName(i);
                     ObjectHelper.setter(object, field, rs.getObject(i));
-                    res.add(rs.getObject(i)); //Añadimos objeto a la lista/tabla
-
-                } System.out.println("Added : " + object.toString());
+                }
+                res.add(object); //Añadimos objeto a la lista/tabla
+                System.out.println("Added : " + object.toString());
             }
         } catch (SQLException e) {
             e.printStackTrace();
