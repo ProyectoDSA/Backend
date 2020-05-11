@@ -57,7 +57,7 @@ public class SessionImpl implements Session {
         Statement statement = null;
 
         try {
-
+            object = theClass.newInstance();
             statement = this.conn.createStatement();
             statement.execute(selectQuery);
             rs = statement.getResultSet();
@@ -65,14 +65,13 @@ public class SessionImpl implements Session {
             //Obtenemos los objetos y leemos las columnas con metadata
             //para ir guardando en cada objeto sus datos correspondientes
             while(rs.next()) {
-                object = theClass.newInstance();
                 ResultSetMetaData rsmd = rs.getMetaData();
-                String field = null;
                 for (int i=1; i<=rsmd.getColumnCount(); i++) {
-                    field = rsmd.getColumnName(i);
+                    String field = rsmd.getColumnName(i);
                     ObjectHelper.setter(object, field, rs.getObject(i));
-                }
-                res.add(object); //Añadimos objeto a la lista/tabla
+                    res.add(rs.getObject(i)); //Añadimos objeto a la lista/tabla
+
+                } System.out.println("Added : " + object.toString());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,6 +99,37 @@ public class SessionImpl implements Session {
             object = theClass.newInstance();
             pstm = this.conn.prepareStatement(selectByIdQuery);
             pstm.setObject(1, id);
+            rs = pstm.executeQuery();
+            System.out.println(pstm);
+            while(rs.next()) {
+                ResultSetMetaData rsmd = rs.getMetaData();
+                for(int i=1; i<=rsmd.getColumnCount();i++){
+                    String field = rsmd.getColumnName(i);
+                    ObjectHelper.setter(object,field,rs.getObject(i));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Object founded: "+object);
+        return object;
+    }
+
+    @Override
+    public Object findByName(Class theClass, String name) {
+        ResultSet rs;
+        Object object = null;
+
+        String selectByIdQuery = QueryHelper.createQuerySELECTbyName(theClass);
+
+        PreparedStatement pstm;
+
+        try {
+            object = theClass.newInstance();
+            pstm = this.conn.prepareStatement(selectByIdQuery);
+            pstm.setObject(1, name);
+            pstm.setObject(2, name);
             rs = pstm.executeQuery();
             System.out.println(pstm);
             while(rs.next()) {
@@ -157,10 +187,5 @@ public class SessionImpl implements Session {
     }
 
     public void close() {
-        try {
-            this.conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 }

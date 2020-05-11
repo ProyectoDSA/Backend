@@ -1,8 +1,10 @@
 package edu.upc.eetac.dsa.services;
 
 
-import edu.upc.eetac.dsa.UserManager;
-import edu.upc.eetac.dsa.UserManagerImpl;
+import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
+import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
+import edu.upc.eetac.dsa.orm.managers.UserManager;
+import edu.upc.eetac.dsa.orm.managers.UserManagerImpl;
 import edu.upc.eetac.dsa.models.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +15,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.LinkedList;
 import java.util.List;
 
 //EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
@@ -27,8 +28,10 @@ public class UserService {
     public UserService() {
         this.um = UserManagerImpl.getInstance();
         if (um.size()==0) {
-            this.um.addUser("Ivan","ivan@yahoo.es", "jsdjj");
-            this.um.addUser("Manu", "manu@outlook.es", "jdjfj");
+            this.um.register("Ivan", "k@gmail", "klsdvf");
+            this.um.register("PEP", "pepe@pepito", "erjfdjsf");
+            //this.um.addUser("Ivan","ivan@yahoo.es", "jsdjj");
+            //this.um.addUser("Manu", "manu@outlook.es", "jdjfj");
         }
     }
 
@@ -97,7 +100,7 @@ public class UserService {
 
 
     @POST
-    @ApiOperation(value = "create a new User", notes = "Crea un nuevo usuario")
+    @ApiOperation(value = "register a new User", notes = "Crea un nuevo usuario")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response=User.class),
             @ApiResponse(code = 500, message = "Validation Error")
@@ -106,11 +109,39 @@ public class UserService {
 
     @Path("/{nombre}/{mail}/{password}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newUser(@PathParam("nombre") String nombre, @PathParam("mail") String mail, @PathParam("password") String password) {
+    public Response register(@PathParam("nombre") String nombre, @PathParam("mail") String mail, @PathParam("password") String password) {
 
-        User user = new User(nombre,mail,password);
-        if(user.getMail()==null || user.getNombre()==null) return Response.status(500).entity(user).build();
-        this.um.addUser(user.getNombre(), user.getMail(), user.getPassword());
+        if(nombre==null || mail==null || password==null) return Response.status(500).build();
+        this.um.register(nombre, mail, password);
+        User user = this.um.getUserByName(nombre);
+        return Response.status(201).entity(user).build();
+    }
+
+    @POST
+    @ApiOperation(value = "login", notes = "Iniciar sesión")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response=User.class),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 401, message = "Password Not Match"),
+            @ApiResponse(code = 500, message = "Incorrect password")
+
+    })
+
+    @Path("/{nombre}/{password}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(@PathParam("nombre") String nombre, @PathParam("password") String password) {
+        User user = null;
+        try {
+            user = this.um.login(nombre, password);
+            this.um.checkName(user.getId(), nombre);
+            this.um.checkPassword(user.getId(), password);
+        } catch (UserNotFoundException e) {
+            return Response.status(404).build();
+        } catch (PasswordDontMatchException e) {
+            return Response.status(401).build();
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
         return Response.status(201).entity(user).build();
     }
 

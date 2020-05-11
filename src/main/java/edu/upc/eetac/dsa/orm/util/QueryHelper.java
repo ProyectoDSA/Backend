@@ -45,6 +45,13 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String createQuerySELECTbyName(Class theClass) {
+        StringBuffer sb = new StringBuffer("SELECT ID FROM ");
+        sb.append(theClass.getSimpleName());
+        sb.append(" WHERE NOMBRE=? OR MAIL=?");
+        return sb.toString();
+    }
+
     //SELECT * FROM Class
     public static String createQuerySELECTALL(Class theClass) {
         StringBuffer sb = new StringBuffer();
