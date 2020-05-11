@@ -119,8 +119,8 @@ public class UserManagerImpl implements UserManager{
             session.close();
         }
 
-        /*for(User u : usersList)
-            System.out.println(u.toString());*/
+        for(User u : usersList)
+            System.out.println("Founded "+u.toString());
         return usersList;
     }
 

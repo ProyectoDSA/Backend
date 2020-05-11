@@ -73,7 +73,6 @@ public class SessionImpl implements Session {
                     ObjectHelper.setter(object, field, rs.getObject(i));
                 }
                 res.add(object); //Añadimos objeto a la lista/tabla
-                System.out.println("Added : " + object.toString());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -157,5 +156,10 @@ public class SessionImpl implements Session {
     }
 
     public void close() {
+        try {
+            this.conn.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

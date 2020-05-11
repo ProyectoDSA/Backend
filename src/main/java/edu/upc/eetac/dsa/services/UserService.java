@@ -30,8 +30,6 @@ public class UserService {
             this.um.addUser("Ivan","ivan@yahoo.es");
             this.um.addUser("Manu", "manu@outlook.es");
         }
-        System.out.println("User service");
-
     }
 
     @GET
@@ -44,20 +42,11 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
 
-            System.out.println("getUsers()");
-            List<User> users = null;
-        try {
-            users = this.um.getAllUsers();
+        List<User> users = null;
 
-        System.out.println("string1 "+ users);
-
-        for(User u : users){
-            System.out.println("chivato"+u);
-        }
-        }catch (Throwable e) {
-            e.printStackTrace();
-        }
+        users = this.um.getAllUsers();
         GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {};
+
         return Response.status(201).entity(entity).build();
     }
 
