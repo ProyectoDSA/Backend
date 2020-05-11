@@ -35,12 +35,12 @@ public class UserManagerImpl implements UserManager{
     //Funcion que crea un usuario y lo añade en la tabla con el nombre
     //y el mail que le enviamos como parametros al hacer el registro
     @Override
-    public String addUser(String name, String mail) {
+    public String addUser(String name, String mail, String pswd) {
         Session session = null;
         String userID = null;
         try {
             session = FactorySession.openSession();
-            User user = new User(name, mail);
+            User user = new User(name, mail, pswd);
             userID = user.getId();
             session.save(user);
         }
@@ -58,7 +58,7 @@ public class UserManagerImpl implements UserManager{
     //Funcion que actualiza los datos de un usuario
     //NO PERMITE ACTUALIZAR SU ID!! Es la forma de buscarlo
     @Override
-    public User updateUser(String id, String nombre, String mail) {
+    public User updateUser(String id, String nombre, String mail, String pswd) {
         Session session = null;
         try {
             session = FactorySession.openSession();
@@ -66,6 +66,7 @@ public class UserManagerImpl implements UserManager{
             if(u!=null) {
                 u.setNombre(nombre);
                 u.setMail(mail);
+                u.setPassword(pswd);
                 session.update(u);
                 return u;
             }
@@ -81,7 +82,7 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public User updateUser(User user) {
-        this.updateUser(user.getId(),user.getNombre(),user.getMail());
+        this.updateUser(user.getId(),user.getNombre(),user.getMail(), user.getPassword());
         return user;
     }
 

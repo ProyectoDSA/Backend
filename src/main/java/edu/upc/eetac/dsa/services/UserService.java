@@ -27,8 +27,8 @@ public class UserService {
     public UserService() {
         this.um = UserManagerImpl.getInstance();
         if (um.size()==0) {
-            this.um.addUser("Ivan","ivan@yahoo.es");
-            this.um.addUser("Manu", "manu@outlook.es");
+            this.um.addUser("Ivan","ivan@yahoo.es", "jsdjj");
+            this.um.addUser("Manu", "manu@outlook.es", "jdjfj");
         }
     }
 
@@ -104,13 +104,13 @@ public class UserService {
 
     })
 
-    @Path("/{nombre}/{mail}")
+    @Path("/{nombre}/{mail}/{password}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newUser(@PathParam("nombre") String nombre, @PathParam("mail") String mail) {
+    public Response newUser(@PathParam("nombre") String nombre, @PathParam("mail") String mail, @PathParam("password") String password) {
 
-        User user = new User(nombre,mail);
+        User user = new User(nombre,mail,password);
         if(user.getMail()==null || user.getNombre()==null) return Response.status(500).entity(user).build();
-        this.um.addUser(user.getNombre(), user.getMail());
+        this.um.addUser(user.getNombre(), user.getMail(), user.getPassword());
         return Response.status(201).entity(user).build();
     }
 

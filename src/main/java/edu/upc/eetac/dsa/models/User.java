@@ -7,14 +7,16 @@ public class User {
     public String id;
     public String nombre;
     public String mail;
+    public String password;
 
     public User(){}
 
-    public User(String nombre, String mail) {
+    public User(String nombre, String mail, String password) {
         this();
         this.id = RandomUtils.generateID(6);
         this.nombre = nombre;
         this.mail = mail;
+        this.password = password;
     }
 
 
@@ -40,6 +42,14 @@ public class User {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

@@ -127,6 +127,7 @@ public class SessionImpl implements Session {
             statement.setObject(1, ObjectHelper.getter(object, "id"));
             statement.setObject(2, ObjectHelper.getter(object, "nombre"));
             statement.setObject(3, ObjectHelper.getter(object, "mail"));
+            statement.setObject(4, ObjectHelper.getter(object, "password"));
             System.out.println(statement);
             statement.executeQuery();
         } catch (SQLException throwables) {
