@@ -20,23 +20,23 @@ body {
     padding: 10%;
     height: 100%;
 }
-.login-form{
+.loginform-form{
     padding: 5%;
 
 }
-.login-form h2{
+.loginform-form h2{
     text-align: center;
     color: white;
 }
-.register-form{
+.registerform-form{
     padding: 5%;
     background-image: linear-gradient(to bottom right, black, orange);
 }
-.register-form h2{
+.registerform-form h2{
     text-align: center;
     color: #fff;
 }
-.btnSubmit
+.btnlogin
 {
     width: 50%;
     border-radius: 1rem;
@@ -45,13 +45,22 @@ body {
     cursor: pointer;
     transform: translateX(+50%);
 }
-.login-form .btnSubmit{
+.btnregister
+{
+    width: 50%;
+    border-radius: 1rem;
+    padding: 2.5%;
+    border: none;
+    cursor: pointer;
+    transform: translateX(+50%);
+}
+.loginform-form .btnlogin{
     font-weight: 600;
     color: red;
     background-color: white;
 
 }
-.register-form .btnSubmit{
+.registerform-form .btnregister{
     font-weight: 600;
     color: white;
     background-color: darkorange;
