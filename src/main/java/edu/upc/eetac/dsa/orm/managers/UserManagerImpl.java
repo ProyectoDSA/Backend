@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.orm.managers;
 
 import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
+import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.orm.session.FactorySession;
 import edu.upc.eetac.dsa.orm.session.Session;
@@ -8,69 +9,86 @@ import edu.upc.eetac.dsa.models.User;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UserManagerImpl implements UserManager{
 
     private static UserManager instance;
-    private HashMap<String, User> users;
 
-    private UserManagerImpl(){
-        this.users = new HashMap<>();
-    }
+    final static Logger log = Logger.getLogger(UserManagerImpl.class.getName());
+
+    private UserManagerImpl(){}
 
     public static UserManager getInstance(){
         if (instance==null) instance = new UserManagerImpl();
         return instance;
     }
 
+
+
     //Funcion que obtiene un usuario por su ID
     @Override
-    public User getUser(String id){
+    public User getUser(String id) throws UserNotFoundException {
         Session session = null;
         User u = null;
-        try{
+        try {
             session = FactorySession.openSession();
             u = (User) session.findByID(User.class, id);
-        } catch (Exception e){
-            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return u;
+        if(u!=null)
+            return u;
+        else
+            throw new UserNotFoundException();
     }
 
     @Override
-    public User getUserByName(String name){
+    public String getIdUser(String name) throws UserNotFoundException {
+        String id = null;
+        User u = this.getUserByName(name);
+        if(u!=null)
+            id = u.getId();
+        else
+            throw new UserNotFoundException();
+        return id;
+    }
+
+    @Override
+    public User getUserByName(String name) throws UserNotFoundException {
         Session session = null;
         User u = null;
         try{
             session = FactorySession.openSession();
             u = (User) session.findByName(User.class, name);
-        } catch (Exception e){
-            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return u;
+
+        if(u!=null)
+            return u;
+        else
+            throw new UserNotFoundException();
     }
 
-    //Funcion que crea un usuario y lo añade en la tabla con el nombre
-    //y el mail que le enviamos como parametros al hacer el registro
     @Override
-    public String addUser(String name, String mail, String password) {
+    public List<User> getAllUsers() {
         Session session = null;
-        String userID = null;
+        List<User> usersList=null;
         try {
             session = FactorySession.openSession();
-            User user = new User(name, mail, password);
-            userID = user.getId();
-            session.save(user);
+            usersList = session.findAll(User.class);
         }
         catch (Exception e) {
-            // LOG
-            e.printStackTrace();
+            log.warning("Error");
         }
         finally {
             session.close();
         }
 
-        return userID;
+        /*for(User u : usersList)
+            System.out.println(u.toString());*/
+        return usersList;
     }
 
     //Funcion que actualiza los datos de un usuario
@@ -89,7 +107,7 @@ public class UserManagerImpl implements UserManager{
             }
         }
         catch (Exception e) {
-            // LOG
+            log.warning("Error al actualizar");
         }
         finally {
             session.close();
@@ -105,50 +123,19 @@ public class UserManagerImpl implements UserManager{
     //Funcion que elimina al usuario con el ID que le pasamos
     @Override
     public void deleteUser(String id) {
-        User user = this.getUser(id);
+        User user = null;
         Session session = null;
         try {
+            user = this.getUser(id);
             session = FactorySession.openSession();
             session.delete(user);
         }
-        catch (Exception e) {
-            // LOG
-            e.printStackTrace();
+        catch (UserNotFoundException e) {
+            log.warning("User not found");
         }
         finally {
             session.close();
         }
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        Session session = null;
-        List<User> usersList=null;
-        try {
-            session = FactorySession.openSession();
-            usersList = session.findAll(User.class);
-        }
-        catch (Exception e) {
-            // LOG
-            e.printStackTrace();
-        }
-        finally {
-            session.close();
-        }
-
-        /*for(User u : usersList)
-            System.out.println(u.toString());*/
-        return usersList;
-    }
-
-    @Override
-    public List<User> getUsersConnected() {
-        Session session = null;
-        List<User> usersList=null;
-        for(User u : users.values()){
-            usersList.add(u);
-        }
-        return usersList;
     }
 
     @Override
@@ -167,54 +154,63 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public String getIdUser(String name) {
-        String id = null;
-        User u = this.getUserByName(name);
-        if(u!=null)
-            id = u.getId();
-        return id;
-    }
-
-    @Override
     public User login(String name, String pswd){
-        Session session=null;
         User u = null;
-        boolean logged = false;
-        try{
-            session = FactorySession.openSession();
-            u = this.getUser(getIdUser(name));
-            if(checkName(u.getId(),name)) {
-                if (checkPassword(u.getId(), pswd)){
-                    this.users.put(u.getId(), u);
-                    logged=true;
-                }
-            }
+        try {
+            u = this.getUserByName(name);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
-        } catch (PasswordDontMatchException e) {
-            e.printStackTrace();
-        } finally {
-            session.close();
         }
         return u;
     }
 
-    @Override
-    public boolean checkName(String id, String name) throws UserNotFoundException {
-        User u = getUser(id);
+    public boolean checkNameLogin(String name) throws UserNotFoundException {
+        User u = getUserByName(name);
         if(u.getNombre().equals(name) || u.getMail().equals(name)) {
             return true;
         }
         else throw new UserNotFoundException();
     }
 
-    @Override
     public boolean checkPassword(String id, String pswd) throws PasswordDontMatchException {
-        User u = getUser(id);
+        User u = null;
+        try {
+            u = getUser(id);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
         if(!u.getPassword().equals(pswd)) throw new PasswordDontMatchException();
         else {
             return true;
         }
+    }
+
+    public boolean checkNameRegister(String name) throws UserAlreadyExistsException {
+        User u = null;
+        try {
+            u = getUserByName(name);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(u==null)
+            throw new UserAlreadyExistsException();
+        else
+            return true;
+    }
+
+    public boolean checkMailRegister(String mail) throws UserAlreadyExistsException{
+        User u = null;
+        try {
+            u = getUserByName(mail);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(u==null)
+            throw new UserAlreadyExistsException();
+        else
+            return true;
     }
 
     @Override
