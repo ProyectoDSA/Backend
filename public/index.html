@@ -2,54 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>UI Login</title>
+    <title>Mercovid-20</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="JavaScript/Login.js"></script>
+    <link rel="stylesheet" type="text/css"href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="CSS/style.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="JavaScript/Register.js"></script>
-    <link rel="stylesheet" href="CSS/style.css">
-</head>
 
+</head>
 <body>
-<div class="container login-container">
+<div class="container-fluid bg">
     <div class="row">
-        <div class="col-md-6 loginform-form">
-            <h2>Iniciar sesion</h2>
-            <form id="loginform">
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <form class="loginform">
+                <h1>LOGIN</h1>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Nombre o correo electronico" id="loginName"/>
+                    <label>Name or Email:</label>
+                    <input type="text" class="form-control" placeholder="Name or Email" id="loginName">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Contraseña" id="loginPassword"/>
+                    <label>Password:</label>
+                    <input type="password" class="form-control" placeholder="Password" id="loginPassword">
                 </div>
                 <div class="form-group">
-                    <input type="button" class="btnlogin" value="Iniciar sesion" id="login"/>
+                    <input type="button" class="btnlogin btn-success btn-block" value="Login" id="login">
                 </div>
-                    </form>
-                </div>
-        <div class="col-md-6 registerform-form">
-            <h2>Registrarse</h2>
-            <form id="registerform">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Nombre" id="registerName"/>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Correo electronico" id="registerMail"/>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Contraseña" id="registerPassword"/>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Repita la contraseña" id="registerConfirm"/>
-                </div>
-                <div class="form-group">
-                    <input type="button" class="btnregister" value="Registrarse" id="register"/>
+                <br><br>
+                <div class="toggle">
+                    Don't have account?<a href="register.html">&nbsp;Sign up</a>
                 </div>
             </form>
         </div>
+        <div class="col-md-4 col-sm-4 col-xs-12"></div>
     </div>
 </div>
+    <script src="jquery.js"></script>
+    <script>
+        $('.toggle').click(function () {
+            $('.registerform').animate({
+                height:"toggle", 'padding-top': 'toggle', 'padding-bottom': "toggle", opacity: 'toggle'
+            }, "slow");
+        });
+    </script>
 </body>
 </html>
