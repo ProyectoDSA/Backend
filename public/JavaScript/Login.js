@@ -1,4 +1,4 @@
-var Base_URI="http://localhost:8080/dsaApp/";
+var Base_URI="http://147.83.7.203:8080/dsaApp/";
 
 $(document).ready(function(){
     console.log("hola");
@@ -17,7 +17,7 @@ $(document).ready(function(){
             success: function(data) {
                 console.log("hola1")
                 window.localStorage.setItem("name", username)
-                var url = "http://localhost:8080/hola.html";
+                var url = "http://147.83.7.203:8080/hola.html";
                 window.open(url, "_self");
                 alert(data)
             },

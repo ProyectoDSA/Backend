@@ -1,4 +1,4 @@
-var BASE_URI="http://localhost:8080/dsaApp/"
+var BASE_URI="http://147.83.7.203:8080/dsaApp/"
 
 $(document).ready(function(){
     console.log("iueputa")
@@ -18,7 +18,7 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function (data) {
                     window.localStorage.setItem("username",username);
-                    var url = "http://localhost:8080/hola.html";
+                    var url = "http://147.83.7.203:8080/hola.html";
                     window.open(url, "_self");
                     alert(data)
                 },
