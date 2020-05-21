@@ -109,7 +109,7 @@ public class UserManagerImpl implements UserManager{
             }
         }
         catch (Exception e) {
-            log.warning("Error al actualizar");
+            throw e;
         }
         finally {
             session.close();
@@ -124,7 +124,7 @@ public class UserManagerImpl implements UserManager{
 
     //Funcion que elimina al usuario con el ID que le pasamos
     @Override
-    public void deleteUser(String id) {
+    public void deleteUser(String id) throws UserNotFoundException {
         User user = null;
         Session session = null;
         try {
@@ -134,6 +134,7 @@ public class UserManagerImpl implements UserManager{
         }
         catch (UserNotFoundException e) {
             log.warning("User not found");
+            throw e;
         }
         finally {
             session.close();
@@ -145,69 +146,77 @@ public class UserManagerImpl implements UserManager{
         Session session = null;
         User u = null;
         try {
-            if (checkNameRegister(rc.getNombre()) || checkMailRegister(rc.getNombre())) {
+            if (checkNameRegister(rc.getNombre())) {
                 session = FactorySession.openSession();
                 u = new User(rc.getNombre(), rc.getMail(), rc.getPassword());
                 session.save(u);
                 LoginCredentials lc = new LoginCredentials(u.getNombre(), u.getPassword());
                 this.login(lc);
             } else
-                throw new PasswordDontMatchException();
+                throw new UserAlreadyExistsException();
         } catch (Exception e){
-            throw new UserAlreadyExistsException();
+            throw e;
         }finally {
             session.close();
         }
         System.out.println("User "+u.toString()+" registered");
     }
 
-    @Override
-    public User login(LoginCredentials lc) throws Exception {
-        User u = null;
+    private boolean checkNameRegister(String name) {
 
-        if (checkNameLogin(lc.getNombre())) {
-            if (checkPassword(getIdUser(lc.getNombre()), lc.getPassword())) {
-                u = getUserByNameOrMail(lc.getNombre());
-            } else
-                throw new PasswordDontMatchException();
+        User u = null;
+        try {
+            u = getUserByNameOrMail(name);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
         }
 
-        if(u==null) throw new UserNotFoundException();
+        if(u==null)
+            return false;
+        else
+            return true;
+    }
+
+    @Override
+    public User login(LoginCredentials lc) throws UserNotFoundException, PasswordDontMatchException {
+        User u = null;
+
+        try{
+            if (checkNameLogin(lc.getNombre())) {
+                if (checkPswdLogin(getIdUser(lc.getNombre()), lc.getPassword())) {
+                    u = getUserByNameOrMail(lc.getNombre());
+                }
+            }
+        } catch (UserNotFoundException e) {
+            throw e;
+        } catch (PasswordDontMatchException e) {
+            throw e;
+        }
+
         return u;
     }
 
-    private boolean checkNameLogin(String name) throws Exception {
-        User u = getUserByNameOrMail(name);
-        if (u!=null) return true;
-        else throw new UserNotFoundException();
-    }
+    private boolean checkNameLogin(String name) throws UserNotFoundException {
 
-    private boolean checkPassword(String id, String pswd) throws Exception {
-        User u =  getUser(id);
-
-        if(!u.getPassword().equals(pswd)) throw new PasswordDontMatchException();
-        else {
-            return true;
+        try {
+            if(getUserByNameOrMail(name)!=null) return true;
+        } catch (UserNotFoundException e) {
+            throw e;
         }
+        return false;
     }
 
-    private boolean checkNameRegister(String name) throws Exception {
-        User u = getUserByNameOrMail(name);
+    private boolean checkPswdLogin(String id, String pswd) throws PasswordDontMatchException {
+        User u = null;
 
-        if(u==null)
-            throw new UserAlreadyExistsException();
-        else
-            return true;
-    }
+        try {
+            u = getUser(id);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
 
-    private boolean checkMailRegister(String mail) throws Exception{
-
-        User u = getUserByNameOrMail(mail);
-
-        if(u==null)
-            throw new UserAlreadyExistsException();
-        else
-            return true;
+        if(u.getPassword().equals(pswd)) return true;
+        else throw new PasswordDontMatchException();
     }
 
     @Override

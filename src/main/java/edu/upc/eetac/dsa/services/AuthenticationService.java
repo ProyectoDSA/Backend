@@ -23,7 +23,7 @@ import java.util.List;
 
 //EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
 
-@Api(value = "/auth", description = "Endpoint to User Service")
+@Api(value = "/auth", description = "Authentication API for Login and Register")
 @Path("/auth")
 public class AuthenticationService {
 
@@ -31,12 +31,6 @@ public class AuthenticationService {
 
     public AuthenticationService() {
         this.auth = UserManagerImpl.getInstance();
-        if (auth.size()==0) {
-            //this.auth.register("Ivan", "k@gmail", "klsdvf");
-            //this.auth.register("PEP", "pepe@pepito", "erjfdjsf");
-            //this.um.addUser("Ivan","ivan@yahoo.es", "jsdjj");
-            //this.um.addUser("Manu", "manu@outlook.es", "jdjfj");
-        }
     }
 
     @POST
@@ -44,8 +38,7 @@ public class AuthenticationService {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response=User.class),
             @ApiResponse(code = 400, message = "Password don't match"),
-            @ApiResponse(code = 401, message = "User already exists"),
-            @ApiResponse(code = 409, message = "Mail already exists"),
+            @ApiResponse(code = 409, message = "User already exists"),
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
@@ -54,14 +47,13 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(RegisterCredentials credentials) {
 
-        if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null) return Response.status(500).build();
+        if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null)
+            return Response.status(500).build();
         try {
             if (credentials.getPassword().equals(credentials.getConfirm()))
                 this.auth.register(credentials);
             else
                 return Response.status(400).build();
-        } catch (UserAlreadyExistsException e) {
-            return Response.status(401).build();
         } catch (Exception e) {
             return Response.status(409).build();
         }
@@ -74,7 +66,7 @@ public class AuthenticationService {
             @ApiResponse(code = 201, message = "Successful", response=User.class),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 409, message = "Password Not Match"),
-            @ApiResponse(code = 500, message = "Incorrect password")
+            @ApiResponse(code = 500, message = "Authentication error")
 
     })
 
@@ -82,14 +74,14 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginCredentials credentials) {
         User user = null;
+        if(credentials.getNombre()==null || credentials.getPassword()==null)
+            return Response.status(500).build();
         try {
             user = this.auth.login(credentials);
-        } catch (UserNotFoundException e) {
-            return Response.status(404).build();
         } catch (PasswordDontMatchException e) {
             return Response.status(409).build();
         } catch (Exception e) {
-            return Response.status(500).build();
+            return Response.status(404).build();
         }
 
         return Response.status(201).entity(user).build();

@@ -89,7 +89,13 @@ public class UserService {
             e.printStackTrace();
         }
         if (u == null) return Response.status(404).build();
-        else this.um.deleteUser(id);
+        else {
+            try {
+                this.um.deleteUser(id);
+            } catch (UserNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         return Response.status(201).build();
     }
 

@@ -20,7 +20,7 @@ public interface UserManager {
     public void updateUser(String id, String nombre, String mail, String password); //Actualiza los datos de un usuario
     public User updateUser(User user);
 
-    public void deleteUser(String id); //Elimina usuario de la tabla User
+    public void deleteUser(String id) throws UserNotFoundException; //Elimina usuario de la tabla User
 
     public void register(RegisterCredentials rc) throws Exception;
 
