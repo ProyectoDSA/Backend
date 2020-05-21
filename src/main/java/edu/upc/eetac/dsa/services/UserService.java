@@ -30,8 +30,8 @@ public class UserService {
     public UserService() {
         this.um = UserManagerImpl.getInstance();
         if (um.size()==0) {
-            this.um.register("Ivan", "k@gmail", "klsdvf");
-            this.um.register("PEP", "pepe@pepito", "erjfdjsf");
+            //this.um.register("Ivan", "k@gmail", "klsdvf");
+            //this.um.register("PEP", "pepe@pepito", "erjfdjsf");
             //this.um.addUser("Ivan","ivan@yahoo.es", "jsdjj");
             //this.um.addUser("Manu", "manu@outlook.es", "jdjfj");
         }
@@ -67,7 +67,7 @@ public class UserService {
         User u = null;
         try {
             u = this.um.getUser(id);
-        } catch (UserNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         if (u == null) return Response.status(404).build();
@@ -85,7 +85,7 @@ public class UserService {
         User u = null;
         try {
             u = this.um.getUser(id);
-        } catch (UserNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         if (u == null) return Response.status(404).build();
@@ -121,13 +121,13 @@ public class UserService {
 
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response register(RegisterCredentials credentials) {
+    public Response register(RegisterCredentials credentials) throws Exception {
 
         if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null) return Response.status(500).build();
-        this.um.register(credentials.getNombre(), credentials.getMail(), credentials.getPassword());
+        this.um.register(credentials);
         User user = null;
         try {
-            user = this.um.getUserByName(credentials.getNombre());
+            user = this.um.getUserByNameOrMail(credentials.getNombre());
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
@@ -149,7 +149,7 @@ public class UserService {
     public Response login(LoginCredentials credentials) {
         User user = null;
         try {
-            user = this.um.login(credentials.getNombre(), credentials.getPassword());
+            user = this.um.login(credentials);
             //this.um.checkName(user.getId(), nombre);
             //this.um.checkPassword(user.getId(), password);
         } catch (Exception e) {

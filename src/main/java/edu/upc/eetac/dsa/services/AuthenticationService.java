@@ -18,6 +18,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.List;
 
 //EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
@@ -31,8 +32,8 @@ public class AuthenticationService {
     public AuthenticationService() {
         this.auth = UserManagerImpl.getInstance();
         if (auth.size()==0) {
-            this.auth.register("Ivan", "k@gmail", "klsdvf");
-            this.auth.register("PEP", "pepe@pepito", "erjfdjsf");
+            //this.auth.register("Ivan", "k@gmail", "klsdvf");
+            //this.auth.register("PEP", "pepe@pepito", "erjfdjsf");
             //this.um.addUser("Ivan","ivan@yahoo.es", "jsdjj");
             //this.um.addUser("Manu", "manu@outlook.es", "jdjfj");
         }
@@ -42,6 +43,7 @@ public class AuthenticationService {
     @ApiOperation(value = "register a new User", notes = "Crea un nuevo usuario")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response=User.class),
+            @ApiResponse(code = 400, message = "Password don't match"),
             @ApiResponse(code = 401, message = "User already exists"),
             @ApiResponse(code = 409, message = "Mail already exists"),
             @ApiResponse(code = 500, message = "Validation Error")
@@ -53,18 +55,17 @@ public class AuthenticationService {
     public Response register(RegisterCredentials credentials) {
 
         if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null) return Response.status(500).build();
-        User user = null;
         try {
-            user = this.auth.getUserByName(credentials.getNombre());
-            this.auth.checkNameRegister(credentials.getNombre());
-            this.auth.checkMailRegister(credentials.getMail());
-            this.auth.register(credentials.getNombre(), credentials.getMail(), credentials.getPassword());
-        } catch (UserNotFoundException e) {
-            return Response.status(401).build();
+            if (credentials.getPassword().equals(credentials.getConfirm()))
+                this.auth.register(credentials);
+            else
+                return Response.status(400).build();
         } catch (UserAlreadyExistsException e) {
+            return Response.status(401).build();
+        } catch (Exception e) {
             return Response.status(409).build();
         }
-        return Response.status(201).entity(user).build();
+        return Response.status(201).build();
     }
 
     @POST
@@ -82,11 +83,7 @@ public class AuthenticationService {
     public Response login(LoginCredentials credentials) {
         User user = null;
         try {
-            if(this.auth.checkNameLogin(credentials.getNombre())){
-                if(this.auth.checkPassword(this.auth.getIdUser(credentials.getNombre()), credentials.getPassword())){
-                    user = this.auth.login(credentials.getNombre(), credentials.getPassword());
-                }
-            }
+            user = this.auth.login(credentials);
         } catch (UserNotFoundException e) {
             return Response.status(404).build();
         } catch (PasswordDontMatchException e) {

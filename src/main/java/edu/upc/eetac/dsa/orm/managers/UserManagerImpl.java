@@ -3,6 +3,8 @@ package edu.upc.eetac.dsa.orm.managers;
 import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
+import edu.upc.eetac.dsa.models.LoginCredentials;
+import edu.upc.eetac.dsa.models.RegisterCredentials;
 import edu.upc.eetac.dsa.orm.session.FactorySession;
 import edu.upc.eetac.dsa.orm.session.Session;
 import edu.upc.eetac.dsa.models.User;
@@ -46,7 +48,7 @@ public class UserManagerImpl implements UserManager{
     @Override
     public String getIdUser(String name) throws UserNotFoundException {
         String id = null;
-        User u = this.getUserByName(name);
+        User u = this.getUserByNameOrMail(name);
         if(u!=null)
             id = u.getId();
         else
@@ -55,12 +57,12 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public User getUserByName(String name) throws UserNotFoundException {
+    public User getUserByNameOrMail(String name) throws UserNotFoundException {
         Session session = null;
         User u = null;
         try{
             session = FactorySession.openSession();
-            u = (User) session.findByName(User.class, name);
+            u = (User) session.findByNameOrMail(User.class, name);
         } finally {
             session.close();
         }
@@ -139,59 +141,58 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public void register(String name, String mail, String pswd){
+    public void register(RegisterCredentials rc) throws Exception {
         Session session = null;
         User u = null;
         try {
-            session = FactorySession.openSession();
-            u = new User(name, mail, pswd);
-            session.save(u);
-            this.login(u.getNombre(), u.getPassword());
-        } finally {
+            if (checkNameRegister(rc.getNombre()) || checkMailRegister(rc.getNombre())) {
+                session = FactorySession.openSession();
+                u = new User(rc.getNombre(), rc.getMail(), rc.getPassword());
+                session.save(u);
+                LoginCredentials lc = new LoginCredentials(u.getNombre(), u.getPassword());
+                this.login(lc);
+            } else
+                throw new PasswordDontMatchException();
+        } catch (Exception e){
+            throw new UserAlreadyExistsException();
+        }finally {
             session.close();
         }
         System.out.println("User "+u.toString()+" registered");
     }
 
     @Override
-    public User login(String name, String pswd){
+    public User login(LoginCredentials lc) throws Exception {
         User u = null;
-        try {
-            u = this.getUserByName(name);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
+
+        if (checkNameLogin(lc.getNombre())) {
+            if (checkPassword(getIdUser(lc.getNombre()), lc.getPassword())) {
+                u = getUserByNameOrMail(lc.getNombre());
+            } else
+                throw new PasswordDontMatchException();
         }
+
+        if(u==null) throw new UserNotFoundException();
         return u;
     }
 
-    public boolean checkNameLogin(String name) throws UserNotFoundException {
-        User u = getUserByName(name);
-        if(u.getNombre().equals(name) || u.getMail().equals(name)) {
-            return true;
-        }
+    private boolean checkNameLogin(String name) throws Exception {
+        User u = getUserByNameOrMail(name);
+        if (u!=null) return true;
         else throw new UserNotFoundException();
     }
 
-    public boolean checkPassword(String id, String pswd) throws PasswordDontMatchException {
-        User u = null;
-        try {
-            u = getUser(id);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
+    private boolean checkPassword(String id, String pswd) throws Exception {
+        User u =  getUser(id);
+
         if(!u.getPassword().equals(pswd)) throw new PasswordDontMatchException();
         else {
             return true;
         }
     }
 
-    public boolean checkNameRegister(String name) throws UserAlreadyExistsException {
-        User u = null;
-        try {
-            u = getUserByName(name);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
+    private boolean checkNameRegister(String name) throws Exception {
+        User u = getUserByNameOrMail(name);
 
         if(u==null)
             throw new UserAlreadyExistsException();
@@ -199,13 +200,9 @@ public class UserManagerImpl implements UserManager{
             return true;
     }
 
-    public boolean checkMailRegister(String mail) throws UserAlreadyExistsException{
-        User u = null;
-        try {
-            u = getUserByName(mail);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
+    private boolean checkMailRegister(String mail) throws Exception{
+
+        User u = getUserByNameOrMail(mail);
 
         if(u==null)
             throw new UserAlreadyExistsException();

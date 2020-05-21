@@ -1,5 +1,8 @@
 package edu.upc.eetac.dsa.orm.session;
 
+import edu.upc.eetac.dsa.exceptions.EmptyUserListException;
+import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
+import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.orm.util.ObjectHelper;
 import edu.upc.eetac.dsa.orm.util.QueryHelper;
 
@@ -117,11 +120,11 @@ public class SessionImpl implements Session {
     }
 
     @Override
-    public Object findByName(Class theClass, String name) {
+    public Object findByNameOrMail(Class theClass, String name) {
         ResultSet rs;
         Object object = null;
 
-        String selectByIdQuery = QueryHelper.createQuerySELECTbyName(theClass);
+        String selectByIdQuery = QueryHelper.createQuerySELECTbyNameOrMail(theClass);
 
         PreparedStatement pstm;
 
@@ -160,8 +163,8 @@ public class SessionImpl implements Session {
             statement.setObject(4, ObjectHelper.getter(object, "password"));
             System.out.println(statement);
             statement.executeQuery();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             close();
         }
@@ -179,8 +182,8 @@ public class SessionImpl implements Session {
             statement.executeQuery();
             System.out.println(statement);
             System.out.println("Object with ID = "+idValue+" deleted");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             close();
         }

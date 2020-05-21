@@ -5,14 +5,16 @@ public class RegisterCredentials {
     public String nombre;
     public String mail;
     public String password;
+    public String confirm;
 
     public RegisterCredentials(){}
 
-    public RegisterCredentials(String nombre, String mail, String password) {
+    public RegisterCredentials(String nombre, String mail, String password, String confirm) {
         this();
         this.nombre = nombre;
         this.mail = mail;
         this.password = password;
+        this.confirm = confirm;
     }
 
     public String getNombre() {
@@ -37,5 +39,23 @@ public class RegisterCredentials {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirm() {
+        return confirm;
+    }
+
+    public void setConfirm(String confirm) {
+        this.confirm = confirm;
+    }
+
+    @Override
+    public String toString() {
+        return "RegisterCredentials{" +
+                "nombre='" + nombre + '\'' +
+                ", mail='" + mail + '\'' +
+                ", password='" + password + '\'' +
+                ", confirm='" + confirm + '\'' +
+                '}';
     }
 }
