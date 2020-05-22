@@ -3,9 +3,9 @@ var BASE_URI="http://localhost:8080/dsaApp/auth";
 $(document).ready(function(){
     console.log("hola");
     $('#login').click(function(){
-         var username= $("#loginName").val();
+         var nombre= $("#loginName").val();
          var password= $("#loginPassword").val();
-         var user = {"username": username, "password": password};
+         var user = {"nombre": nombre, "password": password};
          console.log(user);
 
         $.ajax({
@@ -16,7 +16,7 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(data) {
                 console.log("hola1")
-                window.localStorage.setItem("name", username)
+                window.localStorage.setItem("nombre", nombre)
                 var url = "http://localhost:8080/home.html";
                 window.open(url, "_self");
                 alert(data)

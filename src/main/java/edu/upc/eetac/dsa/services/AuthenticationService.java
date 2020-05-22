@@ -46,7 +46,7 @@ public class AuthenticationService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(RegisterCredentials credentials) {
-
+        System.out.println("estoy aqui"+ credentials);
         if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {
@@ -57,7 +57,7 @@ public class AuthenticationService {
         } catch (Exception e) {
             return Response.status(409).build();
         }
-        return Response.status(201).build();
+        return Response.status(201).entity(credentials).build();
     }
 
     @POST
@@ -74,6 +74,7 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginCredentials credentials) {
         User user = null;
+        System.out.println("estoy aqui"+ credentials);
         if(credentials.getNombre()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {

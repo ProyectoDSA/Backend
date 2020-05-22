@@ -15,6 +15,7 @@ public class LoginCredentials {
         this.password=password;
     }
 
+
     public String getNombre() {
         return nombre;
     }
@@ -29,5 +30,10 @@ public class LoginCredentials {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginCredentials{" + "nombre='" + nombre + '\'' + ", password='" + password + '\'' + '}';
     }
 }
