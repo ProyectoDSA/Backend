@@ -1,4 +1,4 @@
-var BASE_URI="http://147.83.7.203:8080/dsaApp/"
+var BASE_URI="http://localhost:8080/dsaApp/auth"
 
 $(document).ready(function(){
     console.log("iueputa")
@@ -12,13 +12,13 @@ $(document).ready(function(){
             console.log(user);
             $.ajax({
                 type: 'POST',
-                url: Base_URI.concat("usermanager/"+username+'/'+mail+'/'+password),
+                url: Base_URI.concat("/register"),
                 headers: { 'content-type': 'application/json',"x-kii-appid": "XXXXX","x-kii-appkey":"XXXXX" },
                 data: JSON.stringify(user),
                 dataType: 'json',
                 success: function (data) {
                     window.localStorage.setItem("username",username);
-                    var url = "http://147.83.7.203:8080/hola.html";
+                    var url = "http://localhost:8080/home.html";
                     window.open(url, "_self");
                     alert(data)
                 },
