@@ -1,20 +1,20 @@
 var BASE_URI="http://localhost:8080/dsaApp/auth";
 
-$(document).ready(function(){
+$(document).ready(function() {
     console.log("hola");
-    $('#login').click(function(){
-         var nombre= $("#loginName").val();
-         var password= $("#loginPassword").val();
-         var user = {"nombre": nombre, "password": password};
-         console.log(user);
+    $('#login').click(function () {
+        var nombre = $("#loginName").val();
+        var password = $("#loginPassword").val();
+        var user = {"nombre": nombre, "password": password};
+        console.log(user);
 
         $.ajax({
             type: 'POST',
             url: BASE_URI.concat("/login"),
-            headers: { 'content-type': 'application/json',"x-kii-appid": "XXXXX","x-kii-appkey":"XXXXX" },
+            headers: {'content-type': 'application/json', "x-kii-appid": "XXXXX", "x-kii-appkey": "XXXXX"},
             data: JSON.stringify(user),
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 console.log("hola1")
                 window.localStorage.setItem("nombre", nombre)
                 var url = "http://localhost:8080/home.html";
@@ -23,8 +23,7 @@ $(document).ready(function(){
             },
             error: function (e) {
                 console.log(e.message);
-        }
+            }
         });
     });
-});
-
+})
