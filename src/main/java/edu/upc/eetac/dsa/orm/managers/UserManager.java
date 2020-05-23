@@ -12,10 +12,12 @@ import java.util.List;
 //Interfaz donde definimos las operaciones CRUD que queremos realizar al usuario
 public interface UserManager {
 
+    //PASAR ESTAS FUNCIONES A SESSION PARA HACERLO EN GENERAL
     public User getUser(String id) throws Exception; //Devuelve un usuario con cierto ID
     public String getIdUser(String name) throws Exception;
     public User getUserByNameOrMail(String name) throws Exception;
     public List<User> getAllUsers(); //Devuelve una lista con todos los usuarios de la tabla
+    //**************************************************************************************
 
     public void updateUser(String id, String nombre, String mail, String password); //Actualiza los datos de un usuario
     public User updateUser(User user);

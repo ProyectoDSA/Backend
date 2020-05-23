@@ -30,12 +30,12 @@ public class UserManagerImpl implements UserManager{
 
     //Funcion que obtiene un usuario por su ID
     @Override
-    public User getUser(String id) throws UserNotFoundException {
+    public User getUser(String idUser) throws UserNotFoundException {
         Session session = null;
         User u = null;
         try {
             session = FactorySession.openSession();
-            u = (User) session.findByID(User.class, id);
+            u = (User) session.findByID(User.class, idUser);
         } finally {
             session.close();
         }
@@ -47,13 +47,13 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public String getIdUser(String name) throws UserNotFoundException {
-        String id = null;
+        String idUser = null;
         User u = this.getUserByNameOrMail(name);
         if(u!=null)
-            id = u.getId();
+            idUser = u.getIdUser();
         else
             throw new UserNotFoundException();
-        return id;
+        return idUser;
     }
 
     @Override
@@ -96,11 +96,11 @@ public class UserManagerImpl implements UserManager{
     //Funcion que actualiza los datos de un usuario
     //NO PERMITE ACTUALIZAR SU ID!! Es la forma de buscarlo
     @Override
-    public void updateUser(String id, String nombre, String mail, String password) {
+    public void updateUser(String idUser, String nombre, String mail, String password) {
         Session session = null;
         try {
             session = FactorySession.openSession();
-            User u = (User) session.findByID(User.class, id);
+            User u = (User) session.findByID(User.class, idUser);
             if(u!=null) {
                 u.setNombre(nombre);
                 u.setMail(mail);
@@ -118,17 +118,17 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public User updateUser(User user) {
-        this.updateUser(user.getId(),user.getNombre(),user.getMail(), user.getPassword());
+        this.updateUser(user.getIdUser(),user.getNombre(),user.getMail(), user.getPassword());
         return user;
     }
 
     //Funcion que elimina al usuario con el ID que le pasamos
     @Override
-    public void deleteUser(String id) throws UserNotFoundException {
+    public void deleteUser(String idUser) throws UserNotFoundException {
         User user = null;
         Session session = null;
         try {
-            user = this.getUser(id);
+            user = this.getUser(idUser);
             session = FactorySession.openSession();
             session.delete(user);
         }
@@ -150,8 +150,6 @@ public class UserManagerImpl implements UserManager{
                 session = FactorySession.openSession();
                 u = new User(rc.getNombre(), rc.getMail(), rc.getPassword());
                 session.save(u);
-                LoginCredentials lc = new LoginCredentials(u.getNombre(), u.getPassword());
-                this.login(lc);
             } else
                 throw new UserAlreadyExistsException();
         } catch (Exception e){
@@ -206,11 +204,11 @@ public class UserManagerImpl implements UserManager{
         return false;
     }
 
-    private boolean checkPswdLogin(String id, String pswd) throws PasswordDontMatchException {
+    private boolean checkPswdLogin(String idUser, String pswd) throws PasswordDontMatchException {
         User u = null;
 
         try {
-            u = getUser(id);
+            u = getUser(idUser);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }

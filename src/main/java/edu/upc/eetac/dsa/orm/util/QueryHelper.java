@@ -19,16 +19,16 @@ public class QueryHelper {
         String [] fields = ObjectHelper.getFields(entity);
 
         //Coloca las comas
-        sb.append("id");
+        sb.append("id"+entity.getClass().getSimpleName());
         for (String field: fields) {
-            if(!field.equals("id")) sb.append(", ").append(field);
+            if(!field.equals("id"+entity.getClass().getSimpleName())) sb.append(", ").append(field);
         }
 
         //Añadimos los parametros
         sb.append(") VALUES (?");
 
         for (String field: fields) {
-            if(!field.equals("id")) sb.append(", ?");
+            if(!field.equals("id"+entity.getClass().getSimpleName())) sb.append(", ?");
         }
 
         sb.append(")");
@@ -41,7 +41,7 @@ public class QueryHelper {
     public static String createQuerySELECTbyID(Class theClass) {
         StringBuffer sb = new StringBuffer("SELECT * FROM ");
         sb.append(theClass.getSimpleName());
-        sb.append(" WHERE ID=?");
+        sb.append(" WHERE id"+theClass.getSimpleName()+"=?");
         return sb.toString();
     }
 
@@ -68,11 +68,11 @@ public class QueryHelper {
 
         String [] fields = ObjectHelper.getFields(entity);
 
-        sb.append("id = ?");
+        sb.append("id"+entity.getClass().getSimpleName()+" = ?");
         for (String field: fields) {
             if(!field.equals("id")) sb.append(", ").append(field).append(" = ?");
         }
-        sb.append(" WHERE ID = '"+ObjectHelper.getter(entity, "id")).append("'");
+        sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = '"+ObjectHelper.getter(entity, "id")).append("'");
 
         return sb.toString();
     }
@@ -81,7 +81,7 @@ public class QueryHelper {
     public static String createQueryDELETE(Object entity){
         StringBuffer sb = new StringBuffer();
         sb.append("DELETE FROM ").append(entity.getClass().getSimpleName());
-        sb.append(" WHERE ID = ?");
+        sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = ?");
         return sb.toString();
     }
 

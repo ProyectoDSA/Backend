@@ -2,26 +2,25 @@ package edu.upc.eetac.dsa.models;
 
 public class Objeto {
 
-    public String id; //ID's numericos Desinfectante ->1 Mascarilla -> 2.
+    public String idObjeto; //ID's numericos 1-6 (Desinfectante ->1 Mascarilla -> 2)
     public String nombre;
     public int precio;
-    public String descripcion;
 
     public Objeto(){}
 
-    public Objeto(String id, String nombre, int precio, String descripcion){
-        this.id=id;
+    public Objeto(String idObjeto, String nombre, int precio){
+        this();
+        this.idObjeto=idObjeto;
         this.nombre=nombre;
         this.precio=precio;
-        this.descripcion=descripcion;
     }
 
-    public String getId() {
-        return id;
+    public String getIdObjeto() {
+        return idObjeto;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdObjeto(String id) {
+        this.idObjeto = id;
     }
 
     public String getNombre() {
@@ -40,21 +39,12 @@ public class Objeto {
         this.precio = precio;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     @Override
     public String toString() {
         return "Objeto{" +
-                "id='" + id + '\'' +
+                "idObjeto='" + idObjeto + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", precio=" + precio +
-                ", descripcion='" + descripcion + '\'' +
                 '}';
     }
 }

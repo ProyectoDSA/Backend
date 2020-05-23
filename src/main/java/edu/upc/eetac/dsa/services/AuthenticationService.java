@@ -46,18 +46,22 @@ public class AuthenticationService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(RegisterCredentials credentials) {
-        System.out.println("estoy aqui"+ credentials);
+        User user = null;
         if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {
-            if (credentials.getPassword().equals(credentials.getConfirm()))
+            if (credentials.getPassword().equals(credentials.getConfirm())) {
                 this.auth.register(credentials);
+                LoginCredentials lc = new LoginCredentials(credentials.getNombre(),credentials.getPassword());
+                user = this.auth.login(lc);
+                System.out.println("PREGUNTAR COMO HACER TOKEN DEL LOGIN!!!");
+            }
             else
                 return Response.status(400).build();
         } catch (Exception e) {
             return Response.status(409).build();
         }
-        return Response.status(201).entity(credentials).build();
+        return Response.status(201).entity(user).build();
     }
 
     @POST
@@ -74,11 +78,11 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginCredentials credentials) {
         User user = null;
-        System.out.println("estoy aqui"+ credentials);
         if(credentials.getNombre()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {
             user = this.auth.login(credentials);
+            System.out.println("PREGUNTAR COMO HACER TOKEN DEL LOGIN!!!");
         } catch (PasswordDontMatchException e) {
             return Response.status(409).build();
         } catch (Exception e) {
