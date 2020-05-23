@@ -3,19 +3,20 @@ package edu.upc.eetac.dsa.models;
 public class Partida {
 
     public int idPartida;
-    public String idPlayer;
-    public int nivel;
-    public int puntos;
+    public String idJugador;
     public float tiempo;
+    public int puntuacion;
+    public int nivelMax;
 
     public Partida(){}
 
-    public Partida(int idPartida, String idPlayer, int nivel, int puntos, float tiempo) {
+    public Partida(int idPartida, String idJugador, float tiempo, int puntuacion, int nivelMax) {
+        this();
         this.idPartida = idPartida;
-        this.idPlayer = idPlayer;
-        this.nivel = nivel;
-        this.puntos = puntos;
+        this.idJugador = idJugador;
         this.tiempo = tiempo;
+        this.puntuacion = puntuacion;
+        this.nivelMax = nivelMax;
     }
 
     public int getIdPartida() {
@@ -26,27 +27,46 @@ public class Partida {
         this.idPartida = idPartida;
     }
 
-    public String getIdPlayer() {
-        return idPlayer;
+    public String getIdJugador() {
+        return idJugador;
     }
 
-    public void setIdPlayer(String idPlayer) {
-        this.idPlayer = idPlayer;
+    public void setIdJugador(String idJugador) {
+        this.idJugador = idJugador;
     }
 
-    public int getNivel() {
-        return nivel;
+    public float getTiempo() {
+        return tiempo;
     }
 
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
+    public void setTiempo(float tiempo) {
+        this.tiempo = tiempo;
     }
 
-    public int getPuntos() {
-        return puntos;
+    public int getPuntuacion() {
+        return puntuacion;
     }
 
-    public void setPuntos(int puntos) {
-        this.puntos = puntos;
+    public void setPuntuacion(int puntuacion) {
+        this.puntuacion = puntuacion;
+    }
+
+    public int getNivelMax() {
+        return nivelMax;
+    }
+
+    public void setNivelMax(int nivelMax) {
+        this.nivelMax = nivelMax;
+    }
+
+    @Override
+    public String toString() {
+        return "Partida{" +
+                "idPartida=" + idPartida +
+                ", idJugador='" + idJugador + '\'' +
+                ", tiempo=" + tiempo +
+                ", puntuacion=" + puntuacion +
+                ", nivelMax=" + nivelMax +
+                '}';
     }
 }

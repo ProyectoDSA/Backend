@@ -28,13 +28,13 @@ public class SessionImpl implements Session {
         try {
             //Leemos los parametros y los guardamos en la consulta
             //El id como se genera aleatorio al inicializar un objeto, lo leemos y lo guardamos
-            String idValue = (String) ObjectHelper.getter(entity, "id");
+            String idValue = (String) ObjectHelper.getter(entity, "id"+entity.getClass().getSimpleName());
             pstm = this.conn.prepareStatement(insertQuery);
             pstm.setObject(1, idValue);
             int i = 2;
 
             for (String field: ObjectHelper.getFields(entity)) {
-                if(!field.equals("id")) pstm.setObject(i++, ObjectHelper.getter(entity, field));
+                if(!field.startsWith("id")) pstm.setObject(i++, ObjectHelper.getter(entity, field));
             }
 
             //Ejecutamos consulta
@@ -157,7 +157,7 @@ public class SessionImpl implements Session {
         PreparedStatement statement = null;
         try{
             statement = conn.prepareStatement(updateQuery);
-            statement.setObject(1, ObjectHelper.getter(object, "id"));
+            statement.setObject(1, ObjectHelper.getter(object, "id"+object.getClass().getSimpleName()));
             statement.setObject(2, ObjectHelper.getter(object, "nombre"));
             statement.setObject(3, ObjectHelper.getter(object, "mail"));
             statement.setObject(4, ObjectHelper.getter(object, "password"));
@@ -177,8 +177,8 @@ public class SessionImpl implements Session {
         PreparedStatement statement = null;
         try{
             statement = conn.prepareStatement(deleteQuery);
-            String idValue = (String) ObjectHelper.getter(object,"id");
-            statement.setObject(1, ObjectHelper.getter(object, "id"));
+            String idValue = (String) ObjectHelper.getter(object,"id"+object.getClass().getSimpleName());
+            statement.setObject(1, ObjectHelper.getter(object, "id"+object.getClass().getSimpleName()));
             statement.executeQuery();
             System.out.println(statement);
             System.out.println("Object with ID = "+idValue+" deleted");

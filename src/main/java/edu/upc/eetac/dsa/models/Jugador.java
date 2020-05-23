@@ -1,29 +1,49 @@
 package edu.upc.eetac.dsa.models;
 
+import java.util.LinkedList;
 import java.util.List;
 
-public class Jugador extends User{
+public class Jugador{
 
-    public String id;
-    public List<Objeto> objetos;
-    public List<Partida> games;
-    public int monedas;
+    public String idJugador; //Mismo id que User
+    public int puntos; //Puntuación-monedas totales del jugador
+    public int vida; //Vida del jugador
+    public List<Objeto> objetos = new LinkedList<>(); //Lista con los objetos del usuario
+    public List<Partida> partidas = new LinkedList<>(); //Lista con las partidas del jugador
+    public User user;
 
-    public Jugador(String id, List<Objeto> objetos, List<Partida> games, int monedas) {
-        this.id = id;
-        this.objetos = objetos;
-        this.games = games;
-        this.monedas = monedas;
+    public Jugador(){
+        this.idJugador = user.getIdUser();
     }
 
-    @Override
-    public String getId() {
-        return id;
+    public Jugador(int puntos, int vida) {
+        this();
+        this.puntos = puntos;
+        this.vida = vida;
     }
 
-    @Override
-    public void setId(String id) {
-        this.id = id;
+    public String getIdJugador() {
+        return idJugador;
+    }
+
+    public void setIdJugador(String idJugador) {
+        this.idJugador = idJugador;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
+    public int getVida() {
+        return vida;
+    }
+
+    public void setVida(int vida) {
+        this.vida = vida;
     }
 
     public List<Objeto> getObjetos() {
@@ -34,29 +54,28 @@ public class Jugador extends User{
         this.objetos = objetos;
     }
 
-    public List<Partida> getGames() {
-        return games;
+    public List<Partida> getPartidas() {
+        return partidas;
     }
 
-    public void setGames(List<Partida> games) {
-        this.games = games;
+    public void setPartidas(List<Partida> partidas) {
+        this.partidas = partidas;
     }
 
-    public int getMonedas() {
-        return monedas;
+    public User getUser() {
+        return user;
     }
 
-    public void setMonedas(int monedas) {
-        this.monedas = monedas;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String toString() {
         return "Jugador{" +
-                "id='" + id + '\'' +
-                ", objetos=" + objetos +
-                ", partidas=" + games +
-                ", monedas=" + monedas +
+                "idJugador='" + idJugador + '\'' +
+                ", puntos=" + puntos +
+                ", vida=" + vida +
                 '}';
     }
 }

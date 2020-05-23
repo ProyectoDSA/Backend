@@ -27,7 +27,13 @@ public class ObjectHelper {
     //Funcion auxiliar que pone solo la primera letra de property en mayuscula para obtener el metodo
     //EJEMPLO: property = "id", respuesta de la funcion = setId()
     private static String getSetter(String property){
-        return "set"+property.substring(0,1).toUpperCase()+property.substring(1).toLowerCase();
+        String res;
+        res="set"+property.substring(0,1).toUpperCase();
+        if(property.startsWith("id"))
+            res+=property.substring(1,2).toLowerCase()+property.substring(2,3).toUpperCase()+property.substring(3).toLowerCase();
+        else
+            res+=property.substring(1).toLowerCase();
+        return res;
     }
 
     // Metodo que llama a un metodo set (se usa para guardar un objeto que leemos de la bbdd en una variable Object)
@@ -53,7 +59,13 @@ public class ObjectHelper {
     //Funcion auxiliar que pone solo la primera letra de property en mayuscula para obtener el metodo
     //EJEMPLO: property = "id", respuesta de la funcion = getId()
     private static String getGetter(String property){
-        return "get"+property.substring(0,1).toUpperCase()+property.substring(1);
+        String res;
+        res="get"+property.substring(0,1).toUpperCase();
+        if(property.startsWith("id"))
+            res+=property.substring(1,2).toLowerCase()+property.substring(2,3).toUpperCase()+property.substring(3).toLowerCase();
+        else
+            res+=property.substring(1).toLowerCase();
+        return res;
     }
 
     // Metodo que llama a un metodo get.
@@ -63,7 +75,7 @@ public class ObjectHelper {
         Method method = null;
         Object res = null;
         try {
-            method = object.getClass().getDeclaredMethod(getGetter(property), null); //User.getId()
+            method = object.getClass().getDeclaredMethod(getGetter(property), null); //User.getIdUser()
             res = method.invoke(object); //res = id
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
