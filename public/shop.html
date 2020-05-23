@@ -8,6 +8,7 @@
     <!-- Boostrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="shortcut icon" href="Media/logoNegro.JPG"/>
     <link rel="stylesheet" href="CSS/shop.css" type="text/css">
     <!-- FONT AWESOME, para poner los simbolos en nuestra web -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
@@ -46,24 +47,104 @@
 </nav>
 <!---------------------------->
 <!-- Header -->
-<header class="main-header">
-    <div class="background-overlay text-white py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center justify-content-center aling-self-center">
-                    <h1>Tienda</h1>
-                    <p>¡Te presentamos una gran variedad de productos para comprar!</p>
+<section class="products text-center">
+    <div class="container p-3">
+        <h1 class="text-white">Tienda</h1>
+        <p class="text-white">Adquiere nuestros increibles productos para disfrutar más del juego</p>
+        <div class="row">
+            <!-- Miembros-->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="Media/des1.JPG" class="img-fluid rounded-circle w-50"   alt="DES1">
+                        <h3>Desinfectante</h3>
+                        <p>Obtén +10 de vida <br> Precio: 150 <i class="fas fa-coins"></i> </p>
+                        <div class="d-flex flex row justify-content-center">
+                            <div class="p-4">
+                                <button type="button" style="margin-left: 15px" name="button" id="des1" class="btn comprar-btn">Comprar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="Media/des2.JPG" class="img-fluid rounded-circle w-50"   alt="DES2">
+                        <h3>Desinfectante +</h3>
+                        <p>Obtén +25 de vida<br>Precio: 150 <i class="fas fa-coins"></i> </p>
+                        <div class="d-flex flex row justify-content-center">
+                            <div class="p-4">
+                                <button type="button" style="margin-left: 15px" name="button" id="des2" class="btn comprar-btn">Comprar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="Media/des3.JPG" class="img-fluid rounded-circle w-50"   alt="DES3">
+                        <h3>Desinfectante Pro</h3>
+                        <p>Obtén +50 de vida <br> Precio: 150€ <i class="fas fa-coins"></i> </p>
+                        <div class="d-flex flex row justify-content-center">
+                            <div class="p-4">
+                                <button type="button" style="margin-left: 15px" name="button" id="des3" class="btn comprar-btn">Comprar</button>                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="Media/mas1.JPG" class="img-fluid rounded-circle w-50"   alt="MASC1">
+                        <h3>Mascarilla</h3>
+                        <p>Incrementa en +25 tu vida al empezar <br> Precio: 150 <i class="fas fa-coins"></i> </p>
+                        <div class="d-flex flex row justify-content-center">
+                            <div class="p-4">
+                                <button type="button" style="margin-left: 15px" name="button" id="masc1" class="btn comprar-btn">Comprar</button>                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="Media/mas2.JPG" class="img-fluid rounded-circle w-50"   alt="MASC2">
+                        <h3>Mega Mascarilla</h3>
+                        <p>Incrementa en +50 tu vida al empezar <br> Precio: 150 <i class="fas fa-coins"></i> </p>
+                        <div class="d-flex flex row justify-content-center">
+                            <div class="p-4">
+                                <button type="button" style="margin-left: 15px" name="button" id="masc2" class="btn comprar-btn">Comprar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="Media/soap.JPG" class="img-fluid rounded-circle w-50"   alt="Jabón">
+                        <h3>Pastilla de Jabón</h3>
+                        <p>Cúrate del virus <br> Precio: 150 <i class="fas fa-coins"></i></p>
+                        <div class="d-flex flex row justify-content-center">
+                            <div class="p-4">
+                                <button type="button" name="button" id="jabon" class="btn comprar-btn">Comprar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</header>
+
+</section>
 <!---------------------------->
+
 <!-- Pie de pagina -->
 <footer class="footer footer-expand-lg footer-dark bg-dark">
     <div class="container p-3 text-center text-white">
         <p>
-            <a href="https://github.com/ProyectoDSA" target="_blank"><i class="fab fa-github"></i></a>
             Copyright &copy; 2020
         </p>
 

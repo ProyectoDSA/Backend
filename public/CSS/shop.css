@@ -7,10 +7,14 @@
 .navbar .nav-item .nav-link{
     color: white;
 }
-.main-header{
+.products{
     background: url("../Media/fondo.jpeg") no-repeat;
-    width: 100%;
-    height: 100vh;
     background-size:cover;
     position: relative;
+}
+.comprar-btn{
+    width: 130px;
+    background-color: rgba(25, 42, 86,1.0) ;
+    color: white;
+
 }
