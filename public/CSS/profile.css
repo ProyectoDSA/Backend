@@ -8,6 +8,6 @@
 }
 .row{
     background: url("../Media/fondo.jpeg") no-repeat;
-    background-size:cover;
+    background-size: cover;
     position: relative;
 }
