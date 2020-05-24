@@ -9,7 +9,8 @@
 }
 .row{
     background: url("../Media/fondo.jpeg") no-repeat;
-    background-size: 100%;
+    background-size:cover;
+    position: relative;
 }
 .table{
     height: 180px;
