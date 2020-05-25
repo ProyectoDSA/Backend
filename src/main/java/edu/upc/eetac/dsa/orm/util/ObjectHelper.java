@@ -43,8 +43,13 @@ public class ObjectHelper {
     public static void setter(Object object, String property, Object value) {
         // Method // invoke
         Method method = null;
+
         try{
-            method = object.getClass().getMethod(getSetter(property),value.getClass()); //u.setName(user.getName());
+            if(value.getClass() == Integer.class)
+                method = object.getClass().getDeclaredMethod(getSetter(property),int.class);
+            else
+                method = object.getClass().getDeclaredMethod(getSetter(property),value.getClass());
+
             method.invoke(object,value);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

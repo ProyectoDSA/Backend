@@ -70,7 +70,7 @@ public class QueryHelper {
 
         sb.append("id"+entity.getClass().getSimpleName()+" = ?");
         for (String field: fields) {
-            if(!field.equals("id")) sb.append(", ").append(field).append(" = ?");
+            if(!field.startsWith("id")) sb.append(", ").append(field).append(" = ?");
         }
         sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = '"+ObjectHelper.getter(entity, "id")).append("'");
 
@@ -82,6 +82,20 @@ public class QueryHelper {
         StringBuffer sb = new StringBuffer();
         sb.append("DELETE FROM ").append(entity.getClass().getSimpleName());
         sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = ?");
+        return sb.toString();
+    }
+
+    public static String createQueryGetID(Object entity){
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT id"+entity.getClass().getSimpleName()+" FROM ").append(entity.getClass().getSimpleName());
+        sb.append(" WHERE nombre = ?");
+        return sb.toString();
+    }
+
+    public static String createQuerySelectClassFromJugador(Class theClass){
+        StringBuffer sb = new StringBuffer("SELECT * FROM ");
+        sb.append(theClass.getSimpleName());
+        sb.append(" WHERE idJugador=?");
         return sb.toString();
     }
 

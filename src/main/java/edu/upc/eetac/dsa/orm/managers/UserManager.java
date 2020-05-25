@@ -7,6 +7,7 @@ import edu.upc.eetac.dsa.models.LoginCredentials;
 import edu.upc.eetac.dsa.models.RegisterCredentials;
 import edu.upc.eetac.dsa.models.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 //Interfaz donde definimos las operaciones CRUD que queremos realizar al usuario
@@ -16,7 +17,7 @@ public interface UserManager {
     public User getUser(String id) throws Exception; //Devuelve un usuario con cierto ID
     public String getIdUser(String name) throws Exception;
     public User getUserByNameOrMail(String name) throws Exception;
-    public List<User> getAllUsers(); //Devuelve una lista con todos los usuarios de la tabla
+    public HashMap<String,User> getAllUsers(); //Devuelve una lista con todos los usuarios de la tabla
     //**************************************************************************************
 
     public void updateUser(String id, String nombre, String mail, String password); //Actualiza los datos de un usuario

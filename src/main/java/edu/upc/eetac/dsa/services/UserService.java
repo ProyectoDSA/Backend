@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.services;
 
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.models.LoginCredentials;
@@ -17,6 +18,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 //EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
@@ -26,15 +29,16 @@ import java.util.List;
 public class UserService {
 
     private UserManager um;
+    private HashMap<String,User> users;
 
     public UserService() {
         this.um = UserManagerImpl.getInstance();
-        if (um.size()==0) {
+        //if (um.size()==0) {
             //this.um.register("Ivan", "k@gmail", "klsdvf");
             //this.um.register("PEP", "pepe@pepito", "erjfdjsf");
             //this.um.addUser("Ivan","ivan@yahoo.es", "jsdjj");
             //this.um.addUser("Manu", "manu@outlook.es", "jdjfj");
-        }
+       // }
     }
 
     @GET
@@ -47,11 +51,17 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
 
-        List<User> users = null;
+        HashMap<String,User> users = null;
+        List<User> u = new LinkedList<>();
 
         users = this.um.getAllUsers();
-        GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {};
+        for ( String key : users.keySet() ) {
+            u.add(users.get(key));
+        }
 
+        GenericEntity<List<User>> entity = new GenericEntity<List<User>>(u) {};
+
+        if(entity==null) return Response.status(500).build();
         return Response.status(201).entity(entity).build();
     }
 

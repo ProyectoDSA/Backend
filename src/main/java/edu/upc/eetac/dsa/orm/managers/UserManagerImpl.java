@@ -74,9 +74,9 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public HashMap<String,User> getAllUsers() {
         Session session = null;
-        List<User> usersList=null;
+        HashMap<String,User> usersList=null;
         try {
             session = FactorySession.openSession();
             usersList = session.findAll(User.class);
@@ -219,6 +219,14 @@ public class UserManagerImpl implements UserManager{
 
     @Override
     public int size() {
-        return this.getAllUsers().size();
+        Session session;
+        HashMap<String,User> users = null;
+        try{
+            session = FactorySession.openSession();
+            users = session.findAll(User.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users.size();
     }
 }

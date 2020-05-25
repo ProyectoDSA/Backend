@@ -6,8 +6,10 @@ import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.orm.util.ObjectHelper;
 import edu.upc.eetac.dsa.orm.util.QueryHelper;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -48,10 +50,12 @@ public class SessionImpl implements Session {
     }
 
     //Devuelve todos los objetos
-    public List<Object> findAll(Class theClass) {
-        List<Object> res = new ArrayList<>();
+    public HashMap<String,Object> findAll(Class theClass) {
+        //List<Object> res = new ArrayList<>();
+        HashMap<String, Object> res = new HashMap<>();
         ResultSet rs;
         Object object;
+        String id = null;
 
         //SELECT * FROM Class
         String selectQuery = QueryHelper.createQuerySELECTALL(theClass);
@@ -60,7 +64,7 @@ public class SessionImpl implements Session {
         Statement statement = null;
 
         try {
-            object = theClass.newInstance();
+            object = theClass.getDeclaredConstructor().newInstance();
             statement = this.conn.createStatement();
             statement.execute(selectQuery);
             rs = statement.getResultSet();
@@ -72,15 +76,20 @@ public class SessionImpl implements Session {
                 for (int i=1; i<=rsmd.getColumnCount(); i++) {
                     String field = rsmd.getColumnName(i);
                     ObjectHelper.setter(object, field, rs.getObject(i));
-                    res.add(rs.getObject(i)); //Añadimos objeto a la lista/tabla
-
-                } System.out.println("Added : " + object.toString());
+                    if(i==1) id = (String) rs.getObject(i);
+                }
+                res.put(id,object);
+                object = theClass.getDeclaredConstructor().newInstance();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
 
@@ -187,6 +196,36 @@ public class SessionImpl implements Session {
         } finally {
             close();
         }
+    }
+
+    @Override
+    public String getID(Class theClass, String nombre) {
+        ResultSet rs;
+        Object object = null;
+
+        String selectID = QueryHelper.createQueryGetID(theClass);
+
+        PreparedStatement pstm;
+
+        try {
+            object = theClass.newInstance();
+            pstm = this.conn.prepareStatement(selectID);
+            pstm.setObject(1, nombre);
+            rs = pstm.executeQuery();
+            System.out.println(pstm);
+            while(rs.next()) {
+                ResultSetMetaData rsmd = rs.getMetaData();
+                for(int i=1; i<=rsmd.getColumnCount();i++){
+                    String field = rsmd.getColumnName(i);
+                    ObjectHelper.setter(object,field,rs.getObject(i));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Object founded: "+object);
+        return null;
     }
 
     public void close() {

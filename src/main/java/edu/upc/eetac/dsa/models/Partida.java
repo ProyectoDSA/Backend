@@ -4,13 +4,13 @@ public class Partida {
 
     public int idPartida;
     public String idJugador;
-    public float tiempo;
+    public String tiempo;
     public int puntuacion;
     public int nivelMax;
 
     public Partida(){}
 
-    public Partida(int idPartida, String idJugador, float tiempo, int puntuacion, int nivelMax) {
+    public Partida(int idPartida, String idJugador, String tiempo, int puntuacion, int nivelMax) {
         this();
         this.idPartida = idPartida;
         this.idJugador = idJugador;
@@ -35,11 +35,11 @@ public class Partida {
         this.idJugador = idJugador;
     }
 
-    public float getTiempo() {
+    public String getTiempo() {
         return tiempo;
     }
 
-    public void setTiempo(float tiempo) {
+    public void setTiempo(String tiempo) {
         this.tiempo = tiempo;
     }
 
