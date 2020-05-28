@@ -109,7 +109,7 @@ public class UserService {
         return Response.status(201).build();
     }
 
-    @PUT
+    /*@PUT
     @ApiOperation(value = "update a User", notes = "Actualiza los datos de un usuario")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
@@ -123,7 +123,7 @@ public class UserService {
         if (u == null) return Response.status(404).build();
 
         return Response.status(201).build();
-    }
+    }*/
 
 
 

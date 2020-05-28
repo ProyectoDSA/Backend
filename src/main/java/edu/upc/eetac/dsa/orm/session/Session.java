@@ -21,6 +21,9 @@ public interface Session<E> {
     //CONSULTA PARA USER
     Object findByNameOrMail(Class theClass, String name);
 
+    //CONSULTAS PARA JUGADOR
+    HashMap<String,Object> findRanking(Class theClass);
+
     void close();
 }
 

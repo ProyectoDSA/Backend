@@ -80,6 +80,10 @@ public class ObjectHelper {
         Method method = null;
         Object res = null;
         try {
+            /*if(value.getClass() == Integer.class)
+                method = object.getClass().getDeclaredMethod(getSetter(property),int.class);
+            else
+                method = object.getClass().getDeclaredMethod(getSetter(property),value.getClass());*/
             method = object.getClass().getDeclaredMethod(getGetter(property), null); //User.getIdUser()
             res = method.invoke(object); //res = id
         } catch (NoSuchMethodException e) {

@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.orm.managers;
 import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
+import edu.upc.eetac.dsa.models.Jugador;
 import edu.upc.eetac.dsa.models.LoginCredentials;
 import edu.upc.eetac.dsa.models.RegisterCredentials;
 import edu.upc.eetac.dsa.orm.session.FactorySession;
@@ -89,11 +90,11 @@ public class UserManagerImpl implements UserManager{
         }
 
         /*for(User u : usersList)
-            System.out.println(u.toString());*/
+            System.out.println(u.toString()); */
         return usersList;
     }
 
-    //Funcion que actualiza los datos de un usuario
+    /*//Funcion que actualiza los datos de un usuario
     //NO PERMITE ACTUALIZAR SU ID!! Es la forma de buscarlo
     @Override
     public void updateUser(String idUser, String nombre, String mail, String password) {
@@ -120,7 +121,7 @@ public class UserManagerImpl implements UserManager{
     public User updateUser(User user) {
         this.updateUser(user.getIdUser(),user.getNombre(),user.getMail(), user.getPassword());
         return user;
-    }
+    }*/
 
     //Funcion que elimina al usuario con el ID que le pasamos
     @Override
@@ -150,6 +151,7 @@ public class UserManagerImpl implements UserManager{
                 session = FactorySession.openSession();
                 u = new User(rc.getNombre(), rc.getMail(), rc.getPassword());
                 session.save(u);
+                this.createJugador(u.getIdUser());
             } else
                 throw new UserAlreadyExistsException();
         } catch (Exception e){
@@ -192,6 +194,23 @@ public class UserManagerImpl implements UserManager{
         }
 
         return u;
+    }
+
+    @Override
+    public void createJugador(String id) {
+        Session session = null;
+        Jugador j = null;
+
+        try {
+            session = FactorySession.openSession();
+             j = new Jugador(id,0,100);
+            session.save(j);
+        } catch (Exception e){
+            throw e;
+        }finally {
+            session.close();
+        }
+        System.out.println("Jugador creado con ID = "+id);
     }
 
     private boolean checkNameLogin(String name) throws UserNotFoundException {

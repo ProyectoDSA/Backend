@@ -60,6 +60,15 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //SELECT * FROM Jugador ORDER BY puntos DESC LIMIT 5
+    public static String createQuerySELECTRanking(Class theClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
+        sb.append(" ORDER BY puntos DESC LIMIT 5");
+
+        return sb.toString();
+    }
+
     //UPDATE User SET id = ?, nombre = ?, mail = ? WHERE ID = 'user.getId()'
     public static String createQueryUPDATE(Object entity) {
         StringBuffer sb = new StringBuffer("UPDATE ");
@@ -72,7 +81,8 @@ public class QueryHelper {
         for (String field: fields) {
             if(!field.startsWith("id")) sb.append(", ").append(field).append(" = ?");
         }
-        sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = '"+ObjectHelper.getter(entity, "id")).append("'");
+        sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = '" +
+                ObjectHelper.getter(entity, "id"+entity.getClass().getSimpleName())+"'");
 
         return sb.toString();
     }

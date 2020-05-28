@@ -42,7 +42,6 @@ public class GameService {
 
         HashMap<String, Jugador> jugadores = null;
         List<Jugador> j = new LinkedList<>();
-        List<Jugador> ranking = new LinkedList<>();
 
         jugadores = this.gm.getRanking();
         for ( String key : jugadores.keySet() ) {
@@ -53,6 +52,40 @@ public class GameService {
 
         if(entity==null) return Response.status(500).build();
         return Response.status(201).entity(entity).build();
+    }
+
+    @PUT
+    @ApiOperation(value = "update puntos", notes = "Actualiza la puntuación y las monedas de un jugador al finalizar la partida")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/puntos/{idJugador}/{puntos}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePuntosAndMonedas(@PathParam("idJugador") String idJugador, @PathParam("puntos") int puntos) {
+        try{
+            this.gm.updateJugador(idJugador,puntos, 1);
+        } catch (Exception e){
+            return Response.status(500).build();
+        }
+        return Response.status(200).build();
+    }
+
+    @PUT
+    @ApiOperation(value = "pagar objetos", notes = "Actualiza las monedas de un jugador al comprar un objeto")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/compra/{idJugador}/{precio}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateMonedasCompra(@PathParam("idJugador") String idJugador, @PathParam("precio") int puntos) {
+        try{
+            this.gm.updateJugador(idJugador, puntos, 2);
+        } catch (Exception e){
+            return Response.status(500).build();
+        }
+        return Response.status(200).build();
     }
 
 }

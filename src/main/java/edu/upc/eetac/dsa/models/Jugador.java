@@ -4,13 +4,15 @@ public class Jugador {
 
     public String idJugador;
     public int puntos;
+    public int monedas;
 
     public Jugador(){}
 
-    public Jugador(String id, int puntos) {
+    public Jugador(String id, int puntos, int monedas) {
         this();
         this.idJugador = id;
         this.puntos = puntos;
+        this.monedas = monedas;
     }
 
     public String getIdJugador() {
@@ -29,11 +31,20 @@ public class Jugador {
         this.puntos = puntos;
     }
 
+    public int getMonedas() {
+        return monedas;
+    }
+
+    public void setMonedas(int monedas) {
+        this.monedas = monedas;
+    }
+
     @Override
     public String toString() {
         return "Jugador{" +
                 "idJugador='" + idJugador + '\'' +
-                ", puntos=" + puntos +
+                ", puntos=" + puntos + '\'' +
+                ", monedas=" + monedas+
                 '}';
     }
 }

@@ -20,14 +20,16 @@ public interface UserManager {
     public HashMap<String,User> getAllUsers(); //Devuelve una lista con todos los usuarios de la tabla
     //**************************************************************************************
 
-    public void updateUser(String id, String nombre, String mail, String password); //Actualiza los datos de un usuario
-    public User updateUser(User user);
+    //public void updateUser(String id, String nombre, String mail, String password); //Actualiza los datos de un usuario
+    //public User updateUser(User user);
 
     public void deleteUser(String id) throws UserNotFoundException; //Elimina usuario de la tabla User
 
     public void register(RegisterCredentials rc) throws Exception;
 
     public User login(LoginCredentials lc) throws Exception;
+
+    public void createJugador(String id);
 
     public int size();
 }

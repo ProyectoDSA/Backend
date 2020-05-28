@@ -31,37 +31,13 @@ public class GameManagerImpl implements GameManager{
         return instance;
     }
 
-    /*public int sizeJugadores(){
-        int res = this.jugadorHashMap.size();
-        log.info("Jugadores encontrados: "+res);
-        return res;
-    }
-
-    public int sizeObjects(){
-        int res = this.objetosHashMap.size();
-        log.info("Objetos encontrados: "+res);
-        return res;
-    }
-
-    public Inventario getInventario(String idJugador) throws UserNotFoundException {
-        Jugador jugador = this.jugadorHashMap.get(idJugador);
-        if(jugador==null) throw new UserNotFoundException();
-        Inventario inv = this.getObjetosJugador();
-        return inv;
-    }
-
-    private Inventario getObjetosJugador() {
-        Session session = null;
-        return null;
-    }*/
-
     @Override
     public HashMap<String, Jugador> getRanking() {
         Session session = null;
         HashMap<String, Jugador> jugadores=null;
         try {
             session = FactorySession.openSession();
-            jugadores = session.findAll(Jugador.class);
+            jugadores = session.findRanking(Jugador.class);
         }
         catch (Exception e) {
             log.warning("Error");
@@ -74,4 +50,71 @@ public class GameManagerImpl implements GameManager{
             System.out.println(u.toString());*/
         return jugadores;
     }
+
+    @Override
+    public void updatePuntosJugador(String idJugador, int puntos) {
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+            Jugador j = (Jugador) session.findByID(Jugador.class, idJugador);
+            if(j!=null) {
+                j.setPuntos(j.getPuntos()+puntos);
+                j.setMonedas(j.getMonedas()+puntos);
+                session.update(j);
+            }
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void updateMonedasJugador(String idJugador, int puntos) {
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+            Jugador j = (Jugador) session.findByID(Jugador.class, idJugador);
+            if(j!=null) {
+                j.setPuntos(j.getPuntos()+puntos);
+                j.setMonedas(j.getMonedas()+puntos);
+                session.update(j);
+            }
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void updateJugador(String idJugador, int puntos, int accion) {
+        Session session = null;
+        Jugador j;
+        try {
+            session = FactorySession.openSession();
+            j = (Jugador) session.findByID(Jugador.class, idJugador);
+            if(j!=null) {
+                if(accion==1){
+                    j.setPuntos(j.getPuntos()+puntos);
+                    j.setMonedas(j.getMonedas()+puntos);
+                }
+                else {
+                    j.setMonedas(j.getMonedas()-puntos);
+                }
+                session.update(j);
+            }
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        finally {
+            session.close();
+        }
+    }
+
 }
