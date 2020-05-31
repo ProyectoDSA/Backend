@@ -99,21 +99,45 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void updateCantidadObjetoJugador(String idJugador, int idObjeto, int cantidad) throws UserNotFoundException {
+    public void addObjetoJugador(Inventario objeto) {
+        Session session = null;
+        Inventario o = null;
+        try {
+            session = FactorySession.openSession();
+            o = new Inventario(objeto.getIdObjeto(), objeto.getCantidad(), objeto.getIdJugador());
+            session.save(o);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void updateInventario(String idJugador, int idObjeto, int newCantidad) throws UserNotFoundException {
         Session session = null;
         HashMap<Integer,Inventario> objetos;
         Inventario i =null;
         try {
             session = FactorySession.openSession();
-            objetos = session.getObjetosJugador(Inventario.class,idJugador);
-            for(Integer key : objetos.keySet())
-                if(key==idObjeto) i=objetos.get(key);
-            i.setCantidad(cantidad);
+            objetos = session.getObjetosJugador(Inventario.class, idJugador);
+            if(objetos.containsKey(idObjeto)) i = objetos.get(idObjeto);
+            i.setCantidad(newCantidad);
             session.update(i);
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException();
         } finally {
             session.close();
         }
+    }
+
+    public int getPrecioObjeto(int idObjeto){
+        Session session = null;
+        int precio = 0;
+        try {
+            session = FactorySession.openSession();
+            precio = session.getPrecioObjeto(idObjeto);
+        } finally {
+            session.close();
+        }
+        return precio;
     }
 }

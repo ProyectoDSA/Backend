@@ -9,6 +9,7 @@ import edu.upc.eetac.dsa.models.Objeto;
 import edu.upc.eetac.dsa.models.User;
 import edu.upc.eetac.dsa.orm.util.ObjectHelper;
 import edu.upc.eetac.dsa.orm.util.QueryHelper;
+import io.swagger.models.auth.In;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
@@ -210,8 +211,23 @@ public class SessionImpl implements Session {
             statement = conn.prepareStatement(updateQuery);
             String[] fields = ObjectHelper.getFields(object);
             for(String field : fields){
-                statement.setObject(i, ObjectHelper.getter(object, field));
-                i++;
+                if(object.getClass()== Inventario.class) {
+                    switch (field) {
+                        case "cantidad":
+                            statement.setObject(1, ObjectHelper.getter(object, field));
+                            break;
+                        case "idObjeto":
+                            statement.setObject(2, ObjectHelper.getter(object, field));
+                            break;
+                        case "idJugador":
+                            statement.setObject(3, ObjectHelper.getter(object, field));
+                            break;
+                    }
+                }
+                else{
+                    statement.setObject(i, ObjectHelper.getter(object, field));
+                    i++;
+                }
             }
             System.out.println(statement);
             statement.executeQuery();
@@ -316,6 +332,24 @@ public class SessionImpl implements Session {
 
         //Devolvemos la lista con los objetos encontrados
         return res;
+    }
+
+    public int getPrecioObjeto(int idObjeto){
+        ResultSet rs;
+        int precio = 0;
+        Statement statement;
+        String selectQuery = QueryHelper.selectPrecioObjeto(idObjeto);
+        try{
+            statement = this.conn.createStatement();
+            statement.execute(selectQuery);
+            rs = statement.getResultSet();
+            if (rs.next()) {
+                precio = (int) rs.getObject(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return precio;
     }
 
     public void close() {

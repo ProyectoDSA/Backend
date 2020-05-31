@@ -1,5 +1,7 @@
 package edu.upc.eetac.dsa.orm.util;
 
+import edu.upc.eetac.dsa.models.Inventario;
+
 import java.lang.reflect.Field;
 
 //CLASE AUXILIAR QUE NOS PERMITE CREAR LAS CONSULTAS SQL DE UNA MANERA MÁS COMODA
@@ -18,21 +20,26 @@ public class QueryHelper {
         //Obtiene los atributos de User
         String [] fields = ObjectHelper.getFields(entity);
 
-        //Coloca las comas
-        sb.append("id"+entity.getClass().getSimpleName());
-        for (String field: fields) {
-            if(!field.equals("id"+entity.getClass().getSimpleName())) sb.append(", ").append(field);
+        if(entity.getClass()==Inventario.class){
+            sb.append("idObjeto, cantidad, idJugador) VALUES(?,?,?)");
         }
 
-        //Añadimos los parametros
-        sb.append(") VALUES (?");
+        else {
+            //Coloca las comas
+            sb.append("id" + entity.getClass().getSimpleName());
+            for (String field : fields) {
+                if (!field.equals("id" + entity.getClass().getSimpleName())) sb.append(", ").append(field);
+            }
 
-        for (String field: fields) {
-            if(!field.equals("id"+entity.getClass().getSimpleName())) sb.append(", ?");
+            //Añadimos los parametros
+            sb.append(") VALUES (?");
+
+            for (String field : fields) {
+                if (!field.equals("id" + entity.getClass().getSimpleName())) sb.append(", ?");
+            }
+
+            sb.append(")");
         }
-
-        sb.append(")");
-
         //Devolvemos la consulta
         return sb.toString();
     }
@@ -75,15 +82,19 @@ public class QueryHelper {
         sb.append(entity.getClass().getSimpleName());
         sb.append(" SET ");
 
-        String [] fields = ObjectHelper.getFields(entity);
-
-        sb.append("id"+entity.getClass().getSimpleName()+" = ?");
-        for (String field: fields) {
-            if(!field.startsWith("id")) sb.append(", ").append(field).append(" = ?");
+        String[] fields = ObjectHelper.getFields(entity);
+        if(entity.getClass()== Inventario.class){
+            sb.append("cantidad=? WHERE idObjeto=? AND idJugador=?");
         }
-        sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = '" +
-                ObjectHelper.getter(entity, "id"+entity.getClass().getSimpleName())+"'");
+        else {
+            sb.append("id" + entity.getClass().getSimpleName() + " = ?");
 
+            for (String field : fields) {
+                if (!field.startsWith("id")) sb.append(", ").append(field).append(" = ?");
+            }
+            sb.append(" WHERE id" + entity.getClass().getSimpleName() + " = '" +
+                    ObjectHelper.getter(entity, "id" + entity.getClass().getSimpleName()) + "'");
+        }
         return sb.toString();
     }
 
@@ -106,6 +117,13 @@ public class QueryHelper {
         StringBuffer sb = new StringBuffer("SELECT * FROM ");
         sb.append(theClass.getSimpleName());
         sb.append(" WHERE idJugador=?");
+        return sb.toString();
+    }
+
+    public static String selectPrecioObjeto(int idObjeto){
+        StringBuffer sb = new StringBuffer("SELECT precio FROM Objeto WHERE idObjeto='");
+        sb.append(idObjeto);
+        sb.append("'");
         return sb.toString();
     }
 

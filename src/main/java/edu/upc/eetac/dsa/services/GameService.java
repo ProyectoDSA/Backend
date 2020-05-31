@@ -105,22 +105,25 @@ public class GameService {
             @ApiResponse(code = 400, message = "Not enough coins"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @Path("/compra/{cantidad}/{precio}")
+    @Path("/compra")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response compraObjeto(Inventario objeto, @PathParam("precio") int precio) {
+    public Response compraObjeto(Inventario objeto) {
         HashMap<Integer,Inventario> objetos;
         Inventario i;
+        int idObjeto = objeto.getIdObjeto();
+        int cantidad = objeto.getCantidad();
         try {
-            this.gm.updateJugador(objeto.getIdJugador(), precio, 2);
+            int precioObjeto = this.gm.getPrecioObjeto(idObjeto);
+            int precioTotal = cantidad*precioObjeto;
+            this.gm.updateJugador(objeto.getIdJugador(), precioTotal, 2);
             objetos = this.gm.getObjetosJugador(objeto.getIdJugador());
-            if(objetos.containsKey(objeto.getIdObjeto())) {
-                i = objetos.get(objeto.getIdObjeto());
-                int cant = objeto.getCantidad();
-                int newCant = i.getCantidad()+cant;
-                this.gm.updateCantidadObjetoJugador(i.getIdJugador(),i.getIdObjeto(),newCant);
+            if(objetos.containsKey(idObjeto)) {
+                i = objetos.get(idObjeto);
+                int newCant = i.getCantidad()+cantidad;
+                this.gm.updateInventario(i.getIdJugador(),i.getIdObjeto(),newCant);
             }
-            //else
-                //this.gm.addObjetoJugador(idJugador,objeto,cantidad);
+            else
+                this.gm.addObjetoJugador(objeto);
         } catch (MonedasInsuficientesException e){
             return Response.status(400).build();
         } catch (Exception e){
