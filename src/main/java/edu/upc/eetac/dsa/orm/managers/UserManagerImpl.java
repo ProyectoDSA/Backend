@@ -143,6 +143,20 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
+    public void restaurarUser(String idUser){
+        User user = null;
+        Session session = null;
+        try{
+            user = this.getUser(idUser);
+            session = FactorySession.openSession();
+            session.restaurar(user);
+
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void register(RegisterCredentials rc) throws Exception {
         Session session = null;
         User u = null;

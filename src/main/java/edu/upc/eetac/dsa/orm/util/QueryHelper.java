@@ -106,6 +106,13 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String createQueryRESTAURAR(Object entity){
+        StringBuffer sb = new StringBuffer();
+        sb.append("UPDATE "+entity.getClass().getSimpleName()+" SET status='active'");
+        sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = ?");
+        return sb.toString();
+    }
+
     public static String createQueryGetID(Object entity){
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT id"+entity.getClass().getSimpleName()+" FROM ").append(entity.getClass().getSimpleName());

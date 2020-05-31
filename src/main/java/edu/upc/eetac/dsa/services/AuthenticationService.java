@@ -67,7 +67,7 @@ public class AuthenticationService {
     @POST
     @ApiOperation(value = "login", notes = "Iniciar sesión")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response=User.class),
+            @ApiResponse(code = 200, message = "Successful", response=User.class),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 409, message = "Password Not Match"),
             @ApiResponse(code = 500, message = "Authentication error")
@@ -89,7 +89,49 @@ public class AuthenticationService {
             return Response.status(404).build();
         }
 
-        return Response.status(201).entity(user).build();
+        return Response.status(200).entity(user).build();
+    }
+
+    @DELETE
+    @ApiOperation(value = "delete a User", notes = "Elimina un usuario mediante su id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 404, message = "User not found")
+    })
+    @Path("/delete/{idUser}")
+    public Response deleteUser(@PathParam("idUser") String id) {
+        User u = null;
+        try {
+            u = this.auth.getUser(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (u == null) return Response.status(404).build();
+        else {
+            try {
+                this.auth.deleteUser(id);
+            } catch (UserNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return Response.status(200).build();
+    }
+
+    @PUT
+    @ApiOperation(value = "restaurar cuenta", notes = "Restaura cuenta y marca status a active")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/restaurar/{idUser}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response restaurarCuenta(@PathParam("idUser") String idUser) {
+        try{
+            this.auth.restaurarUser(idUser);
+        } catch (Exception e){
+            return Response.status(500).build();
+        }
+        return Response.status(200).build();
     }
 
 }

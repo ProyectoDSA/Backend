@@ -18,6 +18,7 @@ public interface Session<E> {
     Object findByID(Class theClass, String id); //Lee una tabla y devuelve el objecto con el ID especificado
     void update(Object object); //Actualiza un objeto de la tabla
     void delete(Object object); //Elimina un objeto de la tabla
+    public void restaurar(Object object);
 
     //CONSULTA PARA USER
     Object findByNameOrMail(Class theClass, String name);

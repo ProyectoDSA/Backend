@@ -249,7 +249,24 @@ public class SessionImpl implements Session {
             statement.setObject(1, ObjectHelper.getter(object, "id"+object.getClass().getSimpleName()));
             statement.executeQuery();
             System.out.println(statement);
-            System.out.println("Object with ID = "+idValue+" deleted");
+            System.out.println("User with ID = "+idValue+" deleted");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    }
+
+    public void restaurar(Object object){
+        String deleteQuery = QueryHelper.createQueryRESTAURAR(object);
+        PreparedStatement statement = null;
+        try{
+            statement = conn.prepareStatement(deleteQuery);
+            String idValue = (String) ObjectHelper.getter(object,"id"+object.getClass().getSimpleName());
+            statement.setObject(1, ObjectHelper.getter(object, "id"+object.getClass().getSimpleName()));
+            statement.executeQuery();
+            System.out.println(statement);
+            System.out.println("User with ID = "+idValue+" restaured");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

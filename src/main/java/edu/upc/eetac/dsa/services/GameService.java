@@ -36,7 +36,7 @@ public class GameService {
     @GET
     @ApiOperation(value = "get Ranking", notes = "Obtén el ranking de jugadores")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Jugador.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = Jugador.class, responseContainer="List"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Path("/ranking")
@@ -54,13 +54,13 @@ public class GameService {
         GenericEntity<List<Jugador>> entity = new GenericEntity<List<Jugador>>(j) {};
 
         if(entity==null) return Response.status(500).build();
-        return Response.status(201).entity(entity).build();
+        return Response.status(200).entity(entity).build();
     }
 
     @GET
     @ApiOperation(value = "get objetos jugador", notes = "Obtén los objetos de un jugador")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Inventario.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = Inventario.class, responseContainer="List"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Path("/objetos/{idJugador}")
@@ -78,7 +78,7 @@ public class GameService {
         GenericEntity<List<Inventario>> entity = new GenericEntity<List<Inventario>>(o) {};
 
         if(entity==null) return Response.status(500).build();
-        return Response.status(201).entity(entity).build();
+        return Response.status(200).entity(entity).build();
     }
 
     @PUT
@@ -101,7 +101,7 @@ public class GameService {
     @PUT
     @ApiOperation(value = "pagar objetos", notes = "Actualiza las monedas de un jugador al comprar un objeto")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 400, message = "Not enough coins"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
@@ -129,7 +129,7 @@ public class GameService {
         } catch (Exception e){
             return Response.status(500).build();
         }
-        return Response.status(200).build();
+        return Response.status(201).build();
     }
 
 

@@ -24,6 +24,7 @@ public interface UserManager {
     //public User updateUser(User user);
 
     public void deleteUser(String id) throws UserNotFoundException; //Elimina usuario de la tabla User
+    public void restaurarUser(String idUser);
 
     public void register(RegisterCredentials rc) throws Exception;
 
