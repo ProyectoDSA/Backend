@@ -68,10 +68,10 @@ public class UserManagerImpl implements UserManager{
             session.close();
         }
 
-        if(u!=null)
-            return u;
-        else
+        if(u==null)
             throw new UserNotFoundException();
+        else
+            return u;
     }
 
     @Override

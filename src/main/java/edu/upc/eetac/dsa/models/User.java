@@ -8,6 +8,7 @@ public class User {
     public String nombre;
     public String mail;
     public String password;
+    public String status;
 
     public User(){}
 
@@ -17,6 +18,7 @@ public class User {
         this.nombre = nombre;
         this.mail = mail;
         this.password = password;
+        this.status = "active";
     }
 
 
@@ -52,9 +54,17 @@ public class User {
         this.password = password;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "User [idUser="+idUser+", name=" + nombre + ", mail=" + mail +"]";
+        return "User [idUser="+idUser+", name=" + nombre + ", mail=" + mail +", status= " + status +"]";
     }
 
 }

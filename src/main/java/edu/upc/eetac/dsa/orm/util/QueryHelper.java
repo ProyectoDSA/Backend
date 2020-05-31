@@ -90,7 +90,7 @@ public class QueryHelper {
     //DELETE FROM Class WHERE ID = ?
     public static String createQueryDELETE(Object entity){
         StringBuffer sb = new StringBuffer();
-        sb.append("DELETE FROM ").append(entity.getClass().getSimpleName());
+        sb.append("UPDATE "+entity.getClass().getSimpleName()+" SET status='inactive'");
         sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = ?");
         return sb.toString();
     }
