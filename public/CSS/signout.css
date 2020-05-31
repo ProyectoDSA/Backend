@@ -13,12 +13,6 @@
     position: relative;
 
 }
-.salir-btn{
-    width: 130px;
-    background-color: rgba(25, 42, 86,1.0) ;
-    color: white;
-
-}
 .card{
     height: 180px;
     margin-top: 200px;
