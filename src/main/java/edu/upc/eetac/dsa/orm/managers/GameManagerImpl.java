@@ -1,5 +1,7 @@
 package edu.upc.eetac.dsa.orm.managers;
 
+import edu.upc.eetac.dsa.exceptions.MonedasInsuficientesException;
+import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.models.Inventario;
 import edu.upc.eetac.dsa.models.Jugador;
@@ -32,9 +34,9 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public HashMap<String, Jugador> getRanking() {
+    public HashMap<Integer, Jugador> getRanking() {
         Session session = null;
-        HashMap<String, Jugador> jugadores=null;
+        HashMap<Integer, Jugador> jugadores=null;
         try {
             session = FactorySession.openSession();
             jugadores = session.findRanking(Jugador.class);
@@ -52,47 +54,7 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void updatePuntosJugador(String idJugador, int puntos) {
-        Session session = null;
-        try {
-            session = FactorySession.openSession();
-            Jugador j = (Jugador) session.findByID(Jugador.class, idJugador);
-            if(j!=null) {
-                j.setPuntos(j.getPuntos()+puntos);
-                j.setMonedas(j.getMonedas()+puntos);
-                session.update(j);
-            }
-        }
-        catch (Exception e) {
-            throw e;
-        }
-        finally {
-            session.close();
-        }
-    }
-
-    @Override
-    public void updateMonedasJugador(String idJugador, int puntos) {
-        Session session = null;
-        try {
-            session = FactorySession.openSession();
-            Jugador j = (Jugador) session.findByID(Jugador.class, idJugador);
-            if(j!=null) {
-                j.setPuntos(j.getPuntos()+puntos);
-                j.setMonedas(j.getMonedas()+puntos);
-                session.update(j);
-            }
-        }
-        catch (Exception e) {
-            throw e;
-        }
-        finally {
-            session.close();
-        }
-    }
-
-    @Override
-    public void updateJugador(String idJugador, int puntos, int accion) {
+    public void updateJugador(String idJugador, int puntos, int accion) throws MonedasInsuficientesException {
         Session session = null;
         Jugador j;
         try {
@@ -104,17 +66,54 @@ public class GameManagerImpl implements GameManager{
                     j.setMonedas(j.getMonedas()+puntos);
                 }
                 else {
-                    j.setMonedas(j.getMonedas()-puntos);
+                    if(j.getMonedas()<=puntos)
+                        throw new MonedasInsuficientesException();
+                    else j.setMonedas(j.getMonedas()-puntos);
                 }
                 session.update(j);
             }
-        }
-        catch (Exception e) {
-            throw e;
         }
         finally {
             session.close();
         }
     }
 
+    @Override
+    public HashMap<Integer,Inventario> getObjetosJugador(String idJugador){
+        Session session = null;
+        HashMap<Integer, Inventario> objetos=null;
+        try {
+            session = FactorySession.openSession();
+            objetos = session.getObjetosJugador(Inventario.class,idJugador);
+        }
+        catch (Exception e) {
+            log.warning("Error");
+        }
+        finally {
+            session.close();
+        }
+
+        /*for(User u : usersList)
+            System.out.println(u.toString());*/
+        return objetos;
+    }
+
+    @Override
+    public void updateCantidadObjetoJugador(String idJugador, int idObjeto, int cantidad) throws UserNotFoundException {
+        Session session = null;
+        HashMap<Integer,Inventario> objetos;
+        Inventario i =null;
+        try {
+            session = FactorySession.openSession();
+            objetos = session.getObjetosJugador(Inventario.class,idJugador);
+            for(Integer key : objetos.keySet())
+                if(key==idObjeto) i=objetos.get(key);
+            i.setCantidad(cantidad);
+            session.update(i);
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException();
+        } finally {
+            session.close();
+        }
+    }
 }

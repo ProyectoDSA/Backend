@@ -2,35 +2,35 @@ package edu.upc.eetac.dsa.models;
 
 public class Objeto {
 
-    public String idObjeto; //ID's numericos 1-6 (Desinfectante ->1 Mascarilla -> 2)
-    public String idUser;
+    public int idObjeto; //ID's numericos 1-6 (Desinfectante ->1 Mascarilla -> 2)
+    public String idJugador;
     public int cantidad;
     public int precio;
 
     public Objeto(){}
 
-    public Objeto(String idObjeto, String idUser,int cantidad, int precio){
+    public Objeto(int idObjeto, int cantidad, String idJugador, int precio){
         this();
         this.idObjeto=idObjeto;
-        this.idUser=idUser;
         this.cantidad=cantidad;
+        this.idJugador=idJugador;
         this.precio=precio;
     }
 
-    public String getIdObjeto() {
+    public int getIdObjeto() {
         return idObjeto;
     }
 
-    public void setIdObjeto(String id) {
+    public void setIdObjeto(int id) {
         this.idObjeto = id;
     }
 
-    public String getIdUser() {
-        return idUser;
+    public String getIdJugador() {
+        return idJugador;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setIdJugador(String idJugador) {
+        this.idJugador = idJugador;
     }
 
     public int getCantidad() {
@@ -53,6 +53,7 @@ public class Objeto {
     public String toString() {
         return "Objeto{" +
                 "idObjeto='" + idObjeto + '\'' +
+                ", cantidad="+cantidad+'\''+
                 ", precio=" + precio +
                 '}';
     }

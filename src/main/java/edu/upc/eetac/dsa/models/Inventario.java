@@ -2,34 +2,33 @@ package edu.upc.eetac.dsa.models;
 
 public class Inventario {
 
-    public int id;
-    public String nombre;
+    public int idObjeto;
     public int cantidad;
-    public int descripcion;
+    public String idJugador;
 
     public Inventario(){}
 
-    public Inventario(int id, String nombre, int cantidad, int descripcion) {
-        this.id = id;
-        this.nombre = nombre;
+    public Inventario(int idObjeto, int cantidad, String idJugador) {
+        this();
+        this.idObjeto = idObjeto;
         this.cantidad = cantidad;
-        this.descripcion = descripcion;
+        this.idJugador = idJugador;
     }
 
-    public int getId() {
-        return id;
+    public String getIdJugador() {
+        return idJugador;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdJugador(String idJugador) {
+        this.idJugador = idJugador;
     }
 
-    public String getNombre() {
-        return nombre;
+    public int getIdObjeto() {
+        return idObjeto;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setIdObjeto(int idObjeto) {
+        this.idObjeto = idObjeto;
     }
 
     public int getCantidad() {
@@ -40,21 +39,12 @@ public class Inventario {
         this.cantidad = cantidad;
     }
 
-    public int getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(int descripcion) {
-        this.descripcion = descripcion;
-    }
-
     @Override
     public String toString() {
         return "Inventario{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
+                "idJugador='" + idJugador + '\'' +
+                ", idObjeto=" + idObjeto +
                 ", cantidad=" + cantidad +
-                ", descripcion=" + descripcion +
                 '}';
     }
 }

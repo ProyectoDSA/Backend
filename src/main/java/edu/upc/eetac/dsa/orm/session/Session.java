@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.orm.session;
 import edu.upc.eetac.dsa.exceptions.EmptyUserListException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
+import edu.upc.eetac.dsa.models.Objeto;
 import edu.upc.eetac.dsa.models.User;
 
 import java.util.HashMap;
@@ -23,6 +24,8 @@ public interface Session<E> {
 
     //CONSULTAS PARA JUGADOR
     HashMap<String,Object> findRanking(Class theClass);
+    HashMap<Integer, Object> getObjetosJugador(Class theClass, String idJugador) throws UserNotFoundException;
+    //public void addObjeto(String idJugador, Objeto objeto, int cantidad);
 
     void close();
 }

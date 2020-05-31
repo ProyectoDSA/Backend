@@ -3,6 +3,10 @@ package edu.upc.eetac.dsa.orm.session;
 import edu.upc.eetac.dsa.exceptions.EmptyUserListException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
+import edu.upc.eetac.dsa.models.Inventario;
+import edu.upc.eetac.dsa.models.Jugador;
+import edu.upc.eetac.dsa.models.Objeto;
+import edu.upc.eetac.dsa.models.User;
 import edu.upc.eetac.dsa.orm.util.ObjectHelper;
 import edu.upc.eetac.dsa.orm.util.QueryHelper;
 
@@ -28,25 +32,20 @@ public class SessionImpl implements Session {
         PreparedStatement pstm = null;
 
         try {
-            //Leemos los parametros y los guardamos en la consulta
-            //El id como se genera aleatorio al inicializar un objeto, lo leemos y lo guardamos
-            String idValue = (String) ObjectHelper.getter(entity, "id"+entity.getClass().getSimpleName());
             pstm = this.conn.prepareStatement(insertQuery);
-            pstm.setObject(1, idValue);
-            int i = 2;
+            int i = 1;
 
-            for (String field: ObjectHelper.getFields(entity)) {
-                if(!field.startsWith("id")) pstm.setObject(i++, ObjectHelper.getter(entity, field));
+            for (String field : ObjectHelper.getFields(entity)) {
+                pstm.setObject(i, ObjectHelper.getter(entity, field));
+                i++;
             }
 
             //Ejecutamos consulta
             pstm.executeQuery();
             System.out.println(pstm);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     //Devuelve todos los objetos
@@ -159,6 +158,48 @@ public class SessionImpl implements Session {
         return object;
     }
 
+    public HashMap<Integer, Inventario> getObjetosJugador(Class theClass, String idJugador) throws UserNotFoundException {
+        String objetosQuery = "SELECT * FROM Inventario WHERE idJugador='"+idJugador+"'";
+        HashMap<Integer, Inventario> res = new HashMap<>();
+        ResultSet rs;
+        Object object;
+        Integer id = null;
+        Statement statement = null;
+
+        try {
+            object = theClass.getDeclaredConstructor().newInstance();
+            statement = this.conn.createStatement();
+            statement.execute(objetosQuery);
+            rs = statement.getResultSet();
+
+            //Obtenemos los objetos y leemos las columnas con metadata
+            //para ir guardando en cada objeto sus datos correspondientes
+            while(rs.next()) {
+                ResultSetMetaData rsmd = rs.getMetaData();
+                for (int i=1; i<=rsmd.getColumnCount(); i++) {
+                    String field = rsmd.getColumnName(i);
+                    ObjectHelper.setter(object, field, rs.getObject(i));
+                    if(i==1) id = (Integer) rs.getObject(i);
+                }
+                res.put(id, (Inventario) object);
+                object = theClass.getDeclaredConstructor().newInstance();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        //Devolvemos la lista con los objetos encontrados
+        return res;
+    }
+
     //Funcion que actualiza los datos de un objeto con los atributos
     //del objeto que le enviamos como parametro
     public void update(Object object) {
@@ -230,14 +271,14 @@ public class SessionImpl implements Session {
         return null;
     }
 
-    public HashMap<String,Object> findRanking(Class theClass) {
+    public HashMap<Integer,Object> findRanking(Class theClass) {
         //List<Object> res = new ArrayList<>();
-        HashMap<String, Object> res = new HashMap<>();
+        HashMap<Integer, Object> res = new HashMap<>();
         ResultSet rs;
         Object object;
-        String id = null;
+        int id = 1;
 
-        //SELECT * FROM Class
+        //SELECT * FROM Jugador ORDER BY puntos DESC LIMIT 5
         String selectQuery = QueryHelper.createQuerySELECTRanking(theClass);
         System.out.println(selectQuery);
 
@@ -256,7 +297,7 @@ public class SessionImpl implements Session {
                 for (int i=1; i<=rsmd.getColumnCount(); i++) {
                     String field = rsmd.getColumnName(i);
                     ObjectHelper.setter(object, field, rs.getObject(i));
-                    if(i==1) id = (String) rs.getObject(i);
+                    id++;
                 }
                 res.put(id,object);
                 object = theClass.getDeclaredConstructor().newInstance();
