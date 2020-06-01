@@ -3,13 +3,12 @@ package edu.upc.eetac.dsa.orm.managers;
 import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
-import edu.upc.eetac.dsa.models.Jugador;
-import edu.upc.eetac.dsa.models.LoginCredentials;
-import edu.upc.eetac.dsa.models.RegisterCredentials;
+import edu.upc.eetac.dsa.models.*;
 import edu.upc.eetac.dsa.orm.session.FactorySession;
 import edu.upc.eetac.dsa.orm.session.Session;
-import edu.upc.eetac.dsa.models.User;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
@@ -142,19 +141,8 @@ public class UserManagerImpl implements UserManager{
         }
     }
 
-    @Override
-    public void restaurarUser(String idUser){
-        User user = null;
-        Session session = null;
-        try{
-            user = this.getUser(idUser);
-            session = FactorySession.openSession();
-            session.restaurar(user);
-
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    //SELECT * FROM User WHERE (NOMBRE=? OR MAIL=?) AND status="active";
+    //SELECT * FROM usuario, * FROM jugador WHERE usuario.idUser = jugador.idJugador AND usuario.status='active';
 
     @Override
     public void register(RegisterCredentials rc) throws Exception {
@@ -192,13 +180,15 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public User login(LoginCredentials lc) throws UserNotFoundException, PasswordDontMatchException {
-        User u = null;
+    public String login(LoginCredentials lc) throws UserNotFoundException, PasswordDontMatchException {
+        User u;
+        String token = null;
 
         try{
             if (checkNameLogin(lc.getNombre())) {
                 if (checkPswdLogin(getIdUser(lc.getNombre()), lc.getPassword())) {
                     u = getUserByNameOrMail(lc.getNombre());
+                    token = this.createToken(u);
                 }
             }
         } catch (UserNotFoundException e) {
@@ -207,7 +197,33 @@ public class UserManagerImpl implements UserManager{
             throw e;
         }
 
-        return u;
+        return token;
+    }
+
+    public String createToken(User user) {
+        Session session = null;
+        Token t = new Token(user.getIdUser());
+        try {
+            session = FactorySession.openSession();
+            session.save(t);
+        } catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return t.getToken();
+    }
+
+    @Override
+    public void deleteToken(String token) {
+        Session session = null;
+
+        try {
+            session = FactorySession.openSession();
+            session.deleteToken(token);
+        } finally {
+            session.close();
+        }
     }
 
     @Override

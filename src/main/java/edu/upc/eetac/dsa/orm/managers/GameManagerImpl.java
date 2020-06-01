@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.orm.managers;
 
 import edu.upc.eetac.dsa.exceptions.MonedasInsuficientesException;
+import edu.upc.eetac.dsa.exceptions.ObjetoNotFoundException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.models.Inventario;
@@ -61,11 +62,11 @@ public class GameManagerImpl implements GameManager{
             session = FactorySession.openSession();
             j = (Jugador) session.findByID(Jugador.class, idJugador);
             if(j!=null) {
-                if(accion==1){
+                if(accion==1){ //GUARDAR NUEVA PUNTUACION Y AÑADIR MONEDAS
                     j.setPuntos(j.getPuntos()+puntos);
                     j.setMonedas(j.getMonedas()+puntos);
                 }
-                else {
+                else { //COMPRAR OBJETO (accion=2)
                     if(j.getMonedas()<=puntos)
                         throw new MonedasInsuficientesException();
                     else j.setMonedas(j.getMonedas()-puntos);
@@ -112,15 +113,22 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void updateInventario(String idJugador, int idObjeto, int newCantidad) throws UserNotFoundException {
+    public void updateInventario(String idJugador, int idObjeto, int newCantidad, int accion) throws Exception {
         Session session = null;
         HashMap<Integer,Inventario> objetos;
         Inventario i =null;
         try {
             session = FactorySession.openSession();
             objetos = session.getObjetosJugador(Inventario.class, idJugador);
-            if(objetos.containsKey(idObjeto)) i = objetos.get(idObjeto);
-            i.setCantidad(newCantidad);
+            if (objetos.containsKey(idObjeto))
+                i = objetos.get(idObjeto);
+            else throw new ObjetoNotFoundException();
+            if(accion==1) { //COMPRAR OBJETO
+                i.setCantidad(newCantidad);
+            } else { //GASTAR OBJETO INVENTARIO (accion=2)
+                int cant = i.getCantidad();
+                i.setCantidad(cant-1);
+            }
             session.update(i);
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException();

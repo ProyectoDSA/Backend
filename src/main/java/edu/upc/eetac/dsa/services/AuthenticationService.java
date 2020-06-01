@@ -6,6 +6,7 @@ import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.models.LoginCredentials;
 import edu.upc.eetac.dsa.models.RegisterCredentials;
+import edu.upc.eetac.dsa.models.Token;
 import edu.upc.eetac.dsa.orm.managers.UserManager;
 import edu.upc.eetac.dsa.orm.managers.UserManagerImpl;
 import edu.upc.eetac.dsa.models.User;
@@ -36,7 +37,7 @@ public class AuthenticationService {
     @POST
     @ApiOperation(value = "register a new User", notes = "Crea un nuevo usuario")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response=User.class),
+            @ApiResponse(code = 201, message = "Successful", response=String.class),
             @ApiResponse(code = 400, message = "Password don't match"),
             @ApiResponse(code = 409, message = "User already exists"),
             @ApiResponse(code = 500, message = "Validation Error")
@@ -46,14 +47,14 @@ public class AuthenticationService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(RegisterCredentials credentials) {
-        User user = null;
+        String token = null;
         if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {
             if (credentials.getPassword().equals(credentials.getConfirm())) {
                 this.auth.register(credentials);
                 LoginCredentials lc = new LoginCredentials(credentials.getNombre(),credentials.getPassword());
-                user = this.auth.login(lc);
+                token = this.auth.login(lc);
                 System.out.println("PREGUNTAR COMO HACER TOKEN DEL LOGIN!!!");
             }
             else
@@ -61,13 +62,13 @@ public class AuthenticationService {
         } catch (Exception e) {
             return Response.status(409).build();
         }
-        return Response.status(201).entity(user).build();
+        return Response.status(201).entity(token).build();
     }
 
     @POST
     @ApiOperation(value = "login", notes = "Iniciar sesión")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response=User.class),
+            @ApiResponse(code = 200, message = "Successful", response=String.class),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 409, message = "Password Not Match"),
             @ApiResponse(code = 500, message = "Authentication error")
@@ -77,19 +78,18 @@ public class AuthenticationService {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginCredentials credentials) {
-        User user = null;
+        String token = null;
         if(credentials.getNombre()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {
-            user = this.auth.login(credentials);
-            System.out.println("PREGUNTAR COMO HACER TOKEN DEL LOGIN!!!");
+            token = this.auth.login(credentials);
         } catch (PasswordDontMatchException e) {
             return Response.status(409).build();
         } catch (Exception e) {
             return Response.status(404).build();
         }
 
-        return Response.status(200).entity(user).build();
+        return Response.status(200).entity(token).build();
     }
 
     @DELETE
@@ -117,20 +117,20 @@ public class AuthenticationService {
         return Response.status(200).build();
     }
 
-    @PUT
-    @ApiOperation(value = "restaurar cuenta", notes = "Restaura cuenta y marca status a active")
+    @DELETE
+    @ApiOperation(value = "Sign out", notes = "Cierra sesion y elimina el token correspondiente")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
-            @ApiResponse(code = 500, message = "Internal Server Error")
+            @ApiResponse(code = 500, message = "Server error")
     })
-    @Path("/restaurar/{idUser}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response restaurarCuenta(@PathParam("idUser") String idUser) {
-        try{
-            this.auth.restaurarUser(idUser);
-        } catch (Exception e){
+    @Path("/signout/{token}")
+    public Response signOut(@PathParam("token") String token) {
+        try {
+            this.auth.deleteToken(token);
+        } catch (Exception e) {
             return Response.status(500).build();
         }
+
         return Response.status(200).build();
     }
 

@@ -2,6 +2,7 @@ package edu.upc.eetac.dsa.services;
 
 
 import edu.upc.eetac.dsa.exceptions.MonedasInsuficientesException;
+import edu.upc.eetac.dsa.exceptions.ObjetoNotFoundException;
 import edu.upc.eetac.dsa.models.Inventario;
 import edu.upc.eetac.dsa.models.Jugador;
 import edu.upc.eetac.dsa.models.Objeto;
@@ -12,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import javassist.tools.rmi.ObjectNotFoundException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -120,12 +122,41 @@ public class GameService {
             if(objetos.containsKey(idObjeto)) {
                 i = objetos.get(idObjeto);
                 int newCant = i.getCantidad()+cantidad;
-                this.gm.updateInventario(i.getIdJugador(),i.getIdObjeto(),newCant);
+                this.gm.updateInventario(i.getIdJugador(),i.getIdObjeto(),newCant, 1);
             }
             else
                 this.gm.addObjetoJugador(objeto);
         } catch (MonedasInsuficientesException e){
             return Response.status(400).build();
+        } catch (Exception e){
+            return Response.status(500).build();
+        }
+        return Response.status(201).build();
+    }
+
+    @PUT
+    @ApiOperation(value = "usar objeto", notes = "Actualiza la de un objeto al gastarlo")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "Object not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/useobject")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response gastarObjeto(Inventario objeto) {
+        HashMap<Integer,Inventario> objetos;
+        Inventario i;
+        int idObjeto = objeto.getIdObjeto();
+        try {
+            objetos = this.gm.getObjetosJugador(objeto.getIdJugador());
+            if(objetos.containsKey(idObjeto)) {
+                i = objetos.get(idObjeto);
+                this.gm.updateInventario(i.getIdJugador(),i.getIdObjeto(),0, 2);
+            }
+            else
+                this.gm.addObjetoJugador(objeto);
+        } catch (ObjetoNotFoundException e){
+            return Response.status(404).build();
         } catch (Exception e){
             return Response.status(500).build();
         }

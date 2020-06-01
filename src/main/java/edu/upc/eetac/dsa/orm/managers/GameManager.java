@@ -15,7 +15,7 @@ public interface GameManager {
     public void updateJugador(String id, int puntos, int accion) throws Exception;
     public HashMap<Integer, Inventario> getObjetosJugador(String idJugador);
     public void addObjetoJugador(Inventario objeto);
-    public void updateInventario(String idJugador, int idObjeto, int newCantidad) throws UserNotFoundException;
+    public void updateInventario(String idJugador, int idObjeto, int newCantidad, int accion) throws UserNotFoundException, Exception;
     public int getPrecioObjeto(int idObjeto);
 
 }

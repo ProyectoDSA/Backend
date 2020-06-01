@@ -257,6 +257,22 @@ public class SessionImpl implements Session {
         }
     }
 
+    public void deleteToken(String token){
+        String deleteQuery = "DELETE FROM Token WHERE token=?";
+        PreparedStatement statement = null;
+        try{
+            statement = conn.prepareStatement(deleteQuery);
+            statement.setObject(1, token);
+            statement.executeQuery();
+            System.out.println(statement);
+            System.out.println("Token "+token+" deleted");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    }
+
     public void restaurar(Object object){
         String deleteQuery = QueryHelper.createQueryRESTAURAR(object);
         PreparedStatement statement = null;

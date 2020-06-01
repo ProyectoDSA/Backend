@@ -29,9 +29,11 @@ public class ObjectHelper {
     private static String getSetter(String property){
         String res;
         res="set"+property.substring(0,1).toUpperCase();
-        if(property.startsWith("id"))
+        if(property.equals("id")) //PARA LA CLASE TOKEN
+            res+=property.substring(1).toLowerCase();
+        else if(property.startsWith("id")) //PARA LOS ID's DE LAS DEMAS CLASES
             res+=property.substring(1,2).toLowerCase()+property.substring(2,3).toUpperCase()+property.substring(3).toLowerCase();
-        else
+        else //PARA LO QUE NO SON ID's
             res+=property.substring(1).toLowerCase();
         return res;
     }
@@ -66,9 +68,11 @@ public class ObjectHelper {
     private static String getGetter(String property){
         String res;
         res="get"+property.substring(0,1).toUpperCase();
-        if(property.startsWith("id"))
+        if(property.equals("id")) //PARA LA CLASE TOKEN
+            res+=property.substring(1).toLowerCase();
+        else if(property.startsWith("id")) //PARA LOS ID's DE LAS DEMAS CLASES
             res+=property.substring(1,2).toLowerCase()+property.substring(2,3).toUpperCase()+property.substring(3).toLowerCase();
-        else
+        else //PARA LO QUE NO SON ID's
             res+=property.substring(1).toLowerCase();
         return res;
     }

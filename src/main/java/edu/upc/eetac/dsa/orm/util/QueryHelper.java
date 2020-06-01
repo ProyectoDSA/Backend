@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.orm.util;
 
 import edu.upc.eetac.dsa.models.Inventario;
+import edu.upc.eetac.dsa.models.Token;
 
 import java.lang.reflect.Field;
 
@@ -22,6 +23,10 @@ public class QueryHelper {
 
         if(entity.getClass()==Inventario.class){
             sb.append("idObjeto, cantidad, idJugador) VALUES(?,?,?)");
+        }
+
+        else if(entity.getClass()== Token.class){
+            sb.append("token,id) VALUES(?,?)");
         }
 
         else {
