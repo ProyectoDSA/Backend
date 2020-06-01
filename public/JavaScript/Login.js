@@ -16,10 +16,10 @@ $(document).ready(function() {
             dataType: 'json',
             success: function (data) {
                 console.log("hola1")
-                window.localStorage.setItem("nombre", nombre)
+                window.sessionStorage.setItem("token", this.data)
                 var url = "http://147.83.7.203:8080/home.html";
                 window.open(url, "_self");
-                alert(data)
+                alert("Entra")
             },
             error: function (e) {
                 console.log(e.message);
