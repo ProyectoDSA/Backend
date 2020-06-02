@@ -4,8 +4,8 @@ import edu.upc.eetac.dsa.orm.util.RandomUtils;
 
 public class Token {
 
-    String token;
     String id;
+    String token;
 
     public Token(){}
 

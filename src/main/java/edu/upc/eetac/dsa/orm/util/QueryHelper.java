@@ -26,7 +26,7 @@ public class QueryHelper {
         }
 
         else if(entity.getClass()== Token.class){
-            sb.append("token,id) VALUES(?,?)");
+            sb.append("id,token) VALUES(?,?)");
         }
 
         else {

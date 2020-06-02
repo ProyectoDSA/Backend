@@ -4,12 +4,9 @@ package edu.upc.eetac.dsa.services;
 import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
-import edu.upc.eetac.dsa.models.LoginCredentials;
-import edu.upc.eetac.dsa.models.RegisterCredentials;
-import edu.upc.eetac.dsa.models.Token;
+import edu.upc.eetac.dsa.models.*;
 import edu.upc.eetac.dsa.orm.managers.UserManager;
 import edu.upc.eetac.dsa.orm.managers.UserManagerImpl;
-import edu.upc.eetac.dsa.models.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -47,7 +44,7 @@ public class AuthenticationService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(RegisterCredentials credentials) {
-        String token = null;
+        TokenStorage token = null;
         if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {
@@ -78,7 +75,7 @@ public class AuthenticationService {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginCredentials credentials) {
-        String token = null;
+        TokenStorage token = null;
         if(credentials.getNombre()==null || credentials.getPassword()==null)
             return Response.status(500).build();
         try {
@@ -86,6 +83,7 @@ public class AuthenticationService {
         } catch (PasswordDontMatchException e) {
             return Response.status(409).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(404).build();
         }
 

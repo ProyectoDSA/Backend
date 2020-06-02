@@ -180,7 +180,7 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public String login(LoginCredentials lc) throws UserNotFoundException, PasswordDontMatchException {
+    public TokenStorage login(LoginCredentials lc) throws UserNotFoundException, PasswordDontMatchException {
         User u;
         String token = null;
 
@@ -197,15 +197,27 @@ public class UserManagerImpl implements UserManager{
             throw e;
         }
 
-        return token;
+        TokenStorage t = new TokenStorage(token);
+        return t;
     }
 
     public String createToken(User user) {
         Session session = null;
-        Token t = new Token(user.getIdUser());
+        Token t = null;
+        HashMap<String, Token> tokens;
         try {
             session = FactorySession.openSession();
-            session.save(t);
+            tokens = session.findAll(Token.class);
+            if (tokens.containsKey(user.getIdUser())){
+                t = tokens.get(user.getIdUser());
+                session.deleteToken(t.getToken());
+                t = new Token(user.getIdUser());
+                session.save(t);
+            }
+            else {
+                t = new Token(user.getIdUser());
+                session.save(t);
+            }
         } catch (Exception e){
             e.printStackTrace();
         }finally {

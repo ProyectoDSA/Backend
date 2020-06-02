@@ -3,10 +3,7 @@ package edu.upc.eetac.dsa.orm.managers;
 import edu.upc.eetac.dsa.exceptions.PasswordDontMatchException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
-import edu.upc.eetac.dsa.models.LoginCredentials;
-import edu.upc.eetac.dsa.models.RegisterCredentials;
-import edu.upc.eetac.dsa.models.Token;
-import edu.upc.eetac.dsa.models.User;
+import edu.upc.eetac.dsa.models.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +24,7 @@ public interface UserManager {
     public void deleteUser(String id) throws UserNotFoundException; //Elimina usuario de la tabla User
 
     public void register(RegisterCredentials rc) throws Exception;
-    public String login(LoginCredentials lc) throws Exception;
+    public TokenStorage login(LoginCredentials lc) throws Exception;
     public String createToken(User user);
     public void deleteToken(String token);
 
