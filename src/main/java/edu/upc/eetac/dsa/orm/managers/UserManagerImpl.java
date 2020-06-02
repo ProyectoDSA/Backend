@@ -6,6 +6,7 @@ import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
 import edu.upc.eetac.dsa.models.*;
 import edu.upc.eetac.dsa.orm.session.FactorySession;
 import edu.upc.eetac.dsa.orm.session.Session;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -151,7 +152,8 @@ public class UserManagerImpl implements UserManager{
         try {
             if (checkNameRegister(rc.getNombre())) {
                 session = FactorySession.openSession();
-                u = new User(rc.getNombre(), rc.getMail(), rc.getPassword());
+                String pswd = DigestUtils.md5Hex(rc.getPassword());
+                u = new User(rc.getNombre(), rc.getMail(), pswd);
                 session.save(u);
                 this.createJugador(u.getIdUser());
             } else
@@ -239,6 +241,11 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
+    public String code(String pswd) {
+        return DigestUtils.md5Hex(pswd);
+    }
+
+    @Override
     public void createJugador(String id) {
         Session session = null;
         Jugador j = null;
@@ -267,14 +274,17 @@ public class UserManagerImpl implements UserManager{
 
     private boolean checkPswdLogin(String idUser, String pswd) throws PasswordDontMatchException {
         User u = null;
+        String pswdDB = null;
+        String p = DigestUtils.md5Hex(pswd);
 
         try {
             u = getUser(idUser);
+            pswdDB = u.getPassword();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
 
-        if(u.getPassword().equals(pswd)) return true;
+        if(pswdDB.equals(p)) return true;
         else throw new PasswordDontMatchException();
     }
 

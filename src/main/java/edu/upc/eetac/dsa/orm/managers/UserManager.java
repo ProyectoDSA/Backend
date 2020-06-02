@@ -28,6 +28,8 @@ public interface UserManager {
     public String createToken(User user);
     public void deleteToken(String token);
 
+    String code(String pswd);
+
     public void createJugador(String id);
 
     public int size();

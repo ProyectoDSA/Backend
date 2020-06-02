@@ -67,7 +67,7 @@ public class GameManagerImpl implements GameManager{
                     j.setMonedas(j.getMonedas()+puntos);
                 }
                 else { //COMPRAR OBJETO (accion=2)
-                    if(j.getMonedas()<=puntos)
+                    if(j.getMonedas()<puntos)
                         throw new MonedasInsuficientesException();
                     else j.setMonedas(j.getMonedas()-puntos);
                 }
@@ -129,7 +129,9 @@ public class GameManagerImpl implements GameManager{
                 int cant = i.getCantidad();
                 i.setCantidad(cant-1);
             }
-            session.update(i);
+            if(i.getCantidad()==0)
+                session.delete(i);
+            else session.update(i);
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException();
         } finally {

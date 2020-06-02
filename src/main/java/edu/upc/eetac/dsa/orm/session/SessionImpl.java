@@ -243,13 +243,19 @@ public class SessionImpl implements Session {
     public void delete(Object object) {
         String deleteQuery = QueryHelper.createQueryDELETE(object);
         PreparedStatement statement = null;
+        String idValue = null;
         try{
-            statement = conn.prepareStatement(deleteQuery);
-            String idValue = (String) ObjectHelper.getter(object,"id"+object.getClass().getSimpleName());
-            statement.setObject(1, ObjectHelper.getter(object, "id"+object.getClass().getSimpleName()));
+            if(object.getClass()==Inventario.class){
+                statement = conn.prepareStatement("DELETE FROM Inventario WHERE idObjeto=? AND idJugador=?");
+                statement.setObject(1, ObjectHelper.getter(object, "idObjeto"));
+                statement.setObject(2, ObjectHelper.getter(object, "idJugador"));
+            } else {
+                statement = conn.prepareStatement(deleteQuery);
+                idValue = (String) ObjectHelper.getter(object, "id" + object.getClass().getSimpleName());
+                statement.setObject(1, ObjectHelper.getter(object, "id" + object.getClass().getSimpleName()));
+            }
             statement.executeQuery();
             System.out.println(statement);
-            System.out.println("User with ID = "+idValue+" deleted");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
