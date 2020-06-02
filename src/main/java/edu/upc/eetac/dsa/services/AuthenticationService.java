@@ -45,7 +45,7 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(RegisterCredentials credentials) {
         TokenStorage token = null;
-        if(credentials.getNombre()==null || credentials.getMail()==null || credentials.getPassword()==null)
+        if(credentials.getNombre().length()==0 || credentials.getMail().length()==0 || credentials.getPassword().length()==0)
             return Response.status(500).build();
         try {
             if (credentials.getPassword().equals(credentials.getConfirm())) {
@@ -76,7 +76,7 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginCredentials credentials) {
         TokenStorage token = null;
-        if(credentials.getNombre()==null || credentials.getPassword()==null)
+        if(credentials.getNombre().length()==0 || credentials.getPassword().length()==0)
             return Response.status(500).build();
         try {
             token = this.auth.login(credentials);
