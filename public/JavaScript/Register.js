@@ -18,11 +18,11 @@ $(document).ready(function(){
                 data: JSON.stringify(user),
                 dataType: 'json',
                 success: function (data) {
-                    console.log("respuesta del registro"+data);
-                    window.localStorage.setItem("nombre",nombre);
+                    var token = JSON.stringify(data)
+                    window.sessionStorage.setItem("token",token);
                     var url = "http://localhost:8080/home.html";
                     window.open(url, "_self");
-                    alert(data)
+                    alert(token)
                 },
                 error: function (e) {
                     // log error in browser
