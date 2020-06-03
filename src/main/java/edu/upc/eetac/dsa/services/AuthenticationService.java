@@ -34,7 +34,7 @@ public class AuthenticationService {
     @POST
     @ApiOperation(value = "register a new User", notes = "Crea un nuevo usuario")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response=String.class),
+            @ApiResponse(code = 201, message = "Successful", response=TokenStorage.class),
             @ApiResponse(code = 400, message = "Password don't match"),
             @ApiResponse(code = 409, message = "User already exists"),
             @ApiResponse(code = 500, message = "Validation Error")
@@ -65,7 +65,7 @@ public class AuthenticationService {
     @POST
     @ApiOperation(value = "login", notes = "Iniciar sesión")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response=String.class),
+            @ApiResponse(code = 200, message = "Successful", response=TokenStorage.class),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 409, message = "Password Not Match"),
             @ApiResponse(code = 500, message = "Authentication error")
@@ -91,23 +91,23 @@ public class AuthenticationService {
     }
 
     @DELETE
-    @ApiOperation(value = "delete a User", notes = "Elimina un usuario mediante su id")
+    @ApiOperation(value = "delete a User", notes = "Elimina un usuario")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 404, message = "User not found")
     })
-    @Path("/delete/{idUser}")
-    public Response deleteUser(@PathParam("idUser") String id) {
+    @Path("/delete")
+    public Response deleteUser(@QueryParam("token") String token) {
         User u = null;
         try {
-            u = this.auth.getUser(id);
+            u = this.auth.getUser(token);
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (u == null) return Response.status(404).build();
         else {
             try {
-                this.auth.deleteUser(id);
+                this.auth.deleteUser(token);
             } catch (UserNotFoundException e) {
                 e.printStackTrace();
             }
@@ -121,8 +121,8 @@ public class AuthenticationService {
             @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 500, message = "Server error")
     })
-    @Path("/signout/{token}")
-    public Response signOut(@PathParam("token") String token) {
+    @Path("/signout")
+    public Response signOut(@QueryParam("token") String token) {
         try {
             this.auth.deleteToken(token);
         } catch (Exception e) {

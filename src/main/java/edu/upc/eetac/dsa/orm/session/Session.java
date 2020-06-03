@@ -16,6 +16,7 @@ public interface Session<E> {
     String getID(Class theClass, String nombre); //Devuelve el ID del objeto con el nombre especificado
     HashMap<String,Object> findAll(Class theClass); //Lee una tabla y devuelve todos los objetos
     Object findByID(Class theClass, String id); //Lee una tabla y devuelve el objecto con el ID especificado
+    public String findIDByToken(String token);
     void update(Object object); //Actualiza un objeto de la tabla
     void delete(Object object); //Elimina un objeto de la tabla
     void deleteToken(String token);

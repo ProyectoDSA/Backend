@@ -60,7 +60,7 @@ public class QueryHelper {
     public static String createQuerySELECTbyNameOrMail(Class theClass) {
         StringBuffer sb = new StringBuffer("SELECT * FROM ");
         sb.append(theClass.getSimpleName());
-        sb.append(" WHERE NOMBRE=? OR MAIL=?");
+        sb.append(" WHERE NOMBRE=? OR MAIL=? AND status='active'");
         return sb.toString();
     }
 
@@ -76,7 +76,7 @@ public class QueryHelper {
     public static String createQuerySELECTRanking(Class theClass) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
-        sb.append(" ORDER BY puntos DESC LIMIT 5");
+        sb.append(" WHERE status='active' ORDER BY puntos DESC LIMIT 5");
 
         return sb.toString();
     }

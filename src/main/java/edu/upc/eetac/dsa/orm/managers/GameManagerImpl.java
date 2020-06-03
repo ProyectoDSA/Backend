@@ -4,12 +4,10 @@ import edu.upc.eetac.dsa.exceptions.MonedasInsuficientesException;
 import edu.upc.eetac.dsa.exceptions.ObjetoNotFoundException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
-import edu.upc.eetac.dsa.models.Inventario;
-import edu.upc.eetac.dsa.models.Jugador;
-import edu.upc.eetac.dsa.models.Objeto;
-import edu.upc.eetac.dsa.models.User;
+import edu.upc.eetac.dsa.models.*;
 import edu.upc.eetac.dsa.orm.session.FactorySession;
 import edu.upc.eetac.dsa.orm.session.Session;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +33,43 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public HashMap<Integer, Jugador> getRanking() {
+    public JugadorRanking getJugador(String token) {
+        JugadorRanking jugador = null;
+        Jugador j;
+        User u = null;
+        Session session=null;
+        String id;
+        try{
+            session = FactorySession.openSession();
+            id = session.findIDByToken(token);
+            u = (User) session.findByID(User.class, id);
+            j = (Jugador) session.findByID(Jugador.class, id);
+            jugador = new JugadorRanking(u.getNombre(),j.getPuntos());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return jugador;
+    }
+
+    @Override
+    public HashMap<Integer, JugadorRanking> getRanking() {
         Session session = null;
-        HashMap<Integer, Jugador> jugadores=null;
+        HashMap<Integer, JugadorRanking> jugadores = new HashMap<>();
+        HashMap<Integer, Jugador> j=null;
+
         try {
             session = FactorySession.openSession();
-            jugadores = session.findRanking(Jugador.class);
+            j = session.findRanking(Jugador.class);
+            for(Integer key : j.keySet()){
+                JugadorRanking jugador = JugadorRanking.class.newInstance();
+                jugador.setPuntos(j.get(key).getPuntos());
+                User user = (User) session.findByID(User.class,j.get(key).getIdJugador());
+                jugador.setUsername(user.getNombre());
+                jugadores.put(key,jugador);
+            }
+
         }
         catch (Exception e) {
             log.warning("Error");
@@ -55,11 +84,12 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void updateJugador(String idJugador, int puntos, int accion) throws MonedasInsuficientesException {
+    public void updateJugador(String token, int puntos, int accion) throws MonedasInsuficientesException {
         Session session = null;
         Jugador j;
         try {
             session = FactorySession.openSession();
+            String idJugador = session.findIDByToken(token);
             j = (Jugador) session.findByID(Jugador.class, idJugador);
             if(j!=null) {
                 if(accion==1){ //GUARDAR NUEVA PUNTUACION Y AÑADIR MONEDAS
@@ -80,11 +110,13 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public HashMap<Integer,Inventario> getObjetosJugador(String idJugador){
+    public HashMap<Integer,Inventario> getObjetosJugador(String token){
+        String idJugador;
         Session session = null;
         HashMap<Integer, Inventario> objetos=null;
         try {
             session = FactorySession.openSession();
+            idJugador = session.findIDByToken(token);
             objetos = session.getObjetosJugador(Inventario.class,idJugador);
         }
         catch (Exception e) {
@@ -105,7 +137,8 @@ public class GameManagerImpl implements GameManager{
         Inventario o = null;
         try {
             session = FactorySession.openSession();
-            o = new Inventario(objeto.getIdObjeto(), objeto.getCantidad(), objeto.getIdJugador());
+            String idJugador = session.findIDByToken(objeto.getIdJugador());
+            o = new Inventario(objeto.getIdObjeto(), objeto.getCantidad(), idJugador);
             session.save(o);
         } finally {
             session.close();
@@ -113,12 +146,14 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void updateInventario(String idJugador, int idObjeto, int newCantidad, int accion) throws Exception {
+    public void updateInventario(String token, int idObjeto, int newCantidad, int accion) throws Exception {
         Session session = null;
         HashMap<Integer,Inventario> objetos;
+        String idJugador;
         Inventario i =null;
         try {
             session = FactorySession.openSession();
+            idJugador = session.findIDByToken(token);
             objetos = session.getObjetosJugador(Inventario.class, idJugador);
             if (objetos.containsKey(idObjeto))
                 i = objetos.get(idObjeto);

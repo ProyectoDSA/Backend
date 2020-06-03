@@ -5,6 +5,7 @@ public class Jugador {
     public String idJugador;
     public int puntos;
     public int monedas;
+    public String status;
 
     public Jugador(){}
 
@@ -13,6 +14,7 @@ public class Jugador {
         this.idJugador = id;
         this.puntos = puntos;
         this.monedas = monedas;
+        this.status="active";
     }
 
     public String getIdJugador() {
@@ -37,6 +39,14 @@ public class Jugador {
 
     public void setMonedas(int monedas) {
         this.monedas = monedas;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

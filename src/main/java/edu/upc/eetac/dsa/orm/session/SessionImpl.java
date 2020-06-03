@@ -3,10 +3,7 @@ package edu.upc.eetac.dsa.orm.session;
 import edu.upc.eetac.dsa.exceptions.EmptyUserListException;
 import edu.upc.eetac.dsa.exceptions.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exceptions.UserNotFoundException;
-import edu.upc.eetac.dsa.models.Inventario;
-import edu.upc.eetac.dsa.models.Jugador;
-import edu.upc.eetac.dsa.models.Objeto;
-import edu.upc.eetac.dsa.models.User;
+import edu.upc.eetac.dsa.models.*;
 import edu.upc.eetac.dsa.orm.util.ObjectHelper;
 import edu.upc.eetac.dsa.orm.util.QueryHelper;
 import io.swagger.models.auth.In;
@@ -126,6 +123,29 @@ public class SessionImpl implements Session {
 
         System.out.println("Object founded: "+object);
         return object;
+    }
+
+    public String findIDByToken(String token) {
+        ResultSet rs;
+        String id = null;
+
+        String selectByTokenQuery = "SELECT id FROM Token WHERE token=?";
+
+        PreparedStatement pstm;
+
+        try {
+            pstm = this.conn.prepareStatement(selectByTokenQuery);
+            pstm.setObject(1, token);
+            rs = pstm.executeQuery();
+            System.out.println(pstm);
+            while(rs.next()) {
+                id = (String) rs.getObject(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return id;
     }
 
     @Override
@@ -352,10 +372,10 @@ public class SessionImpl implements Session {
                 for (int i=1; i<=rsmd.getColumnCount(); i++) {
                     String field = rsmd.getColumnName(i);
                     ObjectHelper.setter(object, field, rs.getObject(i));
-                    id++;
                 }
                 res.put(id,object);
                 object = theClass.getDeclaredConstructor().newInstance();
+                id++;
             }
         } catch (SQLException e) {
             e.printStackTrace();

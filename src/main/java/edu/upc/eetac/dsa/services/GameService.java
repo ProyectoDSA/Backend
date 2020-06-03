@@ -3,12 +3,11 @@ package edu.upc.eetac.dsa.services;
 
 import edu.upc.eetac.dsa.exceptions.MonedasInsuficientesException;
 import edu.upc.eetac.dsa.exceptions.ObjetoNotFoundException;
-import edu.upc.eetac.dsa.models.Inventario;
-import edu.upc.eetac.dsa.models.Jugador;
-import edu.upc.eetac.dsa.models.Objeto;
-import edu.upc.eetac.dsa.models.User;
+import edu.upc.eetac.dsa.models.*;
 import edu.upc.eetac.dsa.orm.managers.GameManager;
 import edu.upc.eetac.dsa.orm.managers.GameManagerImpl;
+import edu.upc.eetac.dsa.orm.session.FactorySession;
+import edu.upc.eetac.dsa.orm.session.Session;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -38,25 +37,43 @@ public class GameService {
     @GET
     @ApiOperation(value = "get Ranking", notes = "Obtén el ranking de jugadores")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response = Jugador.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = JugadorRanking.class, responseContainer="List"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Path("/ranking")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRanking() {
 
-        HashMap<Integer, Jugador> jugadores = null;
-        List<Jugador> j = new LinkedList<>();
+        HashMap<Integer, JugadorRanking> jugadores = null;
+        List<JugadorRanking> j = new LinkedList<>();
 
         jugadores = this.gm.getRanking();
         for ( int key : jugadores.keySet() ) {
             j.add(jugadores.get(key));
         }
 
-        GenericEntity<List<Jugador>> entity = new GenericEntity<List<Jugador>>(j) {};
+        GenericEntity<List<JugadorRanking>> entity = new GenericEntity<List<JugadorRanking>>(j) {};
 
         if(entity==null) return Response.status(500).build();
         return Response.status(200).entity(entity).build();
+    }
+
+    @GET
+    @ApiOperation(value = "get puntuación jugador", notes = "Obtén el ranking de jugadores")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response = JugadorRanking.class),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/puntosPlayer")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPuntosJugador(@QueryParam("token") String token) {
+
+        JugadorRanking j = null;
+
+        j = this.gm.getJugador(token);
+
+        if(j==null) return Response.status(500).build();
+        return Response.status(200).entity(j).build();
     }
 
     @GET
@@ -65,14 +82,14 @@ public class GameService {
             @ApiResponse(code = 200, message = "Successful", response = Inventario.class, responseContainer="List"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @Path("/objetos/{idJugador}")
+    @Path("/objetos")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getObjetosJugador(@PathParam("idJugador") String idJugador) {
+    public Response getObjetosJugador(@QueryParam("token") String token) {
 
         HashMap<Integer,Inventario> objetos = null;
         List<Inventario> o = new LinkedList<>();
 
-        objetos = this.gm.getObjetosJugador(idJugador);
+        objetos = this.gm.getObjetosJugador(token);
         for ( Integer key : objetos.keySet() ) {
             o.add(objetos.get(key));
         }
@@ -89,11 +106,11 @@ public class GameService {
             @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @Path("/puntos/{idJugador}/{puntos}")
+    @Path("/puntos/{puntos}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePuntosAndMonedas(@PathParam("idJugador") String idJugador, @PathParam("puntos") int puntos) {
+    public Response updatePuntosAndMonedas(@QueryParam("token") String token, @PathParam("puntos") int puntos) {
         try{
-            this.gm.updateJugador(idJugador,puntos, 1);
+            this.gm.updateJugador(token,puntos, 1);
         } catch (Exception e){
             return Response.status(500).build();
         }
@@ -122,7 +139,7 @@ public class GameService {
             if(objetos.containsKey(idObjeto)) {
                 i = objetos.get(idObjeto);
                 int newCant = i.getCantidad()+cantidad;
-                this.gm.updateInventario(i.getIdJugador(),i.getIdObjeto(),newCant, 1);
+                this.gm.updateInventario(objeto.getIdJugador(),i.getIdObjeto(),newCant, 1);
             }
             else
                 this.gm.addObjetoJugador(objeto);
@@ -151,7 +168,7 @@ public class GameService {
             objetos = this.gm.getObjetosJugador(objeto.getIdJugador());
             if(objetos.containsKey(idObjeto)) {
                 i = objetos.get(idObjeto);
-                this.gm.updateInventario(i.getIdJugador(),i.getIdObjeto(),0, 2);
+                this.gm.updateInventario(objeto.getIdJugador(),i.getIdObjeto(),0, 2);
             }
             else
                 this.gm.addObjetoJugador(objeto);

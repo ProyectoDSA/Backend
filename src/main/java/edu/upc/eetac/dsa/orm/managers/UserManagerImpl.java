@@ -89,49 +89,22 @@ public class UserManagerImpl implements UserManager{
             session.close();
         }
 
-        /*for(User u : usersList)
-            System.out.println(u.toString()); */
         return usersList;
     }
 
-    /*//Funcion que actualiza los datos de un usuario
-    //NO PERMITE ACTUALIZAR SU ID!! Es la forma de buscarlo
-    @Override
-    public void updateUser(String idUser, String nombre, String mail, String password) {
-        Session session = null;
-        try {
-            session = FactorySession.openSession();
-            User u = (User) session.findByID(User.class, idUser);
-            if(u!=null) {
-                u.setNombre(nombre);
-                u.setMail(mail);
-                u.setPassword(password);
-                session.update(u);
-            }
-        }
-        catch (Exception e) {
-            throw e;
-        }
-        finally {
-            session.close();
-        }
-    }
-
-    @Override
-    public User updateUser(User user) {
-        this.updateUser(user.getIdUser(),user.getNombre(),user.getMail(), user.getPassword());
-        return user;
-    }*/
-
     //Funcion que elimina al usuario con el ID que le pasamos
     @Override
-    public void deleteUser(String idUser) throws UserNotFoundException {
+    public void deleteUser(String token) throws UserNotFoundException {
         User user = null;
+        Jugador jugador = null;
         Session session = null;
         try {
-            user = this.getUser(idUser);
             session = FactorySession.openSession();
+            String idUser = session.findIDByToken(token);
+            user = this.getUser(idUser);
+            jugador = (Jugador) session.findByID(Jugador.class, idUser);
             session.delete(user);
+            session.delete(jugador);
         }
         catch (UserNotFoundException e) {
             log.warning("User not found");
