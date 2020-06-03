@@ -1,7 +1,7 @@
 var BASE_URI="http://localhost:8080/dsaApp/auth";
 
-//$(document).ready(function() {
-    $('#exitButton').click(function () {
+$(document).ready(function() {
+    $("#exitButton").click(function () {
         var token = sessionStorage.getItem("token")
 
         $.ajax({
@@ -20,4 +20,4 @@ var BASE_URI="http://localhost:8080/dsaApp/auth";
             }
         });
     });
-//});
+});

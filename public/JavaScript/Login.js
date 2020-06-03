@@ -16,7 +16,8 @@ $(document).ready(function() {
             dataType: 'json',
             success: function (data) {
                 console.log("hola1")
-                var token = JSON.stringify(data)
+                var token = data.token;
+                console.log(token);
                 window.sessionStorage.setItem("token", token)
                 var url = "http://localhost:8080/home.html";
                 window.open(url, "_self");

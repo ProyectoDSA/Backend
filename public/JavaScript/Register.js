@@ -18,8 +18,9 @@ $(document).ready(function(){
                 data: JSON.stringify(user),
                 dataType: 'json',
                 success: function (data) {
-                    var token = JSON.stringify(data)
-                    window.sessionStorage.setItem("token",token);
+                    var token = data.token;
+                    console.log(token);
+                    window.sessionStorage.setItem("token", token)
                     var url = "http://localhost:8080/home.html";
                     window.open(url, "_self");
                     alert(token)

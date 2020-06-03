@@ -1,7 +1,9 @@
 var BASE_URI="http://localhost:8080/dsaApp/game";
 
-//$(document).ready(function() {
+$(document).ready(function() {
+    //var idJugador = JSON.parse(sessionStorage.getItem("token")).token;
     var idJugador = sessionStorage.getItem("token");
+    console.log(idJugador);
     var cantidad1 = $("#numero1").val();
     var cantidad2 = $("#numero2").val();
     var cantidad3 = $("#numero3").val();
@@ -51,42 +53,51 @@ var BASE_URI="http://localhost:8080/dsaApp/game";
 
     })
     $('#des1').click(function () {
-        var inventario = {"idObjeto": 1, "cantidad": cantidad1, "idJugador": idJugador};
+        var inventario = {"idObjeto": 1, "cantidad": 1, "idJugador": idJugador};
         console.log(inventario);
+        compraObjeto(inventario);
     });
     $('#des2').click(function () {
-        var inventario = {"idObjeto": 2, "cantidad": cantidad2, "idJugador": idJugador};
+        var inventario = {"idObjeto": 2, "cantidad": 1, "idJugador": idJugador};
         console.log(inventario);
+        compraObjeto(inventario);
     });
     $('#des3').click(function () {
-        var inventario = {"idObjeto": 3, "cantidad": cantidad3, "idJugador": idJugador};
+        var inventario = {"idObjeto": 3, "cantidad": 1, "idJugador": idJugador};
         console.log(inventario);
+        compraObjeto(inventario);
     });
     $('#masc1').click(function () {
-        var inventario = {"idObjeto": 4, "cantidad": cantidad4, "idJugador": idJugador};
+        var inventario = {"idObjeto": 4, "cantidad": 1, "idJugador": idJugador};
         console.log(inventario);
+        compraObjeto(inventario);
     });
     $('#masc2').click(function () {
-        var inventario = {"idObjeto": 5, "cantidad": cantidad5, "idJugador": idJugador};
+        var inventario = {"idObjeto": 5, "cantidad": 1, "idJugador": idJugador};
         console.log(inventario);
+        compraObjeto(inventario);
     });
     $('#jabon').click(function () {
-        var inventario = {"idObjeto": 6, "cantidad": cantidad6, "idJugador": idJugador};
+        var inventario = {"idObjeto": 6, "cantidad": 2, "idJugador": idJugador};
         console.log(inventario);
+        compraObjeto(inventario);
     });
 
-    $.ajax({
-        type: 'PUT',
-        url: BASE_URI.concat("/compra"),
-        headers: {'content-type': 'application/json', "x-kii-appid": "XXXXX", "x-kii-appkey": "XXXXX"},
-        data: JSON.stringify(inventario),
-        dataType: 'json',
-        success: function (data) {
-            console.log("hola1")
-            alert("Objeto comprado con exito")
-        },
-        error: function (e) {
-        console.log(e.message);
-        }
+    function compraObjeto(inventario) {
+        console.log("comprando objeto",inventario);
+        $.ajax({
+            type: 'PUT',
+            url: BASE_URI.concat("/compra"),
+            headers: {'content-type': 'application/json', "x-kii-appid": "XXXXX", "x-kii-appkey": "XXXXX"},
+            data: JSON.stringify(inventario),
+            dataType: 'json',
+            success: function () {
+                alert("Objeto comprado con exito")
+            },
+            error: function (e) {
+                console.log(e.message);
+                alert("Objeto comprado con exito")
+            }
         });
-//});
+    }
+});
