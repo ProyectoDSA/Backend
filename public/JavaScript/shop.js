@@ -1,4 +1,7 @@
+var BASE_URI="http://localhost:8080/dsaApp/game";
 
+//$(document).ready(function() {
+    var idJugador = sessionStorage.getItem("token");
     var cantidad1 = $("#numero1").val();
     var cantidad2 = $("#numero2").val();
     var cantidad3 = $("#numero3").val();
@@ -47,4 +50,43 @@
         if(cantidad6 != 1) cantidad6 - 1;
 
     })
+    $('#des1').click(function () {
+        var inventario = {"idObjeto": 1, "cantidad": cantidad1, "idJugador": idJugador};
+        console.log(inventario);
+    });
+    $('#des2').click(function () {
+        var inventario = {"idObjeto": 2, "cantidad": cantidad2, "idJugador": idJugador};
+        console.log(inventario);
+    });
+    $('#des3').click(function () {
+        var inventario = {"idObjeto": 3, "cantidad": cantidad3, "idJugador": idJugador};
+        console.log(inventario);
+    });
+    $('#masc1').click(function () {
+        var inventario = {"idObjeto": 4, "cantidad": cantidad4, "idJugador": idJugador};
+        console.log(inventario);
+    });
+    $('#masc2').click(function () {
+        var inventario = {"idObjeto": 5, "cantidad": cantidad5, "idJugador": idJugador};
+        console.log(inventario);
+    });
+    $('#jabon').click(function () {
+        var inventario = {"idObjeto": 6, "cantidad": cantidad6, "idJugador": idJugador};
+        console.log(inventario);
+    });
 
+    $.ajax({
+        type: 'PUT',
+        url: BASE_URI.concat("/compra"),
+        headers: {'content-type': 'application/json', "x-kii-appid": "XXXXX", "x-kii-appkey": "XXXXX"},
+        data: JSON.stringify(inventario),
+        dataType: 'json',
+        success: function (data) {
+            console.log("hola1")
+            alert("Objeto comprado con exito")
+        },
+        error: function (e) {
+        console.log(e.message);
+        }
+        });
+//});
