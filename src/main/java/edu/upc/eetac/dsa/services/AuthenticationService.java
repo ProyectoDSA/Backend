@@ -17,6 +17,8 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 //EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
@@ -88,48 +90,6 @@ public class AuthenticationService {
         }
 
         return Response.status(200).entity(token).build();
-    }
-
-    @DELETE
-    @ApiOperation(value = "delete a User", notes = "Elimina un usuario")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful"),
-            @ApiResponse(code = 404, message = "User not found")
-    })
-    @Path("/delete")
-    public Response deleteUser(@QueryParam("token") String token) {
-        User u = null;
-        try {
-            u = this.auth.getUser(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (u == null) return Response.status(404).build();
-        else {
-            try {
-                this.auth.deleteUser(token);
-            } catch (UserNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        return Response.status(200).build();
-    }
-
-    @DELETE
-    @ApiOperation(value = "Sign out", notes = "Cierra sesion y elimina el token correspondiente")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful"),
-            @ApiResponse(code = 500, message = "Server error")
-    })
-    @Path("/signout")
-    public Response signOut(@QueryParam("token") String token) {
-        try {
-            this.auth.deleteToken(token);
-        } catch (Exception e) {
-            return Response.status(500).build();
-        }
-
-        return Response.status(200).build();
     }
 
 }

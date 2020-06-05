@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.orm.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Date;
 
 //CLASE AUXILIAR PARA MANEJAR LOS GETTERS Y SETTERS DE UN OBJETO DE UNA MANERA MÁS CÓMODA
 public class ObjectHelper {
@@ -49,6 +50,8 @@ public class ObjectHelper {
         try{
             if(value.getClass() == Integer.class)
                 method = object.getClass().getDeclaredMethod(getSetter(property),int.class);
+            else if(value.getClass() == Date.class)
+                method = object.getClass().getDeclaredMethod(getSetter(property), Date.class);
             else
                 method = object.getClass().getDeclaredMethod(getSetter(property),value.getClass());
 

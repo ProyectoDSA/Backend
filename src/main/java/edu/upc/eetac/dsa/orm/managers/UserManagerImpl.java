@@ -7,7 +7,9 @@ import edu.upc.eetac.dsa.models.*;
 import edu.upc.eetac.dsa.orm.session.FactorySession;
 import edu.upc.eetac.dsa.orm.session.Session;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.joda.time.LocalDate;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -125,7 +127,7 @@ public class UserManagerImpl implements UserManager{
         try {
             if (checkNameRegister(rc.getNombre())) {
                 session = FactorySession.openSession();
-                String pswd = DigestUtils.md5Hex(rc.getPassword());
+                String pswd = code(rc.getPassword());
                 u = new User(rc.getNombre(), rc.getMail(), pswd);
                 session.save(u);
                 this.createJugador(u.getIdUser());
@@ -152,6 +154,11 @@ public class UserManagerImpl implements UserManager{
             return false;
         else
             return true;
+    }
+
+    //Funcion que codifica la contraseña para que no se muestre en claro
+    private String code(String pswd) {
+        return DigestUtils.md5Hex(pswd);
     }
 
     @Override
@@ -214,8 +221,38 @@ public class UserManagerImpl implements UserManager{
     }
 
     @Override
-    public String code(String pswd) {
-        return DigestUtils.md5Hex(pswd);
+    public HashMap<String,Foro> getComments() {
+        Session session = null;
+        HashMap<String,Foro> comentarios=null;
+        try {
+            session = FactorySession.openSession();
+            comentarios = session.findAll(Foro.class);
+        }
+        catch (Exception e) {
+            log.warning("Error");
+        }
+        finally {
+            session.close();
+        }
+
+        return comentarios;
+    }
+
+    @Override
+    public void addComment(String token, Comentario comentario) {
+        Session session = null;
+        Foro newComment = null;
+        try{
+            session = FactorySession.openSession();
+            String id = session.findIDByToken(token);
+            User u = (User) session.findByID(User.class,id);
+            String nombre = u.getNombre();
+            Date date = Date.valueOf(String.valueOf(LocalDate.now()));
+            newComment = new Foro(0, nombre, comentario.getComentario(), date);
+            session.save(newComment);
+        } finally {
+            session.close();
+        }
     }
 
     @Override

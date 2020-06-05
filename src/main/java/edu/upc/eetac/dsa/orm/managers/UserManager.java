@@ -28,7 +28,8 @@ public interface UserManager {
     public String createToken(User user);
     public void deleteToken(String token);
 
-    String code(String pswd);
+    public HashMap<String,Foro> getComments();
+    public void addComment(String token, Comentario comentario);
 
     public void createJugador(String id);
 

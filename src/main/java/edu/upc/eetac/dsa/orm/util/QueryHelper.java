@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.orm.util;
 
+import edu.upc.eetac.dsa.models.Foro;
 import edu.upc.eetac.dsa.models.Inventario;
 import edu.upc.eetac.dsa.models.Token;
 
@@ -27,6 +28,10 @@ public class QueryHelper {
 
         else if(entity.getClass()== Token.class){
             sb.append("id,token) VALUES(?,?)");
+        }
+
+        else if(entity.getClass()== Foro.class){
+            sb.append("idComment,nombre,comentario,fecha) VALUES(?,?,?,?)");
         }
 
         else {

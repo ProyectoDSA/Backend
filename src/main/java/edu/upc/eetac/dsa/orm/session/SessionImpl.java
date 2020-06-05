@@ -73,7 +73,12 @@ public class SessionImpl implements Session {
                 for (int i=1; i<=rsmd.getColumnCount(); i++) {
                     String field = rsmd.getColumnName(i);
                     ObjectHelper.setter(object, field, rs.getObject(i));
-                    if(i==1) id = (String) rs.getObject(i);
+                    if(i==1) {
+                        if(rs.getObject(i).getClass() == Integer.class)
+                            id = String.valueOf(rs.getObject(i));
+                        else
+                            id = (String) rs.getObject(i);
+                    }
                 }
                 res.put(id,object);
                 object = theClass.getDeclaredConstructor().newInstance();
