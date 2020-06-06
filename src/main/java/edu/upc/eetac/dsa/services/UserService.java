@@ -36,7 +36,8 @@ public class UserService {
     @ApiOperation(value = "delete a User", notes = "Elimina un usuario")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
-            @ApiResponse(code = 404, message = "User not found")
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
     })
     @Path("/delete")
     public Response deleteUser(@QueryParam("token") String token) {
@@ -44,14 +45,13 @@ public class UserService {
         try {
             u = this.auth.getUser(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            return Response.status(404).build();
         }
-        if (u == null) return Response.status(404).build();
-        else {
+        if (u != null) {
             try {
                 this.auth.deleteUser(token);
             } catch (UserNotFoundException e) {
-                e.printStackTrace();
+                return Response.status(500).build();
             }
         }
         return Response.status(200).build();
@@ -74,7 +74,7 @@ public class UserService {
         return Response.status(200).build();
     }
 
-    @PUT
+    @POST
     @ApiOperation(value = "Crear comentario", notes = "Cierra sesion y elimina el token correspondiente")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
@@ -113,5 +113,23 @@ public class UserService {
 
         if(entity==null) return Response.status(500).build();
         return Response.status(200).entity(entity).build();
+    }
+
+    @POST
+    @ApiOperation(value = "update user", notes = "Actualiza los parametros de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @Path("/update")
+    public Response updateUser(User user){
+        if(user==null) return Response.status(500).build();
+        try {
+            this.auth.updateUser(user);
+        } catch (UserNotFoundException e) {
+            return Response.status(404).build();
+        }
+        return Response.status(200).build();
     }
 }

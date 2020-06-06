@@ -94,6 +94,30 @@ public class UserManagerImpl implements UserManager{
         return usersList;
     }
 
+    @Override
+    public void updateUser(String token, String nombre, String mail, String password) throws UserNotFoundException {
+        Session session = null;
+        User u = null;
+        try {
+            session = FactorySession.openSession();
+            String id = session.findIDByToken(token);
+            u = (User) session.findByID(User.class, id);
+            u.setNombre(nombre);
+            u.setMail(mail);
+            u.setPassword(code(password));
+            session.update(u);
+        } catch(Exception e) {
+            throw new UserNotFoundException();
+        }finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void updateUser(User user) throws UserNotFoundException {
+        this.updateUser(user.getIdUser(), user.getNombre(), user.getMail(), user.getPassword());
+    }
+
     //Funcion que elimina al usuario con el ID que le pasamos
     @Override
     public void deleteUser(String token) throws UserNotFoundException {

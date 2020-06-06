@@ -4,18 +4,18 @@ public class Partida {
 
     public int idPartida;
     public String idJugador;
-    public String tiempo;
-    public int puntuacion;
+    public String duracion;
+    public int puntos;
     public int nivelMax;
 
     public Partida(){}
 
-    public Partida(int idPartida, String idJugador, String tiempo, int puntuacion, int nivelMax) {
+    public Partida(int idPartida, String idJugador, String duracion, int puntos, int nivelMax) {
         this();
         this.idPartida = idPartida;
         this.idJugador = idJugador;
-        this.tiempo = tiempo;
-        this.puntuacion = puntuacion;
+        this.duracion = duracion;
+        this.puntos = puntos;
         this.nivelMax = nivelMax;
     }
 
@@ -35,20 +35,20 @@ public class Partida {
         this.idJugador = idJugador;
     }
 
-    public String getTiempo() {
-        return tiempo;
+    public String getDuracion() {
+        return duracion;
     }
 
-    public void setTiempo(String tiempo) {
-        this.tiempo = tiempo;
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
     }
 
-    public int getPuntuacion() {
-        return puntuacion;
+    public int getPuntos() {
+        return puntos;
     }
 
-    public void setPuntuacion(int puntuacion) {
-        this.puntuacion = puntuacion;
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
     }
 
     public int getNivelMax() {
@@ -64,8 +64,8 @@ public class Partida {
         return "Partida{" +
                 "idPartida=" + idPartida +
                 ", idJugador='" + idJugador + '\'' +
-                ", tiempo=" + tiempo +
-                ", puntuacion=" + puntuacion +
+                ", tiempo=" + duracion +
+                ", puntuacion=" + puntos +
                 ", nivelMax=" + nivelMax +
                 '}';
     }

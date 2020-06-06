@@ -2,6 +2,7 @@ package edu.upc.eetac.dsa.orm.util;
 
 import edu.upc.eetac.dsa.models.Foro;
 import edu.upc.eetac.dsa.models.Inventario;
+import edu.upc.eetac.dsa.models.Partida;
 import edu.upc.eetac.dsa.models.Token;
 
 import java.lang.reflect.Field;
@@ -33,7 +34,6 @@ public class QueryHelper {
         else if(entity.getClass()== Foro.class){
             sb.append("idComment,nombre,comentario,fecha) VALUES(?,?,?,?)");
         }
-
         else {
             //Coloca las comas
             sb.append("id" + entity.getClass().getSimpleName());
@@ -81,8 +81,12 @@ public class QueryHelper {
     public static String createQuerySELECTRanking(Class theClass) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
-        sb.append(" WHERE status='active' ORDER BY puntos DESC LIMIT 5");
-
+        if(theClass == Partida.class){
+            sb.append(" WHERE idJugador=? ORDER BY puntos DESC LIMIT 5");
+        }
+        else {
+            sb.append(" WHERE status='active' ORDER BY puntos DESC LIMIT 5");
+        }
         return sb.toString();
     }
 
@@ -112,13 +116,6 @@ public class QueryHelper {
     public static String createQueryDELETE(Object entity){
         StringBuffer sb = new StringBuffer();
         sb.append("UPDATE "+entity.getClass().getSimpleName()+" SET status='inactive'");
-        sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = ?");
-        return sb.toString();
-    }
-
-    public static String createQueryRESTAURAR(Object entity){
-        StringBuffer sb = new StringBuffer();
-        sb.append("UPDATE "+entity.getClass().getSimpleName()+" SET status='active'");
         sb.append(" WHERE id"+entity.getClass().getSimpleName()+" = ?");
         return sb.toString();
     }

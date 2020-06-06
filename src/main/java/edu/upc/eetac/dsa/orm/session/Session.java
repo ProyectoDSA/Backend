@@ -20,13 +20,12 @@ public interface Session<E> {
     void update(Object object); //Actualiza un objeto de la tabla
     void delete(Object object); //Elimina un objeto de la tabla
     void deleteToken(String token);
-    public void restaurar(Object object);
 
     //CONSULTA PARA USER
     Object findByNameOrMail(Class theClass, String name);
 
     //CONSULTAS PARA JUGADOR
-    HashMap<String,Object> findRanking(Class theClass);
+    HashMap<String,Object> findRanking(Class theClass, String id);
     HashMap<Integer, Object> getObjetosJugador(Class theClass, String idJugador) throws UserNotFoundException;
     //public void addObjeto(String idJugador, Objeto objeto, int cantidad);
     public int getPrecioObjeto(int idObjeto);

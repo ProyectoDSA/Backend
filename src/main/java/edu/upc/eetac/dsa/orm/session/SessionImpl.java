@@ -304,23 +304,6 @@ public class SessionImpl implements Session {
         }
     }
 
-    public void restaurar(Object object){
-        String deleteQuery = QueryHelper.createQueryRESTAURAR(object);
-        PreparedStatement statement = null;
-        try{
-            statement = conn.prepareStatement(deleteQuery);
-            String idValue = (String) ObjectHelper.getter(object,"id"+object.getClass().getSimpleName());
-            statement.setObject(1, ObjectHelper.getter(object, "id"+object.getClass().getSimpleName()));
-            statement.executeQuery();
-            System.out.println(statement);
-            System.out.println("User with ID = "+idValue+" restaured");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
-    }
-
     @Override
     public String getID(Class theClass, String nombre) {
         ResultSet rs;
@@ -351,7 +334,7 @@ public class SessionImpl implements Session {
         return null;
     }
 
-    public HashMap<Integer,Object> findRanking(Class theClass) {
+    public HashMap<Integer,Object> findRanking(Class theClass, String idJugador) {
         //List<Object> res = new ArrayList<>();
         HashMap<Integer, Object> res = new HashMap<>();
         ResultSet rs;
@@ -363,13 +346,20 @@ public class SessionImpl implements Session {
         System.out.println(selectQuery);
 
         Statement statement = null;
+        PreparedStatement pstm = null;
 
         try {
             object = theClass.getDeclaredConstructor().newInstance();
-            statement = this.conn.createStatement();
-            statement.execute(selectQuery);
-            rs = statement.getResultSet();
-
+            if(theClass == Partida.class){
+                pstm.setObject(1, idJugador);
+                pstm.executeQuery();
+                rs = pstm.getResultSet();
+            }
+            else {
+                statement = this.conn.createStatement();
+                statement.execute(selectQuery);
+                rs = statement.getResultSet();
+            }
             //Obtenemos los objetos y leemos las columnas con metadata
             //para ir guardando en cada objeto sus datos correspondientes
             while(rs.next()) {

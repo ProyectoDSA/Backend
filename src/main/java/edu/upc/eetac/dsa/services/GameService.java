@@ -34,6 +34,23 @@ public class GameService {
         this.gm = GameManagerImpl.getInstance();
     }
 
+    @POST
+    @ApiOperation(value = "Añadir partida", notes = "Añade registro de partida en la BBDD")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 500, message = "Server error")
+    })
+    @Path("/addpartida")
+    public Response addPartida(Partida partida) {
+        try {
+            this.gm.addPartida(partida);
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+
+        return Response.status(200).build();
+    }
+
     @GET
     @ApiOperation(value = "get Ranking", notes = "Obtén el ranking de jugadores")
     @ApiResponses(value = {
@@ -53,6 +70,30 @@ public class GameService {
         }
 
         GenericEntity<List<JugadorRanking>> entity = new GenericEntity<List<JugadorRanking>>(j) {};
+
+        if(entity==null) return Response.status(500).build();
+        return Response.status(200).entity(entity).build();
+    }
+
+    @GET
+    @ApiOperation(value = "get Ranking Partidas", notes = "Obtén las mejores 5 partidas de un jugador")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response = RankingPartida.class, responseContainer="List"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/toppartidas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRankingPartidas(@QueryParam("token") String token) {
+
+        HashMap<Integer, RankingPartida> partidas = null;
+        List<RankingPartida> p = new LinkedList<>();
+
+        partidas = this.gm.getRankingPartidas(token);
+        for ( int key : partidas.keySet() ) {
+            p.add(partidas.get(key));
+        }
+
+        GenericEntity<List<RankingPartida>> entity = new GenericEntity<List<RankingPartida>>(p) {};
 
         if(entity==null) return Response.status(500).build();
         return Response.status(200).entity(entity).build();
@@ -100,7 +141,7 @@ public class GameService {
         return Response.status(200).entity(entity).build();
     }
 
-    @PUT
+    @POST
     @ApiOperation(value = "update puntos", notes = "Actualiza la puntuación y las monedas de un jugador al finalizar la partida")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
@@ -117,7 +158,7 @@ public class GameService {
         return Response.status(200).build();
     }
 
-    @PUT
+    @POST
     @ApiOperation(value = "pagar objetos", notes = "Actualiza las monedas de un jugador al comprar un objeto")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
@@ -151,7 +192,7 @@ public class GameService {
         return Response.status(201).build();
     }
 
-    @PUT
+    @POST
     @ApiOperation(value = "usar objeto", notes = "Actualiza la de un objeto al gastarlo")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
