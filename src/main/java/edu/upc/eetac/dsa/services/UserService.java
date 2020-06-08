@@ -124,11 +124,12 @@ public class UserService {
     })
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPuntosJugador(@QueryParam("token") String token) {
+    public Response getUser(@QueryParam("token") String token) {
 
         User u = null;
 
         try {
+
             u = this.auth.getUser(token);
         } catch (Exception e) {
             return Response.status(404).build();

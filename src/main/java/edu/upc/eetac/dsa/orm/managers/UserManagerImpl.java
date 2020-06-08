@@ -36,9 +36,12 @@ public class UserManagerImpl implements UserManager{
     public User getUser(String idUser) throws UserNotFoundException {
         Session session = null;
         User u = null;
+        String id;
         try {
             session = FactorySession.openSession();
-            String id = session.findIDByToken(idUser);
+            if(idUser.length()>6)
+                id = session.findIDByToken(idUser);
+            else id = idUser;
             u = (User) session.findByID(User.class, id);
         } finally {
             session.close();
