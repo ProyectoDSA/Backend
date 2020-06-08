@@ -115,6 +115,29 @@ public class UserService {
         return Response.status(200).entity(entity).build();
     }
 
+    @GET
+    @ApiOperation(value = "get user", notes = "Obtén los datos de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response = User.class),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPuntosJugador(@QueryParam("token") String token) {
+
+        User u = null;
+
+        try {
+            u = this.auth.getUser(token);
+        } catch (Exception e) {
+            return Response.status(404).build();
+        }
+
+        if(u==null) return Response.status(500).build();
+        return Response.status(200).entity(u).build();
+    }
+
     @POST
     @ApiOperation(value = "update user", notes = "Actualiza los parametros de un usuario")
     @ApiResponses(value = {

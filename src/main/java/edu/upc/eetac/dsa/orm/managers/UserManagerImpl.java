@@ -38,7 +38,8 @@ public class UserManagerImpl implements UserManager{
         User u = null;
         try {
             session = FactorySession.openSession();
-            u = (User) session.findByID(User.class, idUser);
+            String id = session.findIDByToken(idUser);
+            u = (User) session.findByID(User.class, id);
         } finally {
             session.close();
         }
@@ -104,7 +105,8 @@ public class UserManagerImpl implements UserManager{
             u = (User) session.findByID(User.class, id);
             u.setNombre(nombre);
             u.setMail(mail);
-            u.setPassword(code(password));
+            if(password!=null) //Si no la cambia, el parametro es null y no lo cambiamos
+                u.setPassword(code(password));
             session.update(u);
         } catch(Exception e) {
             throw new UserNotFoundException();

@@ -351,6 +351,7 @@ public class SessionImpl implements Session {
         try {
             object = theClass.getDeclaredConstructor().newInstance();
             if(theClass == Partida.class){
+                pstm = this.conn.prepareStatement(selectQuery);
                 pstm.setObject(1, idJugador);
                 pstm.executeQuery();
                 rs = pstm.getResultSet();

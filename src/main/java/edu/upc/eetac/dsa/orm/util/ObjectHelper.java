@@ -3,7 +3,7 @@ package edu.upc.eetac.dsa.orm.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Date;
+import java.util.Date;
 
 //CLASE AUXILIAR PARA MANEJAR LOS GETTERS Y SETTERS DE UN OBJETO DE UNA MANERA MÁS CÓMODA
 public class ObjectHelper {
@@ -29,13 +29,7 @@ public class ObjectHelper {
     //EJEMPLO: property = "id", respuesta de la funcion = setId()
     private static String getSetter(String property){
         String res;
-        res="set"+property.substring(0,1).toUpperCase();
-        if(property.equals("id")) //PARA LA CLASE TOKEN
-            res+=property.substring(1).toLowerCase();
-        else if(property.startsWith("id")) //PARA LOS ID's DE LAS DEMAS CLASES
-            res+=property.substring(1,2).toLowerCase()+property.substring(2,3).toUpperCase()+property.substring(3).toLowerCase();
-        else //PARA LO QUE NO SON ID's
-            res+=property.substring(1).toLowerCase();
+        res="set"+property.substring(0,1).toUpperCase()+property.substring(1);
         return res;
     }
 
@@ -70,13 +64,7 @@ public class ObjectHelper {
     //EJEMPLO: property = "id", respuesta de la funcion = getId()
     private static String getGetter(String property){
         String res;
-        res="get"+property.substring(0,1).toUpperCase();
-        if(property.equals("id")) //PARA LA CLASE TOKEN
-            res+=property.substring(1).toLowerCase();
-        else if(property.startsWith("id")) //PARA LOS ID's DE LAS DEMAS CLASES
-            res+=property.substring(1,2).toLowerCase()+property.substring(2,3).toUpperCase()+property.substring(3).toLowerCase();
-        else //PARA LO QUE NO SON ID's
-            res+=property.substring(1).toLowerCase();
+        res="get"+property.substring(0,1).toUpperCase()+property.substring(1);
         return res;
     }
 
