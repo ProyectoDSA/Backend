@@ -276,8 +276,8 @@ public class UserManagerImpl implements UserManager{
             String id = session.findIDByToken(token);
             User u = (User) session.findByID(User.class,id);
             String nombre = u.getNombre();
-            Date date = Date.valueOf(String.valueOf(LocalDate.now()));
-            newComment = new Foro(0, nombre, comentario.getComentario(), date);
+            String fecha = String.valueOf(LocalDate.now());
+            newComment = new Foro(0, nombre, comentario.getComentario(), fecha);
             session.save(newComment);
         } finally {
             session.close();
