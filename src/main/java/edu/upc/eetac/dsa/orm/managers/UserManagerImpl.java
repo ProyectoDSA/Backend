@@ -194,12 +194,14 @@ public class UserManagerImpl implements UserManager{
     public TokenStorage login(LoginCredentials lc) throws UserNotFoundException, PasswordDontMatchException {
         User u;
         String token = null;
+        int monedas = 0;
 
         try{
             if (checkNameLogin(lc.getNombre())) {
                 if (checkPswdLogin(getIdUser(lc.getNombre()), lc.getPassword())) {
                     u = getUserByNameOrMail(lc.getNombre());
                     token = this.createToken(u);
+                    monedas = getMonedasJugador(u.getIdUser());
                 }
             }
         } catch (UserNotFoundException e) {
@@ -208,7 +210,7 @@ public class UserManagerImpl implements UserManager{
             throw e;
         }
 
-        TokenStorage t = new TokenStorage(token);
+        TokenStorage t = new TokenStorage(token, monedas);
         return t;
     }
 
@@ -299,6 +301,21 @@ public class UserManagerImpl implements UserManager{
             session.close();
         }
         System.out.println("Jugador creado con ID = "+id);
+    }
+
+    @Override
+    public int getMonedasJugador(String idJugador) {
+        Session session = null;
+        int monedas = 0;
+        try{
+            session = FactorySession.openSession();
+            monedas = session.getMonedasJugador(idJugador);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return monedas;
     }
 
     private boolean checkNameLogin(String name) throws UserNotFoundException {

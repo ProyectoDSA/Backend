@@ -32,6 +32,7 @@ public interface UserManager {
     public void addComment(String token, Comentario comentario);
 
     public void createJugador(String id);
+    public int getMonedasJugador(String idJugador);
 
     public int size();
 }

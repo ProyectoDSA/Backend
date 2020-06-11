@@ -389,6 +389,24 @@ public class SessionImpl implements Session {
         return res;
     }
 
+    @Override
+    public int getMonedasJugador(String idJugador) {
+        ResultSet rs;
+        int monedas = 0;
+        Statement statement;
+        String monedasQuery = "SELECT monedas FROM Jugador WHERE idJugador='"+idJugador+"'";
+        try{
+            statement = this.conn.createStatement();
+            statement.execute(monedasQuery);
+            rs = statement.getResultSet();
+            if(rs.next())
+                monedas = (int) rs.getObject(1);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return monedas;
+    }
+
     public int getPrecioObjeto(int idObjeto){
         ResultSet rs;
         int precio = 0;

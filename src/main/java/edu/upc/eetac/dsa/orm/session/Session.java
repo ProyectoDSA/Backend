@@ -27,8 +27,8 @@ public interface Session<E> {
     //CONSULTAS PARA JUGADOR
     HashMap<String,Object> findRanking(Class theClass, String id);
     HashMap<Integer, Object> getObjetosJugador(Class theClass, String idJugador) throws UserNotFoundException;
-    //public void addObjeto(String idJugador, Objeto objeto, int cantidad);
-    public int getPrecioObjeto(int idObjeto);
+    int getMonedasJugador(String idJugador);
+    int getPrecioObjeto(int idObjeto);
 
     void close();
 }
