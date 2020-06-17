@@ -1,13 +1,15 @@
 $(document).ready(function(){
     console.log("hola");
     var token = sessionStorage.getItem("token")
-    $.get("http://localhost:8080/dsaApp/game/objetos", function(data) {
-        console.log("hola1");
-        var objeto = data.idObjeto;
-        var cantidad = data.cantidad;
-        console.log("22:",data);
-        var insertion = "</td></tr>"+objeto+"</td></tr>"+cantidad+"</td></tr>";
-        $("#tabla tbody").append(insertion);
+    $.get("http://localhost:8080/dsaApp/game/objetos?token=" + token.toString(), function(data) {
+        $.each(data,function (index,element) {
+            console.log("hola1");
+            var objeto = element.idObjeto;
+            var cantidad = element.cantidad;
+            console.log("22:",data);
+            var insertion = "<tr><td>" + objeto + "</td><td>" + cantidad + "</td></tr>";
+            $("#tabla_objeto tbody").append(insertion);
+        })
     },"json");
 
     //EDITAR PERFIL

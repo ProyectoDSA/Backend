@@ -1,4 +1,4 @@
-var BASE_URI="http://localhost:8080/dsaApp/auth";
+var BASE_URI="http://localhost:8080/dsaApp/user";
 
 $(document).ready(function() {
     $("#exitButton").click(function () {

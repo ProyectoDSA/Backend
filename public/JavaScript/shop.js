@@ -103,7 +103,7 @@ $(document).ready(function() {
     function compraObjeto(inventario) {
         console.log("comprando objeto",inventario);
         $.ajax({
-            type: 'PUT',
+            type: 'POST',
             url: BASE_URI.concat("/compra"),
             headers: {'content-type': 'application/json', "x-kii-appid": "XXXXX", "x-kii-appkey": "XXXXX"},
             data: JSON.stringify(inventario),
