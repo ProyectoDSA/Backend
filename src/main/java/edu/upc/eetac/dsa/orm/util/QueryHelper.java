@@ -58,7 +58,7 @@ public class QueryHelper {
     public static String createQuerySELECTbyID(Class theClass) {
         StringBuffer sb = new StringBuffer("SELECT * FROM ");
         sb.append(theClass.getSimpleName());
-        sb.append(" WHERE id"+theClass.getSimpleName()+"=?");
+        sb.append(" WHERE id"+theClass.getSimpleName()+"=? AND STATUS='active'" );
         return sb.toString();
     }
 

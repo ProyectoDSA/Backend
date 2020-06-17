@@ -74,7 +74,7 @@ public class UserManagerImpl implements UserManager{
             session.close();
         }
 
-        if(u==null)
+        if(u==null || u.getStatus()=="inactive")
             throw new UserNotFoundException();
         else
             return u;
@@ -196,18 +196,12 @@ public class UserManagerImpl implements UserManager{
         String token = null;
         int monedas = 0;
 
-        try{
-            if (checkNameLogin(lc.getNombre())) {
-                if (checkPswdLogin(getIdUser(lc.getNombre()), lc.getPassword())) {
-                    u = getUserByNameOrMail(lc.getNombre());
-                    token = this.createToken(u);
-                    monedas = getMonedasJugador(u.getIdUser());
-                }
+        if (checkNameLogin(lc.getNombre())) {
+            if (checkPswdLogin(getIdUser(lc.getNombre()), lc.getPassword())) {
+                u = getUserByNameOrMail(lc.getNombre());
+                token = this.createToken(u);
+                monedas = getMonedasJugador(u.getIdUser());
             }
-        } catch (UserNotFoundException e) {
-            throw e;
-        } catch (PasswordDontMatchException e) {
-            throw e;
         }
 
         TokenStorage t = new TokenStorage(token, monedas);

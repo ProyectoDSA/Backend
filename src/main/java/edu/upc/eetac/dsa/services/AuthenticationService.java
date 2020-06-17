@@ -78,15 +78,17 @@ public class AuthenticationService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginCredentials credentials) {
         TokenStorage token = null;
-        if(credentials.getNombre().length()==0 || credentials.getPassword().length()==0)
+        if (credentials.getNombre().length() == 0 || credentials.getPassword().length() == 0)
             return Response.status(500).build();
         try {
             token = this.auth.login(credentials);
-        } catch (PasswordDontMatchException e) {
+        } catch (PasswordDontMatchException e){
             return Response.status(409).build();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (UserNotFoundException e){
             return Response.status(404).build();
+        }
+        catch (Exception e) {
+            return Response.status(500).build();
         }
 
         return Response.status(200).entity(token).build();
