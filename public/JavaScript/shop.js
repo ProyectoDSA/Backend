@@ -1,4 +1,4 @@
-var BASE_URI="http://localhost:8080/dsaApp/game";
+var BASE_URI="http://147.83.7.203:8080/dsaApp/game";
 
 $(document).ready(function() {
     //var idJugador = JSON.parse(sessionStorage.getItem("token")).token;
