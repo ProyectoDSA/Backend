@@ -1,7 +1,7 @@
 $(document).ready(function(){
     console.log("hola");
     var token = sessionStorage.getItem("token")
-    $.get("http://localhost:8080/dsaApp/game/objetos", function(data) {
+    $.get("http://147.83.7.203:8080/dsaApp/game/objetos", function(data) {
         console.log("hola1");
         var objeto = data.idObjeto;
         var cantidad = data.cantidad;
@@ -14,7 +14,7 @@ $(document).ready(function(){
 
     $("#eliminar").click(function(){
         var token = sessionStorage.getItem("token")
-        var BASE_URI="http://localhost:8080/dsaApp/user";
+        var BASE_URI="http://147.83.7.203:8080/dsaApp/user";
         $.ajax({
             type: 'DELETE',
             url: BASE_URI.concat("/delete?token=" + token.toString()),
@@ -22,7 +22,7 @@ $(document).ready(function(){
             success: function () {
                 console.log("hola1")
                 window.sessionStorage.clear();
-                var url = "http://localhost:8080/register.html";
+                var url = "http://147.83.7.203:8080/register.html";
                 window.open(url, "_self");
                 alert("Vuelve pronto :(")
             },

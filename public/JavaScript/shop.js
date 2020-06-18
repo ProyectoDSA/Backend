@@ -1,4 +1,4 @@
-var BASE_URI="http://localhost:8080/dsaApp/game";
+var BASE_URI="http://147.83.7.203:8080/dsaApp/game";
 
 $(document).ready(function() {
     //var idJugador = JSON.parse(sessionStorage.getItem("token")).token;
@@ -103,7 +103,7 @@ $(document).ready(function() {
     function compraObjeto(inventario) {
         console.log("comprando objeto",inventario);
         $.ajax({
-            type: 'PUT',
+            type: 'POST',
             url: BASE_URI.concat("/compra"),
             headers: {'content-type': 'application/json', "x-kii-appid": "XXXXX", "x-kii-appkey": "XXXXX"},
             data: JSON.stringify(inventario),

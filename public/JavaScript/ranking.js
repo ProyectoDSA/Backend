@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var token = sessionStorage.getItem("token")
-    $.get("http://localhost:8080/dsaApp/game/toppartidas", function(data) {
+    $.get("http://147.83.7.203:8080/dsaApp/game/toppartidas", function(data) {
         console.log("hola1");
         var puntos = data.puntos;
         var duracion = data.duracion;
