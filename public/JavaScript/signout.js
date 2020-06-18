@@ -1,9 +1,11 @@
 var BASE_URI="http://147.83.7.203:8080/dsaApp/user";
-
+var token = sessionStorage.getItem("token")
+if (token == null){
+    var url = "http://147.83.7.203:8080/login.html";
+    window.open(url, "_self");
+}
 $(document).ready(function() {
     $("#exitButton").click(function () {
-        var token = sessionStorage.getItem("token")
-
         $.ajax({
             type: 'DELETE',
             url: BASE_URI.concat("/signout?token=" + token.toString()),
