@@ -1,7 +1,7 @@
-var BASE_URI="http://147.83.7.203:8080/dsaApp/user";
+var BASE_URI="http://localhost:8080/dsaApp/user";
 var token = sessionStorage.getItem("token")
 if (token == null){
-    var url = "http://147.83.7.203:8080/login.html";
+    var url = "http://localhost:8080/login.html";
     window.open(url, "_self");
 }
 $(document).ready(function() {
@@ -13,7 +13,7 @@ $(document).ready(function() {
             success: function () {
                 console.log("hola1")
                 window.sessionStorage.clear();
-                var url = "http://147.83.7.203:8080/login.html";
+                var url = "http://localhost:8080/login.html";
                 window.open(url, "_self");
                 alert("Vuelve pronto :(")
             },

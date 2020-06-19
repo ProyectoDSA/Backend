@@ -1,11 +1,11 @@
 var token = sessionStorage.getItem("token")
 if (token == null){
-    var url = "http://147.83.7.203:8080/login.html";
+    var url = "http://localhost:8080/login.html";
     window.open(url, "_self");
 }
 $(document).ready(function(){
     console.log("hola");
-    $.get("http://147.83.7.203:8080/dsaApp/game/objetos?token=" + token.toString(), function(data) {
+    $.get("http://localhost:8080/dsaApp/game/objetos?token=" + token.toString(), function(data) {
         $.each(data,function (index,element) {
             console.log("hola1");
             var objeto = element.idObjeto;
@@ -17,7 +17,7 @@ $(document).ready(function(){
     },"json");
 
     //EDITAR PERFIL
-    $.get("http://147.83.7.203:8080/dsaApp/user/user?token=" + token.toString(), function(data) {
+    $.get("http://localhost:8080/dsaApp/user/user?token=" + token.toString(), function(data) {
         console.log("Porque no vas...")
          var nombre = data.nombre;
          var mail = data.mail;
@@ -27,7 +27,7 @@ $(document).ready(function(){
          $("#EditarCorreo").val(mail);
     },"json");
     $("#editar").click(function () {
-        var BASE_URI_UPDATE="http://147.83.7.203:8080/dsaApp/user/update";
+        var BASE_URI_UPDATE="http://localhost:8080/dsaApp/user/update";
         console.log("3434");
         var nom = $("#EditarNombre").val();
         var ma =  $("#EditarCorreo").val();
@@ -53,7 +53,7 @@ $(document).ready(function(){
     //Eliminar
 
     $("#eliminar").click(function(){
-        var BASE_URI="http://147.83.7.203:8080/dsaApp/user";
+        var BASE_URI="http://localhost:8080/dsaApp/user";
         $.ajax({
             type: 'DELETE',
             url: BASE_URI.concat("/delete?token=" + token.toString()),
@@ -61,7 +61,7 @@ $(document).ready(function(){
             success: function () {
                 console.log("hola1")
                 window.sessionStorage.clear();
-                var url = "http://147.83.7.203:8080/register.html";
+                var url = "http://localhost:8080/register.html";
                 window.open(url, "_self");
                 alert("Vuelve pronto :(")
             },

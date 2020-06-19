@@ -1,7 +1,7 @@
-var BASE_URI="http://147.83.7.203:8080/dsaApp/game";
+var BASE_URI="http://localhost:8080/dsaApp/game";
 var idJugador = sessionStorage.getItem("token")
 if (idJugador == null){
-    var url = "http://147.83.7.203:8080/login.html";
+    var url = "http://localhost:8080/login.html";
     window.open(url, "_self");
 }
 
