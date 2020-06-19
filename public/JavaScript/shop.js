@@ -1,8 +1,11 @@
 var BASE_URI="http://147.83.7.203:8080/dsaApp/game";
+var idJugador = sessionStorage.getItem("token");
+if (idJugador == null){
+    var url = "http://147.83.7.203:8080/login.html";
+    window.open(url, "_self");
+}
 
 $(document).ready(function() {
-    //var idJugador = JSON.parse(sessionStorage.getItem("token")).token;
-    var idJugador = sessionStorage.getItem("token");
     console.log(idJugador);
     var cantidad1 = parseInt($("#numero1").text());
     var cantidad2 = parseInt($("#numero2").text());
