@@ -153,6 +153,53 @@ public class SessionImpl implements Session {
         return id;
     }
 
+    public String findMapa(int id) {
+        ResultSet rs;
+        String mapa = null;
+
+        String selectMapa = QueryHelper.createQuerySELECTMapa();
+
+        PreparedStatement pstm;
+
+        try {
+            pstm = this.conn.prepareStatement(selectMapa);
+            pstm.setObject(1, id);
+            rs = pstm.executeQuery();
+            System.out.println(pstm);
+            while(rs.next()) {
+                mapa = (String) rs.getObject(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Mapa: "+mapa);
+        return mapa;
+    }
+
+    public String findEnemigos(int id){
+        ResultSet rs;
+        String enemigos = null;
+
+        String getEnemigos = QueryHelper.createQuerySELECTEnemigos();
+
+        PreparedStatement pstm;
+
+        try{
+            pstm = this.conn.prepareStatement(getEnemigos);
+            pstm.setObject(1,id);
+            rs = pstm.executeQuery();
+            System.out.println(pstm);
+            while(rs.next())
+                enemigos = (String) rs.getObject(1);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        System.out.println(enemigos);
+        return enemigos;
+    }
+
     @Override
     public Object findByNameOrMail(Class theClass, String name) {
         ResultSet rs;

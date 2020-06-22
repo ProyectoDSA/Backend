@@ -90,6 +90,13 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //SELECT mapa FROM Mapa WHERE idMapa=?
+    public static String createQuerySELECTMapa(){
+        StringBuffer sb = new StringBuffer("SELECT mapa FROM Mapa");
+        sb.append(" WHERE idMapa=?");
+        return sb.toString();
+    }
+
     //UPDATE User SET id = ?, nombre = ?, mail = ? WHERE ID = 'user.getId()'
     public static String createQueryUPDATE(Object entity) {
         StringBuffer sb = new StringBuffer("UPDATE ");
@@ -141,4 +148,9 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String createQuerySELECTEnemigos() {
+        StringBuffer sb = new StringBuffer("SELECT enemigos FROM Nivel");
+        sb.append(" WHERE idNivel=?");
+        return sb.toString();
+    }
 }
