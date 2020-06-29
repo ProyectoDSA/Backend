@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-//EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
+//SERVICIO PARA FUNCIONES DEL JUEGO
 
-@Api(value = "/game", description = "Authentication API for Login and Register")
+@Api(value = "/game", description = "API for Game Services")
 @Path("/game")
 public class GameService {
 
@@ -34,8 +34,10 @@ public class GameService {
         this.gm = GameManagerImpl.getInstance();
     }
 
+
+    //Servicio para añadir partida
     @POST
-    @ApiOperation(value = "Añadir partida", notes = "Añade registro de partida en la BBDD")
+    @ApiOperation(value = "Añadir partida", notes = "Añade partida al jugador")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 500, message = "Server error")
@@ -50,6 +52,8 @@ public class GameService {
 
         return Response.status(200).build();
     }
+
+    //Servicio para obtener el ranking de los mejores jugadores
 
     @GET
     @ApiOperation(value = "get Ranking", notes = "Obtén el ranking de jugadores")
@@ -75,6 +79,8 @@ public class GameService {
         return Response.status(200).entity(entity).build();
     }
 
+    //Servicio para obtener el ranking de partidas de un jugador
+
     @GET
     @ApiOperation(value = "get Ranking Partidas", notes = "Obtén las mejores 5 partidas de un jugador")
     @ApiResponses(value = {
@@ -99,8 +105,10 @@ public class GameService {
         return Response.status(200).entity(entity).build();
     }
 
+    //Servicio para obtener los puntos de un jugador
+
     @GET
-    @ApiOperation(value = "get puntuación jugador", notes = "Obtén el ranking de jugadores")
+    @ApiOperation(value = "get puntuación jugador", notes = "Obtén los puntos del jugador")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful", response = JugadorRanking.class),
             @ApiResponse(code = 500, message = "Internal Server Error")
@@ -116,6 +124,8 @@ public class GameService {
         if(j==null) return Response.status(500).build();
         return Response.status(200).entity(j).build();
     }
+
+    //Servicio que devuelve una lista con los objetos del jugador
 
     @GET
     @ApiOperation(value = "get objetos jugador", notes = "Obtén los objetos de un jugador")
@@ -141,6 +151,8 @@ public class GameService {
         return Response.status(200).entity(entity).build();
     }
 
+    //Servicio que suma puntos y monedas al finalizar la partida
+
     @POST
     @ApiOperation(value = "update puntos", notes = "Actualiza la puntuación y las monedas de un jugador al finalizar la partida")
     @ApiResponses(value = {
@@ -158,8 +170,10 @@ public class GameService {
         return Response.status(200).build();
     }
 
+    //Servicio para comprar objetos
+
     @POST
-    @ApiOperation(value = "pagar objetos", notes = "Actualiza las monedas de un jugador al comprar un objeto")
+    @ApiOperation(value = "comprar objetos", notes = "Añade objetos a inventario")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 400, message = "Not enough coins"),
@@ -192,8 +206,10 @@ public class GameService {
         return Response.status(201).build();
     }
 
+    //Servicio que registra el gasto de un objeto
+
     @POST
-    @ApiOperation(value = "usar objeto", notes = "Actualiza la de un objeto al gastarlo")
+    @ApiOperation(value = "usar objeto", notes = "Actualiza la cantidad de un objeto al gastarlo")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "Object not found"),
@@ -221,23 +237,7 @@ public class GameService {
         return Response.status(201).build();
     }
 
-    @GET
-    @ApiOperation(value = "get mapa", notes = "Obtén el String del mapa")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful", response = String.class),
-            @ApiResponse(code = 500, message = "Internal Server Error")
-    })
-    @Path("/mapa")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMapa(@QueryParam("idMapa") int idMapa) {
-
-        Mapa mapa = null;
-
-        mapa = this.gm.getMapa(idMapa);
-
-        if(mapa==null) return Response.status(500).build();
-        return Response.status(200).entity(mapa).build();
-    }
+    //Servicio que obtiene el string de enemigos de un nivel
 
     @GET
     @ApiOperation(value = "get enemigos", notes = "Obtén el String de enemigos")
@@ -256,6 +256,8 @@ public class GameService {
         if(enemigos==null) return Response.status(500).build();
         return Response.status(200).entity(enemigos).build();
     }
+
+    //Servicio que devuelve una lista con los mapas del juego
 
     @GET
     @ApiOperation(value = "get mapas", notes = "Obtiene lista con los mapas")

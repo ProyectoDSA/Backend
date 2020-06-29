@@ -11,7 +11,13 @@ import edu.upc.eetac.dsa.orm.session.Session;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+//Clase que implementa las funciones de los servicios del juego
+
 public class GameManagerImpl implements GameManager{
+
+    /*********** CONSTRUCTOR ************/
+
+    //Aplicamos Singleton para poder llamarla desde el servicio
 
     private static GameManager instance;
 
@@ -30,6 +36,10 @@ public class GameManagerImpl implements GameManager{
         return instance;
     }
 
+    /************ FUNCIONES ****************/
+
+    //Función que guarda los datos de una partida al morir
+
     @Override
     public void addPartida(Partida partida) {
         Session session = null;
@@ -43,6 +53,8 @@ public class GameManagerImpl implements GameManager{
             session.close();
         }
     }
+
+    //Función que devuelve al jugador
 
     @Override
     public JugadorRanking getJugador(String token) {
@@ -64,6 +76,8 @@ public class GameManagerImpl implements GameManager{
         }
         return jugador;
     }
+
+    //Función que devuelve la lista con el ranking de jugadores
 
     @Override
     public HashMap<Integer, JugadorRanking> getRanking() {
@@ -90,10 +104,10 @@ public class GameManagerImpl implements GameManager{
             session.close();
         }
 
-        /*for(User u : usersList)
-            System.out.println(u.toString());*/
         return jugadores;
     }
+
+    //Función que devuelve la lista con el ranking personal de partidas
 
     @Override
     public HashMap<Integer, RankingPartida> getRankingPartidas(String token) {
@@ -121,10 +135,10 @@ public class GameManagerImpl implements GameManager{
             session.close();
         }
 
-        /*for(User u : usersList)
-            System.out.println(u.toString());*/
         return partidas;
     }
+
+    //Función que actualiza las monedas y los puntos del jugador
 
     @Override
     public void updateJugador(String token, int puntos, int accion) throws MonedasInsuficientesException {
@@ -152,6 +166,8 @@ public class GameManagerImpl implements GameManager{
         }
     }
 
+    //Función que devuelve los objetos del jugador
+
     @Override
     public HashMap<Integer,Inventario> getObjetosJugador(String token){
         String idJugador;
@@ -174,6 +190,8 @@ public class GameManagerImpl implements GameManager{
         return objetos;
     }
 
+    //Función que añade objeto al inventario del jugador
+
     @Override
     public void addObjetoJugador(Inventario objeto) {
         Session session = null;
@@ -187,6 +205,8 @@ public class GameManagerImpl implements GameManager{
             session.close();
         }
     }
+
+    //Función que añade o quita objetos del inventario
 
     @Override
     public void updateInventario(String token, int idObjeto, int newCantidad, int accion) throws Exception {
@@ -217,6 +237,8 @@ public class GameManagerImpl implements GameManager{
         }
     }
 
+    //Función que devuelve el precio de un objeto
+
     public int getPrecioObjeto(int idObjeto){
         Session session = null;
         int precio = 0;
@@ -229,21 +251,7 @@ public class GameManagerImpl implements GameManager{
         return precio;
     }
 
-    @Override
-    public Mapa getMapa(int idMapa) {
-        Mapa m = new Mapa();
-        String mapa = null;
-        Session session = null;
-        try{
-            session = FactorySession.openSession();
-            mapa = session.findMapa(idMapa);
-            m.setIdMapa(idMapa);
-            m.setMapa(mapa);
-        } finally {
-            session.close();
-        }
-        return m;
-    }
+    //Función que devuelve un String con los enemigos del nivel
 
     @Override
     public Nivel getEnemigos(int idNivel) {
@@ -262,6 +270,8 @@ public class GameManagerImpl implements GameManager{
         return n;
     }
 
+    //Función que devuelve una lista con los mapas del juego
+
     public HashMap<Integer,Mapa> getMapas(){
         Session session = null;
         HashMap<Integer, Mapa> mapas=null;
@@ -276,8 +286,6 @@ public class GameManagerImpl implements GameManager{
             session.close();
         }
 
-        /*for(User u : usersList)
-            System.out.println(u.toString());*/
         return mapas;
     }
 }

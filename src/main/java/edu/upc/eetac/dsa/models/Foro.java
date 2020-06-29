@@ -5,9 +5,9 @@ public class Foro {
     public int idComment;
     public String nombre;
     public String comentario;
-    public String fecha;
     //Para obtener el valor: LocalDate.now()
     //Para guardar en BBDD: Date date = Date.valueOf(LocalDate.now());
+    public String fecha;
 
     public Foro(){}
 

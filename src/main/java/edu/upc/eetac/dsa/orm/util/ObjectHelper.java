@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 //CLASE AUXILIAR PARA MANEJAR LOS GETTERS Y SETTERS DE UN OBJETO DE UNA MANERA MÁS CÓMODA
+
 public class ObjectHelper {
 
     //Funcion que obtiene los atributos declarados de cada modelo, que es el equivalente

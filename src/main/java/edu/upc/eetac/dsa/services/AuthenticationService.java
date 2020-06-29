@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-//EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
+//API DE AUTENTICACIÓN ENCARGADA DE LOGIN Y REGISTER
 
 @Api(value = "/auth", description = "Authentication API for Login and Register")
 @Path("/auth")
@@ -32,6 +32,8 @@ public class AuthenticationService {
     public AuthenticationService() {
         this.auth = UserManagerImpl.getInstance();
     }
+
+    //Servicio que registra a un nuevo usuario
 
     @POST
     @ApiOperation(value = "register a new User", notes = "Crea un nuevo usuario")
@@ -63,6 +65,8 @@ public class AuthenticationService {
         }
         return Response.status(201).entity(token).build();
     }
+
+    //Servicio que permite al usuario iniciar sesión
 
     @POST
     @ApiOperation(value = "login", notes = "Iniciar sesión")

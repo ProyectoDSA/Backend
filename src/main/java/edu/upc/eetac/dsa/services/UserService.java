@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-//EN VEZ DE HACER CONSULTAS A LA INSTANCIA, AQUI DEBERE CONSULTARLO EN LA BBDD
+//SERVICIOS DEL USUARIO
 
-@Api(value = "/user", description = "Authentication API for Login and Register")
+@Api(value = "/user", description = "User API for manage their data")
 @Path("/user")
 public class UserService {
 
@@ -31,6 +31,9 @@ public class UserService {
     public UserService() {
         this.auth = UserManagerImpl.getInstance();
     }
+
+    //Servicio que pone a inactivo al usuario
+    //No perdemos los datos, pero ya no podrá iniciar sesión
 
     @DELETE
     @ApiOperation(value = "delete a User", notes = "Elimina un usuario")
@@ -57,6 +60,9 @@ public class UserService {
         return Response.status(200).build();
     }
 
+    //Servicio para cerrar sesión
+    //Elimina el token de la BBDD
+
     @DELETE
     @ApiOperation(value = "Sign out", notes = "Cierra sesion y elimina el token correspondiente")
     @ApiResponses(value = {
@@ -74,8 +80,10 @@ public class UserService {
         return Response.status(200).build();
     }
 
+    //Servicio para publicar comentarios en el foro
+
     @POST
-    @ApiOperation(value = "Crear comentario", notes = "Cierra sesion y elimina el token correspondiente")
+    @ApiOperation(value = "Añadir comentario", notes = "Añade un comentario al foro")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 500, message = "Server error")
@@ -90,6 +98,8 @@ public class UserService {
 
         return Response.status(200).build();
     }
+
+    //Servicio para obtener la lista de comentarios publicados
 
     @GET
     @ApiOperation(value = "get comentarios foro", notes = "Obtén los comentarios del foro")
@@ -115,6 +125,8 @@ public class UserService {
         return Response.status(200).entity(entity).build();
     }
 
+    //Servicio para obtener los datos de un usuario
+
     @GET
     @ApiOperation(value = "get user", notes = "Obtén los datos de un usuario")
     @ApiResponses(value = {
@@ -138,6 +150,8 @@ public class UserService {
         if(u==null) return Response.status(500).build();
         return Response.status(200).entity(u).build();
     }
+
+    //Servicio para actualizar los datos de un usuario
 
     @POST
     @ApiOperation(value = "update user", notes = "Actualiza los parametros de un usuario")

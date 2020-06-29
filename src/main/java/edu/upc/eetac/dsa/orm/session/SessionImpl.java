@@ -130,6 +130,8 @@ public class SessionImpl implements Session {
         return object;
     }
 
+    //Funcion que recibe un token como parametro y encuentra
+    //el ID que tiene asociado en la tabla Token
     public String findIDByToken(String token) {
         ResultSet rs;
         String id = null;
@@ -153,30 +155,7 @@ public class SessionImpl implements Session {
         return id;
     }
 
-    public String findMapa(int id) {
-        ResultSet rs;
-        String mapa = null;
-
-        String selectMapa = QueryHelper.createQuerySELECTMapa();
-
-        PreparedStatement pstm;
-
-        try {
-            pstm = this.conn.prepareStatement(selectMapa);
-            pstm.setObject(1, id);
-            rs = pstm.executeQuery();
-            System.out.println(pstm);
-            while(rs.next()) {
-                mapa = (String) rs.getObject(1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Mapa: "+mapa);
-        return mapa;
-    }
-
+    //Función que devuelve los enemigos de un nivel
     public String findEnemigos(int id){
         ResultSet rs;
         String enemigos = null;
@@ -200,6 +179,7 @@ public class SessionImpl implements Session {
         return enemigos;
     }
 
+    //Funcion que devuelve un usuario con su nombre o correo
     @Override
     public Object findByNameOrMail(Class theClass, String name) {
         ResultSet rs;
@@ -231,6 +211,7 @@ public class SessionImpl implements Session {
         return object;
     }
 
+    //Funcion que devuelve una lista de mapas
     public HashMap<Integer, Mapa> getMapas(Class theClass){
         String mapasQuery = "SELECT * FROM Mapa";
         HashMap<Integer, Mapa> res = new HashMap<>();
@@ -269,6 +250,7 @@ public class SessionImpl implements Session {
         return res;
     }
 
+    //Funcion que devuelve los objetos de un jugador
     public HashMap<Integer, Inventario> getObjetosJugador(Class theClass, String idJugador) throws UserNotFoundException {
         String objetosQuery = "SELECT * FROM Inventario WHERE idJugador='"+idJugador+"'";
         HashMap<Integer, Inventario> res = new HashMap<>();
@@ -373,6 +355,8 @@ public class SessionImpl implements Session {
         }
     }
 
+    //Funcion que elimina el token al cerrar sesión
+
     public void deleteToken(String token){
         String deleteQuery = "DELETE FROM Token WHERE token=?";
         PreparedStatement statement = null;
@@ -388,6 +372,8 @@ public class SessionImpl implements Session {
             close();
         }
     }
+
+    //Función que devuelve el ID de un objeto
 
     @Override
     public String getID(Class theClass, String nombre) {
@@ -418,6 +404,8 @@ public class SessionImpl implements Session {
         System.out.println("Object founded: "+object);
         return null;
     }
+
+    //Función que devuelve las primeras 5 posiciones
 
     public HashMap<Integer,Object> findRanking(Class theClass, String idJugador) {
         //List<Object> res = new ArrayList<>();
@@ -474,6 +462,8 @@ public class SessionImpl implements Session {
         return res;
     }
 
+    //Funcion que devuelve las monedas de un jugador
+
     @Override
     public int getMonedasJugador(String idJugador) {
         ResultSet rs;
@@ -491,6 +481,8 @@ public class SessionImpl implements Session {
         }
         return monedas;
     }
+
+    //Funcion que devuelve el precio de un objeto
 
     public int getPrecioObjeto(int idObjeto){
         ResultSet rs;
@@ -510,6 +502,13 @@ public class SessionImpl implements Session {
         return precio;
     }
 
+    //Funcion que cierra la conexion
+
     public void close() {
+        try {
+            this.conn.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

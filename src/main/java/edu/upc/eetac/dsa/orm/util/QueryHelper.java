@@ -59,19 +59,11 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //SELECT * FROM User WHERE nombre=? OR mail=? AND status='active'
     public static String createQuerySELECTbyNameOrMail(Class theClass) {
         StringBuffer sb = new StringBuffer("SELECT * FROM ");
         sb.append(theClass.getSimpleName());
         sb.append(" WHERE NOMBRE=? OR MAIL=? AND status='active'");
-        return sb.toString();
-    }
-
-    public static String selectFOTO(Class theClass){
-        StringBuffer sb = new StringBuffer("SELECT ");
-        if(theClass==User.class)
-            sb.append("foto FROM User WHERE idUser=?");
-        else
-            sb.append("imagen FROM Objeto WHERE idObjeto=?");
         return sb.toString();
     }
 
@@ -132,17 +124,11 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //SELECT idClass FROM Class WHERE nombre=?
     public static String createQueryGetID(Object entity){
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT id"+entity.getClass().getSimpleName()+" FROM ").append(entity.getClass().getSimpleName());
         sb.append(" WHERE nombre = ?");
-        return sb.toString();
-    }
-
-    public static String createQuerySelectClassFromJugador(Class theClass){
-        StringBuffer sb = new StringBuffer("SELECT * FROM ");
-        sb.append(theClass.getSimpleName());
-        sb.append(" WHERE idJugador=?");
         return sb.toString();
     }
 

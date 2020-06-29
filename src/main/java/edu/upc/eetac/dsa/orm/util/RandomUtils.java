@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class RandomUtils {
 
+    //Clase auxiliar que nos genera un ID aleatorio para usuario
 
     public RandomUtils(){}
     public static String generateID(int size){

@@ -16,7 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+//Clase que ejecuta las funciones de los servicios
+
 public class UserManagerImpl implements UserManager{
+
+    //Aplicamos la receta de Singleton para poder llamar
+    // a esta clase facilmente desde los servicios
 
     private static UserManager instance;
 
@@ -29,9 +34,8 @@ public class UserManagerImpl implements UserManager{
         return instance;
     }
 
-
-
     //Funcion que obtiene un usuario por su ID
+
     @Override
     public User getUser(String idUser) throws UserNotFoundException {
         Session session = null;
@@ -52,6 +56,8 @@ public class UserManagerImpl implements UserManager{
             throw new UserNotFoundException();
     }
 
+    //Funcion que devuelve el id de un usuario
+
     @Override
     public String getIdUser(String name) throws UserNotFoundException {
         String idUser = null;
@@ -62,6 +68,9 @@ public class UserManagerImpl implements UserManager{
             throw new UserNotFoundException();
         return idUser;
     }
+
+    //Funcion que devuelve el usuario a partir del nombre o el correo
+    //Funcion que forma parte del login
 
     @Override
     public User getUserByNameOrMail(String name) throws UserNotFoundException {
@@ -80,6 +89,8 @@ public class UserManagerImpl implements UserManager{
             return u;
     }
 
+    //Funcion que devuelve un HashMap con todos los usuarios
+
     @Override
     public HashMap<String,User> getAllUsers() {
         Session session = null;
@@ -97,6 +108,8 @@ public class UserManagerImpl implements UserManager{
 
         return usersList;
     }
+
+    //Funcion que actualiza los datos de un usuario
 
     @Override
     public void updateUser(String token, String nombre, String mail, String password) throws UserNotFoundException {
@@ -118,12 +131,15 @@ public class UserManagerImpl implements UserManager{
         }
     }
 
+    //Funcion auxiliar para editar los datos de un usuario
+
     @Override
     public void updateUser(User user) throws UserNotFoundException {
         this.updateUser(user.getIdUser(), user.getNombre(), user.getMail(), user.getPassword());
     }
 
-    //Funcion que elimina al usuario con el ID que le pasamos
+    //Funcion que pone el estado del usuario a inactive
+
     @Override
     public void deleteUser(String token) throws UserNotFoundException {
         User user = null;
@@ -146,8 +162,7 @@ public class UserManagerImpl implements UserManager{
         }
     }
 
-    //SELECT * FROM User WHERE (NOMBRE=? OR MAIL=?) AND status="active";
-    //SELECT * FROM usuario, * FROM jugador WHERE usuario.idUser = jugador.idJugador AND usuario.status='active';
+    //Función para registrar a un usuario
 
     @Override
     public void register(RegisterCredentials rc) throws Exception {
@@ -170,6 +185,8 @@ public class UserManagerImpl implements UserManager{
         System.out.println("User "+u.toString()+" registered");
     }
 
+    //Funcion auxiliar que comprueba que el usuario no exista y haya registros dobles
+
     private boolean checkNameRegister(String name) {
 
         User u = null;
@@ -190,6 +207,8 @@ public class UserManagerImpl implements UserManager{
         return DigestUtils.md5Hex(pswd);
     }
 
+    //Funcion que permite al usuario iniciar sesión
+
     @Override
     public TokenStorage login(LoginCredentials lc) throws UserNotFoundException, PasswordDontMatchException {
         User u;
@@ -207,6 +226,9 @@ public class UserManagerImpl implements UserManager{
         TokenStorage t = new TokenStorage(token, monedas);
         return t;
     }
+
+    //Función que crea un token cuando el usuario se registra
+    //mediante el cual se identifica mientras tiene la sesión activa
 
     public String createToken(User user) {
         Session session = null;
@@ -233,6 +255,8 @@ public class UserManagerImpl implements UserManager{
         return t.getToken();
     }
 
+    //Función que elimina el token al cerrar sesión
+
     @Override
     public void deleteToken(String token) {
         Session session = null;
@@ -244,6 +268,8 @@ public class UserManagerImpl implements UserManager{
             session.close();
         }
     }
+
+    //Función que devuelve los comentarios del foro
 
     @Override
     public HashMap<String,Foro> getComments() {
@@ -263,6 +289,8 @@ public class UserManagerImpl implements UserManager{
         return comentarios;
     }
 
+    //Función que añade un comentario al foro
+
     @Override
     public void addComment(String token, Comentario comentario) {
         Session session = null;
@@ -279,6 +307,8 @@ public class UserManagerImpl implements UserManager{
             session.close();
         }
     }
+
+    //Función que crea un jugador asociado a un usuario al registrarse
 
     @Override
     public void createJugador(String id) {
@@ -297,6 +327,8 @@ public class UserManagerImpl implements UserManager{
         System.out.println("Jugador creado con ID = "+id);
     }
 
+    //Función que devuelve las monedas del jugador
+
     @Override
     public int getMonedasJugador(String idJugador) {
         Session session = null;
@@ -312,6 +344,8 @@ public class UserManagerImpl implements UserManager{
         return monedas;
     }
 
+    //Función auxiliar que comprueba que el nombre del login existe en la BBDD
+
     private boolean checkNameLogin(String name) throws UserNotFoundException {
 
         try {
@@ -321,6 +355,8 @@ public class UserManagerImpl implements UserManager{
         }
         return false;
     }
+
+    //Función auxiliar que comprueba que la contraseña es correcta en el login
 
     private boolean checkPswdLogin(String idUser, String pswd) throws PasswordDontMatchException {
         User u = null;
@@ -337,6 +373,8 @@ public class UserManagerImpl implements UserManager{
         if(pswdDB.equals(p)) return true;
         else throw new PasswordDontMatchException();
     }
+
+    //Función que devuelve la cantidad de usuarios registrados
 
     @Override
     public int size() {
