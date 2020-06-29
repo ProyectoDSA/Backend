@@ -505,10 +505,5 @@ public class SessionImpl implements Session {
     //Funcion que cierra la conexion
 
     public void close() {
-        try {
-            this.conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 }
