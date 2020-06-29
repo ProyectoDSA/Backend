@@ -1,11 +1,6 @@
 package edu.upc.eetac.dsa.orm.util;
 
-import edu.upc.eetac.dsa.models.Foro;
-import edu.upc.eetac.dsa.models.Inventario;
-import edu.upc.eetac.dsa.models.Partida;
-import edu.upc.eetac.dsa.models.Token;
-
-import java.lang.reflect.Field;
+import edu.upc.eetac.dsa.models.*;
 
 //CLASE AUXILIAR QUE NOS PERMITE CREAR LAS CONSULTAS SQL DE UNA MANERA MÁS COMODA
 //ASIGNAMOS LOS ? MEDIANTE SQLInjection
@@ -45,7 +40,9 @@ public class QueryHelper {
             sb.append(") VALUES (?");
 
             for (String field : fields) {
-                if (!field.equals("id" + entity.getClass().getSimpleName())) sb.append(", ?");
+                if(!field.equals("foto"))
+                    if (!field.equals("id" + entity.getClass().getSimpleName())) sb.append(", ?");
+                else{}
             }
 
             sb.append(")");
@@ -66,6 +63,15 @@ public class QueryHelper {
         StringBuffer sb = new StringBuffer("SELECT * FROM ");
         sb.append(theClass.getSimpleName());
         sb.append(" WHERE NOMBRE=? OR MAIL=? AND status='active'");
+        return sb.toString();
+    }
+
+    public static String selectFOTO(Class theClass){
+        StringBuffer sb = new StringBuffer("SELECT ");
+        if(theClass==User.class)
+            sb.append("foto FROM User WHERE idUser=?");
+        else
+            sb.append("imagen FROM Objeto WHERE idObjeto=?");
         return sb.toString();
     }
 

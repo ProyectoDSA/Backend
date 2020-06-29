@@ -34,7 +34,7 @@ public class SessionImpl implements Session {
             int i = 1;
 
             for (String field : ObjectHelper.getFields(entity)) {
-                pstm.setObject(i, ObjectHelper.getter(entity, field));
+                if(!field.equals("foto")) pstm.setObject(i, ObjectHelper.getter(entity, field));
                 i++;
             }
 

@@ -231,7 +231,7 @@ public class GameService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMapa(@QueryParam("idMapa") int idMapa) {
 
-        String mapa = null;
+        Mapa mapa = null;
 
         mapa = this.gm.getMapa(idMapa);
 
@@ -249,7 +249,7 @@ public class GameService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getEnemigos(@QueryParam("idNivel") int idNivel) {
 
-        String enemigos = null;
+        Nivel enemigos = null;
 
         enemigos = this.gm.getEnemigos(idNivel);
 

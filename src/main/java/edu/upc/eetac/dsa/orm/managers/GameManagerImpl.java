@@ -230,28 +230,35 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public String getMapa(int idMapa) {
+    public Mapa getMapa(int idMapa) {
+        Mapa m = new Mapa();
         String mapa = null;
         Session session = null;
         try{
             session = FactorySession.openSession();
             mapa = session.findMapa(idMapa);
+            m.setIdMapa(idMapa);
+            m.setMapa(mapa);
         } finally {
             session.close();
         }
-        return mapa;
+        return m;
     }
 
     @Override
-    public String getEnemigos(int idNivel) {
+    public Nivel getEnemigos(int idNivel) {
+        Nivel n = new Nivel();
         String enemigos = null;
         Session session = null;
         try{
             session = FactorySession.openSession();
             enemigos = session.findEnemigos(idNivel);
+            n.setIdNivel(idNivel);
+            n.setEnemigos(enemigos);
         } finally {
             session.close();
         }
-        return enemigos;
+
+        return n;
     }
 }

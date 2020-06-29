@@ -18,7 +18,7 @@ public interface GameManager {
     public void updateInventario(String token, int idObjeto, int newCantidad, int accion) throws UserNotFoundException, Exception;
     public int getPrecioObjeto(int idObjeto);
 
-    public String getMapa(int idMapa);
-    public String getEnemigos(int idNivel);
+    public Mapa getMapa(int idMapa);
+    public Nivel getEnemigos(int idNivel);
 
 }
