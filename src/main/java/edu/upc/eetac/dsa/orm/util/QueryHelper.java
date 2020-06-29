@@ -78,8 +78,8 @@ public class QueryHelper {
     //SELECT * FROM Class
     public static String createQuerySELECTALL(Class theClass) {
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
-
+        if(theClass!=Foro.class) sb.append("SELECT * FROM ").append(theClass.getSimpleName());
+        else sb.append("SELECT * FROM Foro ORDER BY fecha DESC");
         return sb.toString();
     }
 
