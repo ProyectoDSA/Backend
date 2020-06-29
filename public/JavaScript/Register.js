@@ -23,7 +23,6 @@ $(document).ready(function(){
                     window.sessionStorage.setItem("token", token)
                     var url = "http://147.83.7.203:8080/home.html";
                     window.open(url, "_self");
-                    alert(token)
                 },
                 error: function (e) {
                     // log error in browser
