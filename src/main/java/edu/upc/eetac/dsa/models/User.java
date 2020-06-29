@@ -8,7 +8,6 @@ public class User {
     public String nombre;
     public String mail;
     public String password;
-    public String foto;
     public String status;
 
     public User(){}
@@ -53,14 +52,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
     }
 
     public String getStatus() {
