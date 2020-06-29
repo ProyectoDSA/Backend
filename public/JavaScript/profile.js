@@ -18,7 +18,6 @@ $(document).ready(function(){
 
     //EDITAR PERFIL
     $.get("http://147.83.7.203:8080/dsaApp/user/user?token=" + token.toString(), function(data) {
-        console.log("Porque no vas...")
          var nombre = data.nombre;
          var mail = data.mail;
          console.log("1:", nombre);
@@ -28,7 +27,6 @@ $(document).ready(function(){
     },"json");
     $("#editar").click(function () {
         var BASE_URI_UPDATE="http://147.83.7.203:8080/dsaApp/user/update";
-        console.log("3434");
         var nom = $("#EditarNombre").val();
         var ma =  $("#EditarCorreo").val();
         var pass = $("#EditarPassword").val();
@@ -42,7 +40,8 @@ $(document).ready(function(){
             headers: {'content-type': 'application/json', "x-kii-appid": "XXXXX", "x-kii-appkey": "XXXXX"},
             data: JSON.stringify(editar),
             success: function () {
-                console.log("BIEEEEEEN")
+                console.log("Usuario actualizado con éxito")
+                alert("Usuario actualizado con éxito")
             },
             error: function (e) {
                 console.log(e.message);
