@@ -1,6 +1,5 @@
 var BASE_URI="http://147.83.7.203:8080/dsaApp/auth";
 
-
 $(document).ready(function() {
     console.log("hola");
     $('#login').click(function () {

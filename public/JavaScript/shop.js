@@ -1,10 +1,11 @@
-var BASE_URI="http://localhost:8080/dsaApp/game";
+var BASE_URI="http://147.83.7.203:8080/dsaApp/game";
 var idJugador = sessionStorage.getItem("token");
 var monedas = sessionStorage.getItem("monedas")
 if (idJugador == null){
-    var url = "http://localhost:8080/login.html";
+    var url = "http://147.83.7.203:8080/login.html";
     window.open(url, "_self");
 }
+
 
 $(document).ready(function() {
     console.log(idJugador);
@@ -79,6 +80,9 @@ $(document).ready(function() {
         var inventario = {"idObjeto": 1, "cantidad": cantidad1, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        monedas = monedas - 75*cantidad1;
+        window.sessionStorage.setItem("monedas", monedas);
+        $("#m").text(monedas);
         $("#numero1").text(1);
         cantidad1 = 1;
 
@@ -87,6 +91,9 @@ $(document).ready(function() {
         var inventario = {"idObjeto": 2, "cantidad": cantidad2, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        monedas = monedas - 125*cantidad2;
+        window.sessionStorage.setItem("monedas", monedas);
+        $("#m").text(monedas);
         $("#numero2").text(1);
         cantidad2 = 1;
     });
@@ -94,6 +101,9 @@ $(document).ready(function() {
         var inventario = {"idObjeto": 3, "cantidad": cantidad3, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        monedas = monedas - 200*cantidad3;
+        window.sessionStorage.setItem("monedas", monedas);
+        $("#m").text(monedas);
         $("#numero3").text(1);
         cantidad3 = 1;
     });
@@ -101,6 +111,9 @@ $(document).ready(function() {
         var inventario = {"idObjeto": 4, "cantidad": cantidad4, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        monedas = monedas - 150*cantidad4;
+        window.sessionStorage.setItem("monedas", monedas);
+        $("#m").text(monedas);
         $("#numero4").text(1);
         cantidad4 = 1;
     });
@@ -108,6 +121,9 @@ $(document).ready(function() {
         var inventario = {"idObjeto": 5, "cantidad": cantidad5, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        monedas = monedas - 300*cantidad5;
+        window.sessionStorage.setItem("monedas", monedas);
+        $("#m").text(monedas);
         $("#numero5").text(1);
         cantidad5 = 1;
     });
@@ -117,6 +133,7 @@ $(document).ready(function() {
         compraObjeto(inventario);
         monedas = monedas - 25*cantidad6;
         window.sessionStorage.setItem("monedas", monedas);
+        $("#m").text(monedas);
         $("#numero6").text(1)
         cantidad6 = 1;
     });
