@@ -63,7 +63,6 @@ $(document).ready(function(){
                 window.sessionStorage.clear();
                 var url = "http://147.83.7.203:8080/register.html";
                 window.open(url, "_self");
-                alert("Vuelve pronto :(")
             },
             error: function (e) {
                 console.log(e.message);

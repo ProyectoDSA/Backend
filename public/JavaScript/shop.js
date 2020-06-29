@@ -23,7 +23,7 @@ $(document).ready(function() {
     })
     $('#r1').click(function () {
         if(cantidad1 != 1) cantidad1 = cantidad1 - 1;
-        else alert("Noooooo");
+        else alert("Noo");
         $("#numero1").text(cantidad1);
     })
     $('#s2').click(function (){
@@ -32,7 +32,6 @@ $(document).ready(function() {
     })
     $('#r2').click(function () {
         if(cantidad2 != 1) cantidad2 = cantidad2 - 1;
-        else alert("Noooooo");
         $("#numero2").text(cantidad2);
 
     })
@@ -42,7 +41,6 @@ $(document).ready(function() {
     })
     $('#r3').click(function () {
         if(cantidad3 != 1) cantidad3 = cantidad3 - 1;
-        else alert("Noooooo");
         $("#numero3").text(cantidad3);
 
     })
@@ -52,7 +50,6 @@ $(document).ready(function() {
     })
     $('#r4').click(function () {
         if(cantidad4 != 1) cantidad4 = cantidad4 - 1;
-        else alert("Noooooo");
         $("#numero4").text(cantidad4);
 
     })
@@ -62,7 +59,6 @@ $(document).ready(function() {
     })
     $('#r5').click(function () {
         if(cantidad5 != 1) cantidad5 = cantidad5 - 1;
-        else alert("Noooooo");
         $("#numero5").text(cantidad5);
 
     })
@@ -72,7 +68,6 @@ $(document).ready(function() {
     })
     $('#r6').click(function () {
         if(cantidad6 != 1) cantidad6 = cantidad6 - 1;
-        else alert("Noooooo");
         $("#numero6").text(cantidad6);
 
     })
