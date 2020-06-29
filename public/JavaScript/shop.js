@@ -1,13 +1,15 @@
-var BASE_URI="http://147.83.7.203:8080/dsaApp/game";
-var idJugador = sessionStorage.getItem("token")
+var BASE_URI="http://localhost:8080/dsaApp/game";
+var idJugador = sessionStorage.getItem("token");
+var monedas = sessionStorage.getItem("monedas")
 if (idJugador == null){
-    var url = "http://147.83.7.203:8080/login.html";
+    var url = "http://localhost:8080/login.html";
     window.open(url, "_self");
 }
 
 $(document).ready(function() {
-    //var idJugador = JSON.parse(sessionStorage.getItem("token")).token;
     console.log(idJugador);
+    console.log(monedas);
+    $("#m").text(monedas);
     var cantidad1 = parseInt($("#numero1").text());
     var cantidad2 = parseInt($("#numero2").text());
     var cantidad3 = parseInt($("#numero3").text());
@@ -77,31 +79,46 @@ $(document).ready(function() {
         var inventario = {"idObjeto": 1, "cantidad": cantidad1, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        $("#numero1").text(1);
+        cantidad1 = 1;
+
     });
     $('#des2').click(function () {
         var inventario = {"idObjeto": 2, "cantidad": cantidad2, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        $("#numero2").text(1);
+        cantidad2 = 1;
     });
     $('#des3').click(function () {
         var inventario = {"idObjeto": 3, "cantidad": cantidad3, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        $("#numero3").text(1);
+        cantidad3 = 1;
     });
     $('#masc1').click(function () {
         var inventario = {"idObjeto": 4, "cantidad": cantidad4, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        $("#numero4").text(1);
+        cantidad4 = 1;
     });
     $('#masc2').click(function () {
         var inventario = {"idObjeto": 5, "cantidad": cantidad5, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        $("#numero5").text(1);
+        cantidad5 = 1;
     });
     $('#jabon').click(function () {
         var inventario = {"idObjeto": 6, "cantidad": cantidad6, "idJugador": idJugador};
         console.log(inventario);
         compraObjeto(inventario);
+        monedas = monedas - 25*cantidad6;
+        window.sessionStorage.setItem("monedas", monedas);
+        $("#numero6").text(1)
+        cantidad6 = 1;
     });
 
     function compraObjeto(inventario) {
