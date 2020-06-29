@@ -261,4 +261,23 @@ public class GameManagerImpl implements GameManager{
 
         return n;
     }
+
+    public HashMap<Integer,Mapa> getMapas(){
+        Session session = null;
+        HashMap<Integer, Mapa> mapas=null;
+        try {
+            session = FactorySession.openSession();
+            mapas = session.getMapas(Mapa.class);
+        }
+        catch (Exception e) {
+            log.warning("Error");
+        }
+        finally {
+            session.close();
+        }
+
+        /*for(User u : usersList)
+            System.out.println(u.toString());*/
+        return mapas;
+    }
 }

@@ -256,4 +256,28 @@ public class GameService {
         if(enemigos==null) return Response.status(500).build();
         return Response.status(200).entity(enemigos).build();
     }
+
+    @GET
+    @ApiOperation(value = "get mapas", notes = "Obtiene lista con los mapas")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response = Mapa.class, responseContainer="List"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/mapitas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMapas() {
+
+        HashMap<Integer,Mapa> mapas = null;
+        List<Mapa> m = new LinkedList<>();
+
+        mapas = this.gm.getMapas();
+        for ( Integer key : mapas.keySet() ) {
+            m.add(mapas.get(key));
+        }
+
+        GenericEntity<List<Mapa>> entity = new GenericEntity<List<Mapa>>(m) {};
+
+        if(entity==null) return Response.status(500).build();
+        return Response.status(200).entity(entity).build();
+    }
 }

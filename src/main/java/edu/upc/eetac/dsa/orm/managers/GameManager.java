@@ -20,5 +20,6 @@ public interface GameManager {
 
     public Mapa getMapa(int idMapa);
     public Nivel getEnemigos(int idNivel);
+    public HashMap<Integer,Mapa> getMapas();
 
 }

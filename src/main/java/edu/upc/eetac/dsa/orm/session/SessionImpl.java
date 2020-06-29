@@ -231,6 +231,44 @@ public class SessionImpl implements Session {
         return object;
     }
 
+    public HashMap<Integer, Mapa> getMapas(Class theClass){
+        String mapasQuery = "SELECT * FROM Mapa";
+        HashMap<Integer, Mapa> res = new HashMap<>();
+        ResultSet rs;
+        Object object;
+        Integer id = null;
+        Statement statement;
+
+        try{
+            object=theClass.getDeclaredConstructor().newInstance();
+            statement = this.conn.createStatement();
+            statement.execute(mapasQuery);
+            rs=statement.getResultSet();
+
+            while(rs.next()) {
+                ResultSetMetaData rsmd = rs.getMetaData();
+                for (int i=1; i<=rsmd.getColumnCount(); i++) {
+                    String field = rsmd.getColumnName(i);
+                    ObjectHelper.setter(object, field, rs.getObject(i));
+                    if(i==1) id = (Integer) rs.getObject(i);
+                }
+                res.put(id, (Mapa) object);
+                object = theClass.getDeclaredConstructor().newInstance();
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
     public HashMap<Integer, Inventario> getObjetosJugador(Class theClass, String idJugador) throws UserNotFoundException {
         String objetosQuery = "SELECT * FROM Inventario WHERE idJugador='"+idJugador+"'";
         HashMap<Integer, Inventario> res = new HashMap<>();
