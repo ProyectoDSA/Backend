@@ -79,7 +79,7 @@ public class QueryHelper {
     public static String createQuerySELECTALL(Class theClass) {
         StringBuffer sb = new StringBuffer();
         if(theClass!=Foro.class) sb.append("SELECT * FROM ").append(theClass.getSimpleName());
-        else sb.append("SELECT * FROM Foro ORDER BY idComment DESC");
+        else sb.append("SELECT * FROM Foro ORDER BY idComment ASC");
         return sb.toString();
     }
 
