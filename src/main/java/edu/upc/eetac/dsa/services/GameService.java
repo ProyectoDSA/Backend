@@ -147,9 +147,9 @@ public class GameService {
             @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @Path("/puntos/{puntos}")
+    @Path("/puntos")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePuntosAndMonedas(@QueryParam("token") String token, @PathParam("puntos") int puntos) {
+    public Response updatePuntosAndMonedas(@QueryParam("token") String token, @QueryParam("puntos") int puntos) {
         try{
             this.gm.updateJugador(token,puntos, 1);
         } catch (Exception e){
