@@ -221,6 +221,63 @@ public class GameService {
         return Response.status(201).build();
     }
 
+    @GET
+    @ApiOperation(value = "get mapa", notes = "Obtén el String del mapa")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response = String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/mapa")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMapa(@QueryParam("idMapa") int idMapa) {
 
+        Mapa mapa = null;
 
+        mapa = this.gm.getMapa(idMapa);
+
+        if(mapa==null) return Response.status(500).build();
+        return Response.status(200).entity(mapa).build();
+    }
+
+    @GET
+    @ApiOperation(value = "get enemigos", notes = "Obtén el String de enemigos")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response = String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/enemigos")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getEnemigos(@QueryParam("idNivel") int idNivel) {
+
+        Nivel enemigos = null;
+
+        enemigos = this.gm.getEnemigos(idNivel);
+
+        if(enemigos==null) return Response.status(500).build();
+        return Response.status(200).entity(enemigos).build();
+    }
+
+    @GET
+    @ApiOperation(value = "get mapas", notes = "Obtiene lista con los mapas")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful", response = Mapa.class, responseContainer="List"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/mapitas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMapas() {
+
+        HashMap<Integer,Mapa> mapas = null;
+        List<Mapa> m = new LinkedList<>();
+
+        mapas = this.gm.getMapas();
+        for ( Integer key : mapas.keySet() ) {
+            m.add(mapas.get(key));
+        }
+
+        GenericEntity<List<Mapa>> entity = new GenericEntity<List<Mapa>>(m) {};
+
+        if(entity==null) return Response.status(500).build();
+        return Response.status(200).entity(entity).build();
+    }
 }

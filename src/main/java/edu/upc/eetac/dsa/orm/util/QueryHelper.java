@@ -1,11 +1,6 @@
 package edu.upc.eetac.dsa.orm.util;
 
-import edu.upc.eetac.dsa.models.Foro;
-import edu.upc.eetac.dsa.models.Inventario;
-import edu.upc.eetac.dsa.models.Partida;
-import edu.upc.eetac.dsa.models.Token;
-
-import java.lang.reflect.Field;
+import edu.upc.eetac.dsa.models.*;
 
 //CLASE AUXILIAR QUE NOS PERMITE CREAR LAS CONSULTAS SQL DE UNA MANERA MÁS COMODA
 //ASIGNAMOS LOS ? MEDIANTE SQLInjection
@@ -45,7 +40,9 @@ public class QueryHelper {
             sb.append(") VALUES (?");
 
             for (String field : fields) {
-                if (!field.equals("id" + entity.getClass().getSimpleName())) sb.append(", ?");
+                if(!field.equals("foto"))
+                    if (!field.equals("id" + entity.getClass().getSimpleName())) sb.append(", ?");
+                else{}
             }
 
             sb.append(")");
@@ -69,6 +66,15 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String selectFOTO(Class theClass){
+        StringBuffer sb = new StringBuffer("SELECT ");
+        if(theClass==User.class)
+            sb.append("foto FROM User WHERE idUser=?");
+        else
+            sb.append("imagen FROM Objeto WHERE idObjeto=?");
+        return sb.toString();
+    }
+
     //SELECT * FROM Class
     public static String createQuerySELECTALL(Class theClass) {
         StringBuffer sb = new StringBuffer();
@@ -87,6 +93,13 @@ public class QueryHelper {
         else {
             sb.append(" WHERE status='active' ORDER BY puntos DESC LIMIT 5");
         }
+        return sb.toString();
+    }
+
+    //SELECT mapa FROM Mapa WHERE idMapa=?
+    public static String createQuerySELECTMapa(){
+        StringBuffer sb = new StringBuffer("SELECT mapa FROM Mapa");
+        sb.append(" WHERE idMapa=?");
         return sb.toString();
     }
 
@@ -141,4 +154,9 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String createQuerySELECTEnemigos() {
+        StringBuffer sb = new StringBuffer("SELECT enemigos FROM Nivel");
+        sb.append(" WHERE idNivel=?");
+        return sb.toString();
+    }
 }

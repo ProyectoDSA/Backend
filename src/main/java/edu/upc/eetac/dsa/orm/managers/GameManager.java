@@ -18,4 +18,8 @@ public interface GameManager {
     public void updateInventario(String token, int idObjeto, int newCantidad, int accion) throws UserNotFoundException, Exception;
     public int getPrecioObjeto(int idObjeto);
 
+    public Mapa getMapa(int idMapa);
+    public Nivel getEnemigos(int idNivel);
+    public HashMap<Integer,Mapa> getMapas();
+
 }

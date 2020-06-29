@@ -228,4 +228,56 @@ public class GameManagerImpl implements GameManager{
         }
         return precio;
     }
+
+    @Override
+    public Mapa getMapa(int idMapa) {
+        Mapa m = new Mapa();
+        String mapa = null;
+        Session session = null;
+        try{
+            session = FactorySession.openSession();
+            mapa = session.findMapa(idMapa);
+            m.setIdMapa(idMapa);
+            m.setMapa(mapa);
+        } finally {
+            session.close();
+        }
+        return m;
+    }
+
+    @Override
+    public Nivel getEnemigos(int idNivel) {
+        Nivel n = new Nivel();
+        String enemigos = null;
+        Session session = null;
+        try{
+            session = FactorySession.openSession();
+            enemigos = session.findEnemigos(idNivel);
+            n.setIdNivel(idNivel);
+            n.setEnemigos(enemigos);
+        } finally {
+            session.close();
+        }
+
+        return n;
+    }
+
+    public HashMap<Integer,Mapa> getMapas(){
+        Session session = null;
+        HashMap<Integer, Mapa> mapas=null;
+        try {
+            session = FactorySession.openSession();
+            mapas = session.getMapas(Mapa.class);
+        }
+        catch (Exception e) {
+            log.warning("Error");
+        }
+        finally {
+            session.close();
+        }
+
+        /*for(User u : usersList)
+            System.out.println(u.toString());*/
+        return mapas;
+    }
 }

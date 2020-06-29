@@ -1,4 +1,4 @@
-var BASE_URI="http://localhost:8080/dsaApp/auth";
+var BASE_URI="http://147.83.7.203:8080/dsaApp/auth";
 
 $(document).ready(function() {
     console.log("hola");
@@ -17,9 +17,11 @@ $(document).ready(function() {
             success: function (data) {
                 console.log("hola1")
                 var token = data.token;
+                var monedas = data.monedas;
                 console.log(token);
                 window.sessionStorage.setItem("token", token)
-                var url = "http://localhost:8080/home.html";
+                window.sessionStorage.setItem("monedas", monedas)
+                var url = "http://147.83.7.203:8080/home.html";
                 window.open(url, "_self");
                 alert(token)
             },
