@@ -19,8 +19,9 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function (data) {
                     var token = data.token;
-                    console.log(token);
+                    var monedas = data.monedas;
                     window.sessionStorage.setItem("token", token)
+                    window.sessionStorage.setItem("monedas", monedas)
                     var url = "http://147.83.7.203:8080/home.html";
                     window.open(url, "_self");
                 },
